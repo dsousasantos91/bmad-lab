@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BMAD Enterprise — Guia Estratégico</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f1117;
+  --surface: #181c27;
+  --surface2: #1f2535;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --text: #e8eaf0;
+  --muted: #7a8099;
+  --faint: #3a3f52;
+  --p1: #3ecf8e; --p1t: #1a5c38; --p1bg: #0f3d25;
+  --p2: #7c6fcd; --p2t: #2d2560; --p2bg: #1e1840;
+  --p3: #e8975a; --p3t: #5c3018; --p3bg: #3d2010;
+  --p4: #e05c7c; --p4t: #5c1830; --p4bg: #3d0f1f;
+  --p5: #4faaee; --p5t: #1a3d60; --p5bg: #0d2540;
+  --accent: #7c6fcd;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.7;min-height:100vh}
+
+/* Nav */
+.topnav{position:sticky;top:0;z-index:100;background:rgba(15,17,23,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 24px;height:52px;display:flex;align-items:center;gap:24px}
+.topnav-home{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .15s}
+.topnav-home:hover{color:var(--text)}
+.topnav-title{font-family:'DM Mono',monospace;font-size:12px;color:var(--text);margin-left:auto}
+.topnav-sep{color:var(--faint);font-size:12px}
+
+/* Layout */
+.layout{display:flex;max-width:1120px;margin:0 auto;padding:48px 24px 80px;gap:48px}
+.toc{width:220px;flex-shrink:0}
+.toc-sticky{position:sticky;top:72px}
+.toc-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.toc-list{list-style:none;display:flex;flex-direction:column;gap:2px}
+.toc-item a{font-size:12px;color:var(--muted);text-decoration:none;display:block;padding:4px 8px;border-radius:5px;transition:color .12s,background .12s}
+.toc-item a:hover{color:var(--text);background:var(--surface)}
+.toc-item a.active{color:var(--accent);background:var(--p2bg)}
+.toc-section{font-family:'DM Mono',monospace;font-size:10px;color:var(--faint);letter-spacing:.1em;text-transform:uppercase;padding:8px 8px 2px;margin-top:6px}
+.content{flex:1;min-width:0}
+
+/* Header */
+.page-header{margin-bottom:48px;padding-bottom:32px;border-bottom:1px solid var(--border)}
+.header-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.page-header h1{font-family:'DM Serif Display',serif;font-size:clamp(26px,4vw,40px);font-weight:400;line-height:1.15;margin-bottom:10px}
+.header-sub{font-size:14px;color:var(--muted);margin-bottom:20px}
+.header-tags{display:flex;gap:8px;flex-wrap:wrap}
+.tag{font-size:11px;font-family:'DM Mono',monospace;padding:3px 10px;border-radius:99px;border:1px solid var(--border2);color:var(--muted)}
+
+/* Sections */
+.section{margin-bottom:48px;scroll-margin-top:80px}
+.section-heading{font-family:'DM Serif Display',serif;font-size:22px;font-weight:400;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:12px}
+.section-num{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);background:var(--surface);border:1px solid var(--border);padding:3px 8px;border-radius:5px}
+.section-body{color:var(--muted);font-size:14px;line-height:1.75}
+.section-body p{margin-bottom:12px}
+.section-body p:last-child{margin-bottom:0}
+
+/* Subsections */
+.sub{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:12px}
+.sub-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.sub-title .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.sub p,.sub li{font-size:13px;color:var(--muted);line-height:1.65}
+.sub ul,.sub ol{padding-left:18px;display:flex;flex-direction:column;gap:5px}
+
+/* Cards grid */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:12px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px}
+.card-icon{font-size:20px;margin-bottom:8px}
+.card-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px}
+.card-body{font-size:12px;color:var(--muted);line-height:1.6}
+.card-list{margin-top:6px;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:3px}
+.card-list li{font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:5px}
+.card-list li::before{content:'·';color:var(--faint);flex-shrink:0}
+
+/* Flow */
+.flow{display:flex;align-items:center;gap:0;margin:16px 0;flex-wrap:wrap}
+.flow-step{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 14px;font-size:13px;font-weight:500;color:var(--text);white-space:nowrap}
+.flow-arrow{font-size:14px;color:var(--faint);padding:0 6px;flex-shrink:0}
+
+/* Agent cards */
+.agents-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:8px}
+.agent-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;transition:border-color .15s}
+.agent-card:hover{border-color:var(--border2)}
+.agent-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.agent-pip{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.agent-name{font-size:13px;font-weight:600;color:var(--text)}
+.agent-id{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);background:var(--faint);padding:2px 6px;border-radius:4px;margin-left:auto}
+.agent-resp{font-size:12px;color:var(--muted);line-height:1.6}
+.agent-resp-list{padding-left:0;list-style:none;display:flex;flex-direction:column;gap:3px}
+.agent-resp-list li{display:flex;align-items:flex-start;gap:5px}
+.agent-resp-list li::before{content:'→';color:var(--faint);font-size:11px;margin-top:2px;flex-shrink:0}
+
+/* Code blocks */
+pre{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;overflow-x:auto;margin:12px 0}
+code{font-family:'DM Mono',monospace;font-size:12px;color:#a8d8a8;line-height:1.7}
+p code,li code{background:var(--faint);padding:1px 6px;border-radius:4px;color:var(--text);font-size:12px}
+
+/* Checklist */
+.checklist{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;font-size:13px}
+.check-item.good{border-left:3px solid var(--p1)}
+.check-item.bad{border-left:3px solid var(--p4)}
+.check-icon{flex-shrink:0;font-size:14px;margin-top:1px}
+.check-text{color:var(--muted);line-height:1.5}
+.check-text strong{color:var(--text);font-weight:500}
+
+/* Divider */
+.divider{height:1px;background:var(--border);margin:40px 0}
+
+/* Mobile */
+@media(max-width:768px){
+  .layout{flex-direction:column;padding:24px 16px 60px}
+  .toc{width:100%;display:none}
+  .agents-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a class="topnav-home" href="index.html">← BMAD Lab</a>
+  <span class="topnav-sep">/</span>
+  <span class="topnav-title">Guia Enterprise</span>
+</nav>
+
+<div class="layout">
+
+  <!-- TOC -->
+  <aside class="toc">
+    <div class="toc-sticky">
+      <div class="toc-label">Sumário</div>
+      <ul class="toc-list" id="toc-list">
+        <li class="toc-section">Fundamentos</li>
+        <li class="toc-item"><a href="#s1">1. Introdução</a></li>
+        <li class="toc-item"><a href="#s2">2. O que é BMAD</a></li>
+        <li class="toc-item"><a href="#s3">3. Objetivos</a></li>
+        <li class="toc-item"><a href="#s4">4. Quando faz sentido</a></li>
+        <li class="toc-item"><a href="#s5">5. Papel da IA</a></li>
+        <li class="toc-section">Operação</li>
+        <li class="toc-item"><a href="#s6">6. Modelo operacional</a></li>
+        <li class="toc-item"><a href="#s7">7. Fluxo dos agentes</a></li>
+        <li class="toc-section">Artefatos</li>
+        <li class="toc-item"><a href="#s8">8. PRD</a></li>
+        <li class="toc-item"><a href="#s9">9. ADR</a></li>
+        <li class="toc-item"><a href="#s10">10. OpenAPI</a></li>
+        <li class="toc-item"><a href="#s11">11. Context Engineering</a></li>
+        <li class="toc-section">Repositórios</li>
+        <li class="toc-item"><a href="#s12">12. Organização</a></li>
+        <li class="toc-item"><a href="#s13">13. Monorepo</a></li>
+        <li class="toc-item"><a href="#s14">14. Multirepo</a></li>
+        <li class="toc-item"><a href="#s15">15. Context Repo</a></li>
+        <li class="toc-item"><a href="#s16">16. Estrutura de projetos</a></li>
+        <li class="toc-item"><a href="#s17">17. Estrutura de contexto</a></li>
+        <li class="toc-section">Práticas</li>
+        <li class="toc-item"><a href="#s18">18. Fluxo do time</a></li>
+        <li class="toc-item"><a href="#s19">19. Pipelines</a></li>
+        <li class="toc-item"><a href="#s20">20. Melhores práticas</a></li>
+        <li class="toc-item"><a href="#s21">21. O que evitar</a></li>
+        <li class="toc-item"><a href="#s22">22. Recomendações finais</a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <!-- Content -->
+  <main class="content">
+
+    <div class="page-header">
+      <div class="header-label">Guia Estratégico e Operacional</div>
+      <h1>BMAD em Times<br>Enterprise Pequenos</h1>
+      <div class="header-sub">Uso de IA no Desenvolvimento de Software com foco em tiny teams</div>
+      <div class="header-tags">
+        <span class="tag">Enterprise</span>
+        <span class="tag">Tiny Teams</span>
+        <span class="tag">Context Engineering</span>
+        <span class="tag">OpenAPI First</span>
+      </div>
+    </div>
+
+    <!-- 1 -->
+    <div class="section" id="s1">
+      <div class="section-heading"><span class="section-num">01</span> Introdução</div>
+      <div class="section-body">
+        <p>Este documento consolida as melhores práticas para adoção do BMAD em ambientes corporativos, especialmente em <strong style="color:var(--text)">tiny teams</strong> com perfis de PM, Backend, Frontend e QA.</p>
+      </div>
+      <div class="cards" style="margin-top:16px">
+        <div class="card">
+          <div class="card-icon">🎯</div>
+          <div class="card-title">Foco principal</div>
+          <ul class="card-list">
+            <li>Uso estratégico de IA</li>
+            <li>Compartilhamento de contexto</li>
+            <li>Integração frontend/backend</li>
+            <li>Arquitetura sustentável</li>
+            <li>Rastreabilidade</li>
+            <li>Produtividade com qualidade</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-icon">👥</div>
+          <div class="card-title">Perfil do time</div>
+          <ul class="card-list">
+            <li>Product Manager</li>
+            <li>Desenvolvedor Backend</li>
+            <li>Desenvolvedor Frontend</li>
+            <li>QA Engineer</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 2 -->
+    <div class="section" id="s2">
+      <div class="section-heading"><span class="section-num">02</span> O que é BMAD</div>
+      <div class="section-body">
+        <p>BMAD é uma metodologia de desenvolvimento orientada por IA baseada em agentes especializados, contexto estruturado, documentação versionada, contratos compartilhados e fluxo colaborativo.</p>
+      </div>
+      <div class="sub" style="margin-top:16px">
+        <div class="sub-title"><div class="dot" style="background:var(--p1)"></div>Objetivo central</div>
+        <p>O objetivo <strong style="color:var(--text)">NÃO</strong> é substituir pessoas. BMAD existe para <strong style="color:var(--text)">ampliar a capacidade do time</strong>, reduzir perda de contexto, aumentar consistência e acelerar execução.</p>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 3 -->
+    <div class="section" id="s3">
+      <div class="section-heading"><span class="section-num">03</span> Objetivos do BMAD</div>
+      <div class="section-body"><p>O BMAD resolve problemas comuns em times pequenos:</p></div>
+      <div class="cards" style="margin-top:12px">
+        <div class="card" style="border-left:3px solid var(--p4)">
+          <div class="card-title">Problemas que resolve</div>
+          <ul class="card-list">
+            <li>Contexto espalhado</li>
+            <li>Documentação inexistente</li>
+            <li>Dependência de pessoas-chave</li>
+            <li>Desalinhamento entre frontend e backend</li>
+            <li>Perda de decisões arquiteturais</li>
+            <li>Retrabalho e inconsistência técnica</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 4 -->
+    <div class="section" id="s4">
+      <div class="section-heading"><span class="section-num">04</span> Quando BMAD faz sentido</div>
+      <div class="cards" style="margin-top:8px">
+        <div class="card" style="border-left:3px solid var(--p1)">
+          <div class="card-title">✅ Contextos ideais</div>
+          <ul class="card-list">
+            <li>Tiny teams</li>
+            <li>Produtos complexos</li>
+            <li>APIs enterprise</li>
+            <li>Times altamente técnicos</li>
+            <li>Sistemas com muitas regras de negócio</li>
+            <li>Integração forte entre frontend e backend</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 5 -->
+    <div class="section" id="s5">
+      <div class="section-heading"><span class="section-num">05</span> O papel da IA dentro do BMAD</div>
+      <div class="cards" style="margin-top:8px">
+        <div class="card" style="border-left:3px solid var(--p2)">
+          <div class="card-icon">🧠</div>
+          <div class="card-title">Humanos fazem</div>
+          <ul class="card-list">
+            <li>Estratégia</li>
+            <li>Domínio</li>
+            <li>Arquitetura</li>
+            <li>Validação</li>
+          </ul>
+        </div>
+        <div class="card" style="border-left:3px solid var(--p1)">
+          <div class="card-icon">⚡</div>
+          <div class="card-title">IA faz</div>
+          <ul class="card-list">
+            <li>Aceleração</li>
+            <li>Boilerplate</li>
+            <li>Documentação</li>
+            <li>Análise</li>
+            <li>Auxílio operacional</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 6 -->
+    <div class="section" id="s6">
+      <div class="section-heading"><span class="section-num">06</span> Modelo operacional recomendado</div>
+      <div class="section-body"><p>O modelo <strong style="color:var(--text)">Human-led AI Development</strong> é a base de tudo:</p></div>
+      <div class="flow" style="margin-top:16px">
+        <div class="flow-step" style="border-color:var(--p2);color:var(--p2)">Humano define direção</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step" style="border-color:var(--p1);color:var(--p1)">IA acelera execução</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step" style="border-color:var(--p3);color:var(--p3)">Humano valida</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 7 -->
+    <div class="section" id="s7">
+      <div class="section-heading"><span class="section-num">07</span> Fluxo ideal entre os agentes BMAD</div>
+      <div class="flow" style="margin-top:8px;flex-wrap:wrap">
+        <div class="flow-step">Discovery</div><div class="flow-arrow">→</div>
+        <div class="flow-step">PRD</div><div class="flow-arrow">→</div>
+        <div class="flow-step">ADR</div><div class="flow-arrow">→</div>
+        <div class="flow-step">OpenAPI</div><div class="flow-arrow">→</div>
+        <div class="flow-step">Backend + Frontend</div><div class="flow-arrow">→</div>
+        <div class="flow-step">QA</div><div class="flow-arrow">→</div>
+        <div class="flow-step" style="border-color:var(--p1);color:var(--p1)">Deploy</div>
+      </div>
+      <div class="agents-grid" style="margin-top:20px">
+        <div class="agent-card">
+          <div class="agent-header">
+            <div class="agent-pip" style="background:#3ecf8e"></div>
+            <div class="agent-name">Analyst (Mary)</div>
+            <div class="agent-id">bmad-analyst</div>
+          </div>
+          <ul class="agent-resp-list">
+            <li>Entendimento do domínio</li>
+            <li>Definição de escopo</li>
+            <li>Regras iniciais e fluxos</li>
+          </ul>
+        </div>
+        <div class="agent-card">
+          <div class="agent-header">
+            <div class="agent-pip" style="background:#7c6fcd"></div>
+            <div class="agent-name">PM (John)</div>
+            <div class="agent-id">bmad-pm</div>
+          </div>
+          <ul class="agent-resp-list">
+            <li>PRD e epics</li>
+            <li>Histórias de usuário</li>
+            <li>Critérios de aceite</li>
+          </ul>
+        </div>
+        <div class="agent-card">
+          <div class="agent-header">
+            <div class="agent-pip" style="background:#e8975a"></div>
+            <div class="agent-name">Architect (Winston)</div>
+            <div class="agent-id">bmad-architect</div>
+          </div>
+          <ul class="agent-resp-list">
+            <li>Arquitetura e contratos</li>
+            <li>ADRs e decisões técnicas</li>
+          </ul>
+        </div>
+        <div class="agent-card">
+          <div class="agent-header">
+            <div class="agent-pip" style="background:#4faaee"></div>
+            <div class="agent-name">Developer (Amelia)</div>
+            <div class="agent-id">bmad-agent-dev</div>
+          </div>
+          <ul class="agent-resp-list">
+            <li>APIs, services, integração</li>
+            <li>Telas, UX, frontend/backend</li>
+            <li>Sprint planning e stories</li>
+          </ul>
+        </div>
+        <div class="agent-card">
+          <div class="agent-header">
+            <div class="agent-pip" style="background:#e05c7c"></div>
+            <div class="agent-name">UX Designer (Sally)</div>
+            <div class="agent-id">bmad-ux-designer</div>
+          </div>
+          <ul class="agent-resp-list">
+            <li>UX Design e fluxos visuais</li>
+          </ul>
+        </div>
+        <div class="agent-card">
+          <div class="agent-header">
+            <div class="agent-pip" style="background:#aaa"></div>
+            <div class="agent-name">Tech Writer (Paige)</div>
+            <div class="agent-id">bmad-tech-writer</div>
+          </div>
+          <ul class="agent-resp-list">
+            <li>Documentação técnica</li>
+            <li>Cenários, validações, automações</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 8 -->
+    <div class="section" id="s8">
+      <div class="section-heading"><span class="section-num">08</span> PRD — Product Requirements Document</div>
+      <div class="section-body"><p>Documento funcional que descreve problema, objetivos, regras, requisitos e comportamento esperado.</p></div>
+      <div class="sub" style="margin-top:16px">
+        <div class="sub-title"><div class="dot" style="background:var(--p2)"></div>Estrutura recomendada</div>
+        <ol style="padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--muted)">
+          <li>Objetivo</li>
+          <li>Problema</li>
+          <li>Escopo</li>
+          <li>Regras de negócio</li>
+          <li>Fluxos</li>
+          <li>Critérios de aceite</li>
+          <li>Requisitos funcionais</li>
+          <li>Requisitos não funcionais</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 9 -->
+    <div class="section" id="s9">
+      <div class="section-heading"><span class="section-num">09</span> ADR — Architecture Decision Record</div>
+      <div class="section-body"><p>Documento responsável por registrar decisões arquiteturais, contexto, tradeoffs e impactos. Garante rastreabilidade total de "por que chegamos aqui".</p></div>
+      <div class="sub" style="margin-top:16px">
+        <div class="sub-title"><div class="dot" style="background:var(--p3)"></div>Estrutura recomendada</div>
+        <ol style="padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--muted)">
+          <li>Título</li>
+          <li>Status (proposed / accepted / deprecated)</li>
+          <li>Contexto</li>
+          <li>Decisão</li>
+          <li>Consequências</li>
+          <li>Alternativas consideradas</li>
+          <li>Referências</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 10 -->
+    <div class="section" id="s10">
+      <div class="section-heading"><span class="section-num">10</span> OpenAPI como contrato central</div>
+      <div class="section-body"><p>O OpenAPI deve ser definido <strong style="color:var(--text)">antes</strong> da implementação — centralizado, versionado e compartilhado entre todos os times.</p></div>
+      <div class="flow" style="margin-top:16px">
+        <div class="flow-step">Regras</div><div class="flow-arrow">→</div>
+        <div class="flow-step" style="border-color:var(--p2);color:var(--p2)">Contratos OpenAPI</div><div class="flow-arrow">→</div>
+        <div class="flow-step">Backend</div><div class="flow-arrow">→</div>
+        <div class="flow-step">Frontend</div><div class="flow-arrow">→</div>
+        <div class="flow-step" style="border-color:var(--p1);color:var(--p1)">QA</div>
+      </div>
+      <div class="sub" style="margin-top:16px">
+        <div class="sub-title"><div class="dot" style="background:var(--p1)"></div>Boas práticas</div>
+        <ul><li>Centralizado no context repo</li><li>Versionado com semantic versioning</li><li>Definido antes de qualquer implementação</li><li>Compartilhado como fonte da verdade entre frontend, backend e QA</li></ul>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 11 -->
+    <div class="section" id="s11">
+      <div class="section-heading"><span class="section-num">11</span> Context Engineering</div>
+      <div class="section-body">
+        <p>Context Engineering é o processo de estruturar, versionar e compartilhar conhecimento para que a IA receba o contexto correto em cada etapa. É o diferencial entre uma IA que "chuta" e uma IA que age como membro do time.</p>
+      </div>
+      <div class="cards" style="margin-top:12px">
+        <div class="card">
+          <div class="card-icon">📐</div>
+          <div class="card-title">Estruturar</div>
+          <div class="card-body">Organizar conhecimento em artefatos claros: PRD, ADR, OpenAPI, claude.md</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">📦</div>
+          <div class="card-title">Versionar</div>
+          <div class="card-body">Todo contexto vive no Git. Decisões têm histórico e são auditáveis</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔗</div>
+          <div class="card-title">Compartilhar</div>
+          <div class="card-body">Um context repo central serve como fonte da verdade para todos os agentes e devs</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 12 -->
+    <div class="section" id="s12">
+      <div class="section-heading"><span class="section-num">12</span> Organização de repositórios</div>
+      <div class="section-body"><p>Dois modelos principais: <strong style="color:var(--text)">Monorepo</strong> e <strong style="color:var(--text)">Multirepo</strong>. A escolha depende do tamanho do time, das pipelines corporativas e da necessidade de deploy independente.</p></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 13 -->
+    <div class="section" id="s13">
+      <div class="section-heading"><span class="section-num">13</span> Estratégia Monorepo</div>
+      <div class="sub">
+        <div class="sub-title"><div class="dot" style="background:var(--p2)"></div>Estrutura recomendada</div>
+<pre><code>produto/
+├── apps/
+│   ├── backend/
+│   └── frontend/
+│
+└── docs/
+    ├── contracts/
+    ├── adr/
+    └── .ai/</code></pre>
+      </div>
+      <div class="cards" style="margin-top:12px">
+        <div class="card" style="border-left:3px solid var(--p1)">
+          <div class="card-title">✅ Fazer</div>
+          <ul class="card-list">
+            <li>Um único Git repository</li>
+            <li>Pipelines separadas por path</li>
+          </ul>
+        </div>
+        <div class="card" style="border-left:3px solid var(--p4)">
+          <div class="card-title">❌ Evitar</div>
+          <ul class="card-list">
+            <li>Múltiplos .git internos</li>
+            <li>Nested repositories</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 14 -->
+    <div class="section" id="s14">
+      <div class="section-heading"><span class="section-num">14</span> Estratégia Multirepo</div>
+      <div class="sub">
+        <div class="sub-title"><div class="dot" style="background:var(--p3)"></div>Estrutura recomendada</div>
+<pre><code>produto-context/
+produto-backend/
+produto-frontend/</code></pre>
+      </div>
+      <div class="sub" style="margin-top:12px">
+        <div class="sub-title"><div class="dot" style="background:var(--p1)"></div>Melhor prática</div>
+        <ul><li>Context repo centralizado e compartilhado</li><li>Workspace compartilhado entre os repos</li><li>Pipelines independentes por repo</li></ul>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 15 -->
+    <div class="section" id="s15">
+      <div class="section-heading"><span class="section-num">15</span> Context Repository</div>
+      <div class="section-body"><p>O context repo é o <strong style="color:var(--text)">cérebro do produto</strong> — fonte da verdade e camada de contexto compartilhada entre todos os times e agentes de IA.</p></div>
+      <div class="sub" style="margin-top:16px">
+        <div class="sub-title"><div class="dot" style="background:var(--p5)"></div>Estrutura recomendada</div>
+<pre><code>context-repo/
+├── docs/
+├── contracts/     ← OpenAPI e contratos
+├── adr/           ← Architecture Decision Records
+├── .ai/           ← Contexto para agentes IA
+├── flows/         ← Fluxos de negócio
+└── stories/       ← Stories e epics</code></pre>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 16 -->
+    <div class="section" id="s16">
+      <div class="section-heading"><span class="section-num">16</span> Estrutura ideal dos projetos</div>
+      <div class="sub">
+        <div class="sub-title"><div class="dot" style="background:var(--p1)"></div>Exemplo workspace multirepo</div>
+<pre><code>workspace/
+├── produto-context/     ← fonte da verdade
+├── produto-backend/     ← API e serviços
+└── produto-frontend/    ← interface e UX</code></pre>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 17 -->
+    <div class="section" id="s17">
+      <div class="section-heading"><span class="section-num">17</span> Estrutura de contexto para IA</div>
+      <div class="sub">
+        <div class="sub-title"><div class="dot" style="background:var(--p2)"></div>Pasta .ai/ por escopo</div>
+<pre><code>.ai/
+├── shared/
+│   └── company-standards.md   ← padrões globais
+├── backend/
+│   └── backend-agent.md       ← contexto do backend
+└── frontend/
+    └── angular-guidelines.md  ← contexto do frontend</code></pre>
+      </div>
+      <div class="section-body" style="margin-top:12px"><p>Cada agente recebe apenas o contexto necessário para sua tarefa — evitando poluição de contexto e respostas genéricas.</p></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 18 -->
+    <div class="section" id="s18">
+      <div class="section-heading"><span class="section-num">18</span> Fluxo operacional do time</div>
+      <div class="cards" style="margin-top:8px">
+        <div class="card" style="border-left:3px solid var(--p2)">
+          <div class="card-icon">🏗</div>
+          <div class="card-title">Macro — fluxo sequencial</div>
+          <div class="card-body">Discovery → PRD → ADR → OpenAPI → Implementação → QA → Deploy. Cada etapa depende da anterior e gera artefatos que alimentam a próxima.</div>
+        </div>
+        <div class="card" style="border-left:3px solid var(--p1)">
+          <div class="card-icon">⚡</div>
+          <div class="card-title">Micro — trabalho paralelo</div>
+          <div class="card-body">Com os contratos (OpenAPI) definidos, backend e frontend trabalham em paralelo de forma autônoma, sem bloqueio mútuo.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 19 -->
+    <div class="section" id="s19">
+      <div class="section-heading"><span class="section-num">19</span> Integração com pipelines corporativas</div>
+      <div class="cards" style="margin-top:8px">
+        <div class="card" style="border-left:3px solid var(--p1)">
+          <div class="card-title">Manter</div>
+          <ul class="card-list">
+            <li>Pipelines independentes por serviço</li>
+            <li>Deploy separado por repositório</li>
+          </ul>
+        </div>
+        <div class="card" style="border-left:3px solid var(--p2)">
+          <div class="card-title">Adicionar</div>
+          <ul class="card-list">
+            <li>Context repo compartilhado</li>
+            <li>OpenAPI centralizado</li>
+            <li>Workspace compartilhado</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 20 -->
+    <div class="section" id="s20">
+      <div class="section-heading"><span class="section-num">20</span> Melhores práticas</div>
+      <div class="checklist" style="margin-top:8px">
+        <div class="check-item good"><span class="check-icon">✅</span><div class="check-text"><strong>OpenAPI First</strong> — defina contratos antes de implementar</div></div>
+        <div class="check-item good"><span class="check-icon">✅</span><div class="check-text"><strong>Context-first development</strong> — estruture o contexto antes de invocar qualquer agente</div></div>
+        <div class="check-item good"><span class="check-icon">✅</span><div class="check-text"><strong>ADRs curtos e objetivos</strong> — documente decisões no momento em que são tomadas</div></div>
+        <div class="check-item good"><span class="check-icon">✅</span><div class="check-text"><strong>PRD versionado</strong> — trate o PRD como código, com histórico e revisões</div></div>
+        <div class="check-item good"><span class="check-icon">✅</span><div class="check-text"><strong>IA contextualizada</strong> — sempre forneça o contexto correto antes de qualquer prompt</div></div>
+        <div class="check-item good"><span class="check-icon">✅</span><div class="check-text"><strong>Contratos centralizados</strong> — um único lugar para OpenAPI, acessível a todos</div></div>
+        <div class="check-item good"><span class="check-icon">✅</span><div class="check-text"><strong>Padrões corporativos compartilhados</strong> — <code>.ai/shared/company-standards.md</code></div></div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 21 -->
+    <div class="section" id="s21">
+      <div class="section-heading"><span class="section-num">21</span> O que evitar</div>
+      <div class="checklist" style="margin-top:8px">
+        <div class="check-item bad"><span class="check-icon">❌</span><div class="check-text"><strong>IA trabalhando sem contexto</strong> — gera alucinações e código inconsistente</div></div>
+        <div class="check-item bad"><span class="check-icon">❌</span><div class="check-text"><strong>OpenAPI apenas no backend</strong> — frontend perde a fonte da verdade</div></div>
+        <div class="check-item bad"><span class="check-icon">❌</span><div class="check-text"><strong>Regras fora do Git</strong> — decisões em Slack, e-mail ou cabeças de pessoas</div></div>
+        <div class="check-item bad"><span class="check-icon">❌</span><div class="check-text"><strong>Documentação desconectada</strong> — docs que não acompanham o código ficam obsoletos</div></div>
+        <div class="check-item bad"><span class="check-icon">❌</span><div class="check-text"><strong>Duplicação manual de contexto</strong> — cada repo replicando as mesmas regras manualmente</div></div>
+        <div class="check-item bad"><span class="check-icon">❌</span><div class="check-text"><strong>Nested repositories complexos</strong> — múltiplos <code>.git</code> dentro de um mesmo repo</div></div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 22 -->
+    <div class="section" id="s22">
+      <div class="section-heading"><span class="section-num">22</span> Recomendações finais</div>
+      <div class="sub" style="margin-top:8px;border-color:var(--p2)">
+        <div class="sub-title"><div class="dot" style="background:var(--p2)"></div>Modelo recomendado para tiny teams enterprise</div>
+        <div class="flow" style="flex-wrap:wrap;margin-top:8px">
+          <div class="flow-step" style="border-color:var(--p2);color:var(--p2)">Multirepo</div>
+          <div class="flow-arrow">+</div>
+          <div class="flow-step" style="border-color:var(--p1);color:var(--p1)">Context Repo</div>
+          <div class="flow-arrow">+</div>
+          <div class="flow-step" style="border-color:var(--p3);color:var(--p3)">Workspace Compartilhado</div>
+          <div class="flow-arrow">+</div>
+          <div class="flow-step" style="border-color:var(--p5);color:var(--p5)">OpenAPI Centralizado</div>
+        </div>
+      </div>
+      <div class="sub" style="margin-top:12px">
+        <div class="sub-title"><div class="dot" style="background:var(--p1)"></div>BMAD entrega mais valor quando</div>
+        <ul>
+          <li>Humanos lideram a estratégia</li>
+          <li>IA acelera a execução</li>
+          <li>Contexto é estruturado e versionado</li>
+          <li>Contratos são compartilhados e centralizados</li>
+          <li>Arquitetura é rastreável via ADRs</li>
+          <li>Padrões corporativos são respeitados e documentados</li>
+        </ul>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+// Active TOC on scroll
+const sections = document.querySelectorAll('.section[id]');
+const links = document.querySelectorAll('.toc-item a');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      links.forEach(l => l.classList.remove('active'));
+      const active = document.querySelector(`.toc-item a[href="#${e.target.id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

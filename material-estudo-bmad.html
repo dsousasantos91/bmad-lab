@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BMAD Method — Plano de Estudos</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f1117;
+  --surface: #181c27;
+  --surface2: #1f2535;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --text: #e8eaf0;
+  --muted: #7a8099;
+  --faint: #3a3f52;
+
+  --p1: #3ecf8e; --p1d: #0f3d25; --p1t: #1a5c38;
+  --p2: #7c6fcd; --p2d: #1e1840; --p2t: #2d2560;
+  --p3: #e8975a; --p3d: #3d2010; --p3t: #5c3018;
+  --p4: #e05c7c; --p4d: #3d0f1f; --p4t: #5c1830;
+  --p5: #4faaee; --p5d: #0d2540; --p5t: #1a3d60;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ── Layout ── */
+.page { max-width: 900px; margin: 0 auto; padding: 48px 24px 80px; }
+
+/* ── Header ── */
+.header { margin-bottom: 48px; }
+.header-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.header h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(28px, 5vw, 44px);
+  font-weight: 400;
+  line-height: 1.15;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+.header-meta {
+  font-size: 14px;
+  color: var(--muted);
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+}
+.header-meta span { display: flex; align-items: center; gap: 6px; }
+
+/* ── Stats bar ── */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 48px;
+}
+.stat {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 20px;
+}
+.stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px; }
+.stat-value { font-size: 26px; font-weight: 600; color: var(--text); line-height: 1; }
+.stat-sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+.progress-wrap { margin-top: 10px; background: var(--faint); border-radius: 99px; height: 4px; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 99px; background: var(--p1); transition: width .5s ease; }
+
+/* ── Cronograma ── */
+.section-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 20px;
+  font-weight: 400;
+  margin-bottom: 20px;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-title::after { content:''; flex:1; height:1px; background:var(--border); }
+
+.cronograma {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 48px;
+  overflow-x: auto;
+}
+.crono-weeks {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 4px;
+  min-width: 600px;
+}
+.crono-week { text-align: center; }
+.crono-week-label {
+  font-size: 10px;
+  color: var(--muted);
+  font-family: 'DM Mono', monospace;
+  margin-bottom: 6px;
+  letter-spacing: 0.05em;
+}
+.crono-bar {
+  height: 36px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  position: relative;
+  cursor: default;
+  transition: opacity .15s;
+}
+.crono-bar:hover { opacity: 0.85; }
+.crono-bar.ph1 { background: var(--p1t); color: var(--p1); border: 1px solid var(--p1); }
+.crono-bar.ph2 { background: var(--p2t); color: var(--p2); border: 1px solid var(--p2); }
+.crono-bar.ph3 { background: var(--p3t); color: var(--p3); border: 1px solid var(--p3); }
+.crono-bar.ph4 { background: var(--p4t); color: var(--p4); border: 1px solid var(--p4); }
+.crono-bar.ph5 { background: var(--p5t); color: var(--p5); border: 1px solid var(--p5); }
+.crono-bar.done-week { opacity: 0.45; }
+
+.crono-legend {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.crono-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.crono-dot {
+  width: 10px; height: 10px; border-radius: 3px;
+}
+
+/* ── Info box ── */
+.info-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 48px;
+}
+.info-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 20px;
+}
+.info-card-icon { font-size: 20px; margin-bottom: 8px; }
+.info-card-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.info-card-text { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+/* ── Phases ── */
+.phase { margin-bottom: 24px; }
+.phase-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 22px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  cursor: pointer;
+  user-select: none;
+  transition: border-color .15s, background .15s;
+}
+.phase-header:hover { background: var(--surface2); border-color: var(--border2); }
+.phase-header.open { border-radius: 14px 14px 0 0; border-bottom-color: transparent; }
+.phase-pip {
+  width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+}
+.phase-info { flex: 1; }
+.phase-name { font-size: 15px; font-weight: 600; color: var(--text); }
+.phase-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.phase-badge {
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  padding: 4px 10px;
+  border-radius: 99px;
+  font-weight: 500;
+}
+.phase-progress-mini {
+  font-size: 11px;
+  color: var(--muted);
+  font-family: 'DM Mono', monospace;
+  white-space: nowrap;
+}
+.phase-chevron { color: var(--muted); font-size: 12px; transition: transform .2s; }
+.phase-chevron.open { transform: rotate(90deg); }
+
+.phase-body {
+  display: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 14px 14px;
+  padding: 8px 12px 16px;
+}
+.phase-body.open { display: block; }
+
+/* ── Session cards ── */
+.session {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background .12s;
+  border-bottom: 1px solid var(--border);
+}
+.session:last-child { border-bottom: none; }
+.session:hover { background: var(--surface2); }
+
+.session-check {
+  width: 20px; height: 20px;
+  border-radius: 6px;
+  border: 1.5px solid var(--faint);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+  transition: background .15s, border-color .15s;
+  font-size: 11px;
+}
+.session-check.done {
+  background: var(--p1);
+  border-color: var(--p1);
+  color: #000;
+  font-weight: 700;
+}
+.session-main { flex: 1; }
+.session-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.session-num {
+  font-size: 10px;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+  background: var(--faint);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.session-title { font-size: 14px; font-weight: 500; color: var(--text); }
+.session-title.done-text { opacity: 0.45; text-decoration: line-through; }
+.session-time {
+  font-size: 10px;
+  color: var(--muted);
+  font-family: 'DM Mono', monospace;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+.session-content {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-top: 4px;
+}
+.session-content code {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  background: var(--faint);
+  padding: 1px 5px;
+  border-radius: 4px;
+  color: var(--text);
+}
+.session-tasks {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.session-task {
+  font-size: 12px;
+  color: var(--muted);
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+.session-task::before {
+  content: '→';
+  color: var(--faint);
+  flex-shrink: 0;
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+/* ── Reset btn ── */
+.reset-btn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color .15s, color .15s;
+}
+.reset-btn:hover { border-color: var(--border2); color: var(--text); }
+
+.footer {
+  margin-top: 60px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--faint);
+  text-align: center;
+}
+</style>
+</head>
+<body>
+<nav style="position:sticky;top:0;z-index:100;background:rgba(15,17,23,0.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.07);padding:0 24px;height:52px;display:flex;align-items:center;gap:16px;margin:0 -24px;margin-bottom:0">
+  <a href="index.html" style="font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .15s" onmouseover="this.style.color='#e8eaf0'" onmouseout="this.style.color='#7a8099'">← BMAD Lab</a>
+  <span style="color:var(--faint);font-size:12px">/</span>
+  <span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--text)">Plano de Estudos</span>
+</nav>
+
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-label">Plano de estudos · 30 min/dia</div>
+    <h1>BMAD Method<br>com Claude Code + VSCode</h1>
+    <div class="header-meta">
+      <span>📅 12 semanas</span>
+      <span>⏱ 60 sessões × 30 min</span>
+      <span>🎯 30 horas no total</span>
+      <span>📆 5 dias por semana</span>
+    </div>
+    <button class="reset-btn" onclick="resetProgress()">↺ Reiniciar progresso</button>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-label">Progresso</div>
+      <div class="stat-value" id="pct">0%</div>
+      <div class="stat-sub" id="pct-sub">0 de 60 sessões</div>
+      <div class="progress-wrap"><div class="progress-fill" id="prog-bar" style="width:0%"></div></div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Horas estudadas</div>
+      <div class="stat-value" id="hours">0h</div>
+      <div class="stat-sub">de 30h totais</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Fase atual</div>
+      <div class="stat-value" id="cur-phase" style="font-size:18px">Fase 1</div>
+      <div class="stat-sub" id="cur-phase-sub">Fundamentos</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Previsão de término</div>
+      <div class="stat-value" id="finish-date" style="font-size:16px">—</div>
+      <div class="stat-sub" id="finish-sub">a partir de hoje</div>
+    </div>
+  </div>
+
+  <!-- Cronograma -->
+  <div class="section-title">Cronograma</div>
+  <div class="cronograma">
+    <div class="crono-weeks" id="crono-weeks"></div>
+    <div class="crono-legend">
+      <div class="crono-legend-item"><div class="crono-dot" style="background:#3ecf8e"></div>Fase 1 — Fundamentos</div>
+      <div class="crono-legend-item"><div class="crono-dot" style="background:#7c6fcd"></div>Fase 2 — Fluxo básico</div>
+      <div class="crono-legend-item"><div class="crono-dot" style="background:#e8975a"></div>Fase 3 — VSCode + Claude Code</div>
+      <div class="crono-legend-item"><div class="crono-dot" style="background:#e05c7c"></div>Fase 4 — Avançado</div>
+      <div class="crono-legend-item"><div class="crono-dot" style="background:#4faaee"></div>Fase 5 — Expert</div>
+    </div>
+  </div>
+
+  <!-- Info cards -->
+  <div class="info-row">
+    <div class="info-card">
+      <div class="info-card-icon">⏱</div>
+      <div class="info-card-title">Como usar as sessões</div>
+      <div class="info-card-text">Cada sessão dura 30 minutos. Siga as tarefas listadas em ordem. Marque a sessão como concluída ao terminar.</div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-icon">📌</div>
+      <div class="info-card-title">Progresso salvo automaticamente</div>
+      <div class="info-card-text">Seu progresso é salvo no navegador (localStorage). Você pode fechar e voltar quando quiser.</div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-icon">🔁</div>
+      <div class="info-card-title">Sessões de revisão</div>
+      <div class="info-card-text">Ao final de cada fase há uma sessão de revisão. Use-a para consolidar o que aprendeu antes de avançar.</div>
+    </div>
+  </div>
+
+  <!-- Phases -->
+  <div class="section-title">Sessões de estudo</div>
+  <div id="phases-container"></div>
+
+  <div class="footer">BMAD Method Study Plan · Gerado com Claude · 2026</div>
+</div>
+
+<script>
+const PHASES = [
+  {
+    id: 1,
+    name: 'Fase 1 — Fundamentos',
+    desc: 'Semanas 1–2 · Ambiente, conceitos e primeiros passos',
+    color: '#3ecf8e',
+    bg: '#0f3d25',
+    weeks: [1, 2],
+    sessions: [
+      {
+        title: 'Instalação do VSCode e extensão Claude Code',
+        content: 'Configure o ambiente base de desenvolvimento.',
+        tasks: [
+          'Instale o VSCode em code.visualstudio.com caso ainda não tenha',
+          'Abra o VSCode → Extensions (Ctrl+Shift+X) → pesquise "Claude Code" e instale',
+          'Faça login com sua conta Anthropic na extensão',
+          'Crie uma pasta de projeto de teste: mkdir bmad-hello && cd bmad-hello',
+          'Abra a pasta no VSCode e confirme que o painel Claude Code aparece na barra lateral'
+        ]
+      },
+      {
+        title: 'Instalação do Node.js e BMAD',
+        content: 'Instale as dependências e o framework BMAD no projeto.',
+        tasks: [
+          'Verifique se Node.js está instalado: node --version (precisa ser v18+)',
+          'Se não tiver, baixe em nodejs.org e instale a versão LTS',
+          'No terminal do VSCode, dentro da pasta do projeto, execute: npx bmad-method install',
+          'Siga todos os prompts do instalador (aceite as opções padrão por enquanto)',
+          'Explore a estrutura gerada: pasta .bmad, arquivos de agentes (.md) e workflows'
+        ]
+      },
+      {
+        title: 'Explorando a estrutura de arquivos do BMAD',
+        content: 'Entenda o que cada arquivo e pasta do BMAD faz.',
+        tasks: [
+          'Abra o Explorer do VSCode e navegue pela pasta .bmad/',
+          'Leia o arquivo README ou SKILL.md de apresentação do BMAD',
+          'Abra o arquivo de um agente (ex: analyst.md) e leia a persona e skills definidos',
+          'Identifique a pasta de workflows e abra um arquivo .yaml para entender a estrutura',
+          'Anote suas dúvidas sobre a estrutura para explorar nas próximas sessões'
+        ]
+      },
+      {
+        title: 'Entendendo os 6 agentes oficiais do BMAD',
+        content: 'Conheça cada agente e sua responsabilidade no ciclo de desenvolvimento.',
+        tasks: [
+          'Leia o arquivo de definição dos agentes de planejamento: Analyst (Mary) — bmad-analyst, PM (John) — bmad-pm, Architect (Winston) — bmad-architect',
+          'Leia os agentes de execução: Developer (Amelia) — bmad-agent-dev, UX Designer (Sally) — bmad-ux-designer, Technical Writer (Paige) — bmad-tech-writer',
+          'Para cada agente, anote: qual é a sua persona? Quais são seus triggers? Quando usá-lo?',
+          'Acesse docs.bmad-method.org/reference/agents e leia a tabela oficial de triggers de cada agente',
+          'Desenhe (no papel ou num doc) o fluxo: qual agente alimenta qual? Como as stories são criadas (PM via CE + Developer via SP/CS)?'
+        ]
+      },
+      {
+        title: 'Primeiro contato com @bmad-help',
+        content: 'Use o agente de ajuda para se orientar no framework.',
+        tasks: [
+          'Abra o painel Claude Code no VSCode (barra lateral)',
+          'Digite: @bmad-help e pressione Enter',
+          'Leia toda a resposta do agente sobre o que o BMAD pode fazer',
+          'Pergunte: "what modules are available?"',
+          'Pergunte: "I am a beginner, what should I do first?" e siga as orientações'
+        ]
+      },
+      {
+        title: 'Documentação oficial — Getting Started',
+        content: 'Leitura estruturada da documentação para construir base sólida.',
+        tasks: [
+          'Acesse docs.bmad-method.org no navegador',
+          'Leia a seção completa "Getting Started" sem pular nenhuma parte',
+          'Preste atenção especial na seção de instalação e primeiros comandos',
+          'Anote os 3 conceitos que pareceram mais importantes',
+          'Salve nos favoritos as páginas que precisará consultar com frequência'
+        ]
+      },
+      {
+        title: 'Documentação oficial — Core Concepts',
+        content: 'Compreenda os pilares conceituais do BMAD Method.',
+        tasks: [
+          'Leia a seção "Core Concepts" da documentação oficial',
+          'Entenda o conceito de "artifact-driven development" (tudo é um artefato versionável)',
+          'Estude o ciclo completo: Ideação → PRD → Arquitetura → Stories → Código',
+          'Leia sobre o conceito de "agent handoff" — como um agente passa para o próximo',
+          'Escreva com suas palavras: o que diferencia BMAD de usar Claude diretamente?'
+        ]
+      },
+      {
+        title: 'Criando o projeto de prática',
+        content: 'Configure um projeto real (simples) para praticar durante todo o roadmap.',
+        tasks: [
+          'Decida um projeto pequeno para usar como campo de prática (ex: app de lista de tarefas, blog simples)',
+          'Crie a pasta do projeto: mkdir meu-projeto-bmad && cd meu-projeto-bmad',
+          'Execute npx bmad-method install nesta pasta',
+          'Inicialize o Git: git init && git add . && git commit -m "chore: init bmad"',
+          'Abra o projeto no VSCode e confirme que tudo está funcionando'
+        ]
+      },
+      {
+        title: 'Explorando os 6 agentes oficiais na prática',
+        content: 'Interaja com cada um dos 6 agentes padrão do BMAD para entender suas personas.',
+        tasks: [
+          'Ative o Analyst (Mary) via skill bmad-analyst e diga "hello, what can you do?"',
+          'Faça o mesmo com o PM (John) via bmad-pm e o Architect (Winston) via bmad-architect',
+          'Experimente o Developer (Amelia) via bmad-agent-dev, o UX Designer (Sally) via bmad-ux-designer e o Technical Writer (Paige) via bmad-tech-writer',
+          'Observe as diferenças de persona, tom e foco de cada agente — cada um tem triggers próprios (ex: CP para criar PRD, CA para criar arquitetura)',
+          'Documente num arquivo NOTAS.md suas observações: qual agente usar em qual momento?'
+        ]
+      },
+      {
+        title: 'Revisão da Fase 1',
+        content: 'Consolide o aprendizado antes de avançar para o fluxo completo.',
+        tasks: [
+          'Revise suas anotações das 9 sessões anteriores',
+          'Confirme: consegue instalar o BMAD do zero sem consultar tutorial?',
+          'Confirme: sabe identificar para que serve cada agente?',
+          'Confirme: ambiente VSCode + Claude Code funcionando corretamente?',
+          'Use @bmad-help para perguntar "I finished the basics setup, what is next?" e anote a resposta'
+        ]
+      }
+    ]
+  },
+  {
+    id: 2,
+    name: 'Fase 2 — Fluxo de trabalho básico',
+    desc: 'Semanas 3–4 · Usando agentes para criar um projeto do zero',
+    color: '#7c6fcd',
+    bg: '#1e1840',
+    weeks: [3, 4],
+    sessions: [
+      {
+        title: 'Agente Analyst — iniciando o briefing',
+        content: 'Use o Analyst para estruturar o problema do seu projeto de prática.',
+        tasks: [
+          'Abra o projeto de prática no VSCode',
+          'Ative o Analyst: @analyst',
+          'Diga: "I want to create [seu projeto]. Can you help me define the problem?"',
+          'Responda às perguntas do agente sobre problema, público-alvo e contexto',
+          'Salve as perguntas feitas pelo Analyst — elas revelam como o framework pensa'
+        ]
+      },
+      {
+        title: 'Agente Analyst — finalizando o Project Brief',
+        content: 'Complete e refine o briefing do projeto com o Analyst.',
+        tasks: [
+          'Continue a sessão do Analyst do dia anterior (ou reative e cole o contexto)',
+          'Peça ao Analyst para fazer uma análise de mercado simplificada',
+          'Peça para identificar os principais diferenciais do seu projeto',
+          'Solicite que gere o Project Brief final em formato markdown',
+          'Salve o arquivo como docs/project-brief.md e faça commit: git commit -m "docs: project brief"'
+        ]
+      },
+      {
+        title: 'Agente PM — criando o PRD',
+        content: 'Transforme o Project Brief em um documento de requisitos de produto.',
+        tasks: [
+          'Cole o conteúdo do project-brief.md no contexto do Claude Code',
+          'Ative o agente PM: @pm',
+          'Diga: "Here is our project brief. Please create the PRD."',
+          'Deixe o PM criar o PRD com user stories e critérios de aceite',
+          'Salve como docs/prd.md e faça commit'
+        ]
+      },
+      {
+        title: 'Agente PM — revisando e iterando o PRD',
+        content: 'Refine o PRD para garantir qualidade antes de passar para arquitetura.',
+        tasks: [
+          'Leia o PRD gerado linha por linha com atenção crítica',
+          'Identifique: as user stories fazem sentido? Os critérios de aceite são testáveis?',
+          'Peça ao PM para refinar 2 ou 3 user stories que pareçam vagas',
+          'Adicione uma seção de "non-goals" (o que este projeto NÃO vai fazer)',
+          'Faça o commit final do PRD: git commit -m "docs: finalize prd v1"'
+        ]
+      },
+      {
+        title: 'Agente Architect — proposta de arquitetura',
+        content: 'Use o Architect para desenhar a solução técnica baseada no PRD.',
+        tasks: [
+          'Cole o PRD como contexto no Claude Code',
+          'Ative o Architect: @architect',
+          'Diga: "Based on this PRD, propose an architecture for our project"',
+          'Analise a proposta: stack técnica, estrutura de pastas, decisões de design',
+          'Pergunte: "What are the main technical risks in this architecture?"'
+        ]
+      },
+      {
+        title: 'Agente Architect — refinando e documentando',
+        content: 'Finalize o documento de arquitetura versionado.',
+        tasks: [
+          'Peça ao Architect para detalhar os contratos de API (endpoints principais)',
+          'Solicite um diagrama de componentes em formato texto (ASCII ou mermaid)',
+          'Pergunte sobre a estratégia de banco de dados e justificativa',
+          'Salve como docs/architecture.md e faça commit',
+          'Reflita: a arquitetura resolve todos os requisitos do PRD?'
+        ]
+      },
+      {
+        title: 'Agente PM — criando epics e stories (trigger CE)',
+        content: 'Use o agente PM para quebrar o PRD em epics e stories acionáveis.',
+        tasks: [
+          'Cole PRD + arquitetura como contexto no Claude Code',
+          'Ative o agente PM: bmad-pm e use o trigger CE (Create Epics and Stories)',
+          'Deixe o PM gerar epics organizados por funcionalidade e as stories de cada epic',
+          'Revise as stories: cada uma tem contexto claro, critério de aceite e é independente?',
+          'Salve as stories em docs/stories/ (uma por arquivo) e faça commit'
+        ]
+      },
+      {
+        title: 'Agente Developer — Sprint Planning e refinamento de stories (triggers SP e CS)',
+        content: 'Use o Developer para planejar o sprint e detalhar stories tecnicamente.',
+        tasks: [
+          'Ative o agente Developer (bmad-agent-dev) com as stories geradas pelo PM',
+          'Use o trigger SP (Sprint Planning) para o Developer priorizar e ordenar as stories',
+          'Para stories vagas, use o trigger CS (Create Story) para o Developer gerar versões mais detalhadas com contexto técnico',
+          'Certifique-se de que cada story define claramente o que deve ser implementado antes de passar para o Dev Loop',
+          'Salve a versão final das stories e faça commit: git commit -m "docs: finalize stories v1"'
+        ]
+      },
+      {
+        title: 'Agente Developer — primeira story',
+        content: 'Implemente sua primeira story com o agente Developer.',
+        tasks: [
+          'Escolha a story mais simples e sem dependências',
+          'Cole a story como contexto e ative: @developer',
+          'Diga: "Please implement this story"',
+          'Analise o código gerado: está alinhado com a arquitetura?',
+          'Salve o código, rode localmente se possível, faça commit'
+        ]
+      },
+      {
+        title: 'Revisão do ciclo completo — Fase 2',
+        content: 'Consolide o fluxo Brief → PRD → Arquitetura → Stories → Código.',
+        tasks: [
+          'Revise todos os artefatos criados: brief, PRD, arquitetura, stories, código',
+          'Verifique a consistência: o código entregue resolve o que o PRD prometeu?',
+          'Anote o que foi difícil e o que foi surpreendentemente fácil',
+          'Responda: qual agente foi mais valioso neste ciclo? Por quê?',
+          'Use @bmad-help para perguntar "I completed the first cycle, what should I improve?"'
+        ]
+      }
+    ]
+  },
+  {
+    id: 3,
+    name: 'Fase 3 — Integração VSCode + Claude Code',
+    desc: 'Semanas 5–6 · Produtividade máxima no editor',
+    color: '#e8975a',
+    bg: '#3d2010',
+    weeks: [5, 6],
+    sessions: [
+      {
+        title: 'Explorando o painel Claude Code no VSCode',
+        content: 'Domine todos os recursos da extensão para ganhar produtividade.',
+        tasks: [
+          'Explore todos os ícones e botões do painel lateral do Claude Code',
+          'Aprenda o atalho para abrir/fechar o painel (normalmente Ctrl+Shift+A ou configurável)',
+          'Teste a seleção de contexto: selecione um trecho de código e peça análise ao Claude Code',
+          'Explore como adicionar arquivos específicos ao contexto da conversa',
+          'Configure as preferências da extensão em Settings → Extensions → Claude Code'
+        ]
+      },
+      {
+        title: 'Escrevendo um claude.md eficiente',
+        content: 'Crie o arquivo de contexto persistente que alimenta todos os agentes.',
+        tasks: [
+          'Crie o arquivo claude.md na raiz do projeto',
+          'Adicione: nome e descrição do projeto, stack técnica escolhida',
+          'Adicione: convenções de código (nomenclatura, padrão de commits, estrutura de pastas)',
+          'Adicione: restrições importantes (ex: "não usar dependências externas para X")',
+          'Teste: abra uma nova sessão com @developer e veja se ele absorve o contexto do claude.md'
+        ]
+      },
+      {
+        title: 'Técnicas avançadas de seleção de contexto',
+        content: 'Aprenda a dar contexto cirúrgico aos agentes para respostas melhores.',
+        tasks: [
+          'Pratique adicionar apenas o arquivo relevante ao contexto (não o projeto inteiro)',
+          'Teste: abra dois arquivos relacionados e peça ao Developer para integrar um com o outro',
+          'Experimente adicionar um erro do terminal como contexto para o agente debugar',
+          'Aprenda a referenciar problemas do VSCode (aba "Problems") no contexto do Claude Code',
+          'Anote: qual combinação de contexto gerou a resposta mais precisa?'
+        ]
+      },
+      {
+        title: 'Handoff Analyst → PM com contexto preservado',
+        content: 'Pratique a transição entre agentes sem perder informação.',
+        tasks: [
+          'Simule um segundo projeto (pode ser fictício e simples)',
+          'Complete o briefing com o Analyst e salve o artefato',
+          'Ao ativar o PM, cole o project-brief.md no contexto antes de fazer qualquer pergunta',
+          'Observe: o PM entende o contexto sem precisar de explicação verbal?',
+          'Anote estratégias de handoff que funcionaram bem'
+        ]
+      },
+      {
+        title: 'Handoff PM → Architect → Developer',
+        content: 'Execute o ciclo completo com foco na qualidade dos handoffs.',
+        tasks: [
+          'Continue o projeto simulado da sessão anterior',
+          'Passe o PRD para o Architect garantindo que cole o artefato completo',
+          'Do Architect, passe a arquitetura para o Developer com uma story específica',
+          'Avalie: o Developer gerou código consistente com a arquitetura?',
+          'Documente: qual é a forma ideal de passar contexto de um agente para o próximo?'
+        ]
+      },
+      {
+        title: 'Dev Loop: código → QA → refinamento',
+        content: 'Implemente o ciclo de qualidade com o agente QA.',
+        tasks: [
+          'Pegue o código gerado pelo Developer na última sessão',
+          'Ative o agente QA: @qa com o código e a story como contexto',
+          'Peça: "Review this implementation against the acceptance criteria"',
+          'Passe o feedback do QA de volta para o Developer para corrigir',
+          'Repita até o QA aprovar — esse é o Dev Loop básico'
+        ]
+      },
+      {
+        title: 'Automatizando o Dev Loop no terminal do VSCode',
+        content: 'Use o terminal integrado para acelerar o ciclo de desenvolvimento.',
+        tasks: [
+          'Configure scripts npm básicos no package.json: test, lint, build',
+          'Aprenda a rodar testes diretamente no terminal integrado do VSCode (Ctrl+`)',
+          'Quando houver falha de teste, cole o erro no Claude Code e peça correção ao Developer',
+          'Teste o ciclo: código → npm test → erro → Claude Code corrige → npm test passa',
+          'Cronometre quanto tempo leva uma iteração — estabeleça sua baseline'
+        ]
+      },
+      {
+        title: 'Git como camada de governança do BMAD',
+        content: 'Versione artefatos e código de forma rastreável e organizada.',
+        tasks: [
+          'Estude a estrutura de branches recomendada: main, develop, feature/*, docs/*',
+          'Crie branches separadas para artefatos e código (ex: docs/prd, feat/user-auth)',
+          'Configure um template de commit message que inclua o agente responsável',
+          'Exemplo: "feat(developer): implement user auth story #3"',
+          'Faça um git log e veja a rastreabilidade de cada decisão do projeto'
+        ]
+      },
+      {
+        title: 'Otimizando o claude.md com aprendizados',
+        content: 'Refine o arquivo de contexto com o que aprendeu até agora.',
+        tasks: [
+          'Revise o claude.md criado na sessão 2 desta fase',
+          'Adicione: lições aprendidas sobre a arquitetura do projeto',
+          'Adicione: padrões de código que os agentes devem seguir',
+          'Adicione: uma seção "do not do" com anti-patterns identificados',
+          'Teste: o novo claude.md melhorou a qualidade das respostas dos agentes?'
+        ]
+      },
+      {
+        title: 'Revisão da Fase 3',
+        content: 'Avalie sua produtividade e identifique gargalos no fluxo.',
+        tasks: [
+          'Compare sua velocidade atual com a Fase 2: está mais rápido? O que melhorou?',
+          'Identifique: qual etapa do fluxo ainda consome mais tempo desnecessário?',
+          'Revise seu claude.md e anote se precisa de mais ajustes',
+          'Documente seu "dev loop" ideal: tempo estimado por story do zero ao commit',
+          'Use @bmad-help para perguntar "how can I further optimize my workflow?"'
+        ]
+      }
+    ]
+  },
+  {
+    id: 4,
+    name: 'Fase 4 — Workflows avançados',
+    desc: 'Semanas 7–9 · Automação e customização de fluxos',
+    color: '#e05c7c',
+    bg: '#3d0f1f',
+    weeks: [7, 8, 9],
+    sessions: [
+      {
+        title: 'Estudando workflows YAML do BMAD',
+        content: 'Entenda a estrutura dos workflows padrão para criar os seus.',
+        tasks: [
+          'Abra a pasta de workflows do BMAD no Explorer do VSCode',
+          'Leia um workflow padrão completo (ex: greenfield-fullstack) linha por linha',
+          'Identifique: como são definidas as etapas? Como são passadas dependências?',
+          'Leia a documentação de workflows em docs.bmad-method.org',
+          'Anote a estrutura mínima de um workflow: name, steps, inputs, outputs'
+        ]
+      },
+      {
+        title: 'Criando seu primeiro workflow YAML customizado',
+        content: 'Escreva um workflow simples adaptado ao seu projeto de prática.',
+        tasks: [
+          'Defina um fluxo simples de 3 etapas para o seu projeto (ex: research → design → implement)',
+          'Crie o arquivo .bmad/workflows/meu-workflow.yaml',
+          'Defina cada etapa com: agent, input (artefatos necessários), output (artefatos gerados)',
+          'Adicione uma descrição de quando usar este workflow',
+          'Revise a sintaxe e compare com um workflow padrão para garantir consistência'
+        ]
+      },
+      {
+        title: 'Testando o workflow customizado',
+        content: 'Execute e itere o workflow que você criou.',
+        tasks: [
+          'Ative o @bmad-help e pergunte como executar um workflow customizado',
+          'Execute seu workflow no projeto de prática',
+          'Observe se os agentes seguem a sequência definida corretamente',
+          'Identifique pontos de fricção: onde o workflow precisou de intervenção manual?',
+          'Refine o YAML com base nos problemas encontrados e execute novamente'
+        ]
+      },
+      {
+        title: 'Explorando módulos oficiais do BMAD',
+        content: 'Conheça os módulos disponíveis para expandir o framework.',
+        tasks: [
+          'Acesse docs.bmad-method.org/modules para ver módulos disponíveis',
+          'Leia a descrição de cada módulo disponível',
+          'Identifique 2 módulos que fariam sentido para o seu projeto de prática',
+          'Leia a documentação completa de um módulo que você quer instalar',
+          'Anote: quais agentes e workflows cada módulo adiciona ao framework?'
+        ]
+      },
+      {
+        title: 'Instalando e testando um módulo oficial',
+        content: 'Adicione um módulo ao seu projeto e integre ao fluxo de trabalho.',
+        tasks: [
+          'Instale um módulo relevante: npx bmad-method install --module <nome>',
+          'Explore a estrutura adicionada ao projeto pelo módulo',
+          'Ative um dos novos agentes do módulo com @<nome-do-agente>',
+          'Integre o módulo ao seu workflow customizado (adicione uma etapa)',
+          'Faça commit das mudanças: git commit -m "chore: add bmad module X"'
+        ]
+      },
+      {
+        title: 'Conceito de times de agentes (multi-agent teams)',
+        content: 'Entenda como organizar agentes para trabalhar em paralelo.',
+        tasks: [
+          'Leia a documentação de "Cross Platform Agent Team" nos docs do BMAD',
+          'Entenda o conceito: como agentes diferentes podem trabalhar no mesmo contexto?',
+          'Estude um caso de uso: time com Developer-Frontend e Developer-Backend em paralelo',
+          'Identifique: como o contexto é compartilhado entre agentes de um time?',
+          'Anote como você usaria times no seu projeto de prática'
+        ]
+      },
+      {
+        title: 'Configurando um time de agentes',
+        content: 'Coloque dois agentes para trabalhar em paralelo no mesmo projeto.',
+        tasks: [
+          'Escolha uma story do seu projeto que tenha componente frontend e backend',
+          'Abra dois painéis do Claude Code (ou duas sessões)',
+          'Em um, ative @developer com foco em backend; no outro, com foco em frontend',
+          'Garanta que ambos têm o mesmo claude.md e arquitetura como contexto',
+          'Integre os dois outputs e avalie: houve inconsistências? Como resolvê-las?'
+        ]
+      },
+      {
+        title: 'Introdução ao BMad Builder (BMB)',
+        content: 'Conheça a ferramenta para criar agentes e módulos customizados.',
+        tasks: [
+          'Leia a documentação do BMad Builder em docs.bmad-method.org/builder',
+          'Entenda a estrutura de um agente em YAML: name, persona, skills, workflows',
+          'Abra o arquivo de definição de um agente padrão (ex: analyst.agent.yaml)',
+          'Identifique: como a persona influencia o comportamento do agente?',
+          'Esboce no papel: que agente customizado seria útil para o seu contexto de trabalho?'
+        ]
+      },
+      {
+        title: 'Criando um agente customizado — definição YAML',
+        content: 'Escreva a definição do seu primeiro agente customizado.',
+        tasks: [
+          'Com base no esboço da sessão anterior, crie o arquivo .bmad/custom/agents/meu-agente.agent.yaml',
+          'Defina: name, description, persona (quem é este agente? como ele fala?)',
+          'Defina: skills (o que ele sabe fazer?) e workflows (quais fluxos ele guia?)',
+          'Seja específico na persona — agentes genéricos são menos úteis',
+          'Revise o YAML e compare estrutura com um agente padrão para garantir sintaxe correta'
+        ]
+      },
+      {
+        title: 'Compilando e testando o agente customizado',
+        content: 'Use o BMB para compilar e ativar seu agente no VSCode.',
+        tasks: [
+          'Compile o agente com o BMad Builder (consulte docs para o comando atual)',
+          'Confirme que o arquivo .md compilado aparece em .bmad/custom/agents/',
+          'Ative o agente no Claude Code: @meu-agente',
+          'Diga "hello, what can you do?" e avalie se o agente responde como esperado',
+          'Refine a persona ou skills com base no comportamento observado e recompile'
+        ]
+      },
+      {
+        title: 'Dev Loop automation com scripts',
+        content: 'Automatize partes repetitivas do Dev Loop com scripts locais.',
+        tasks: [
+          'Identifique 2 ou 3 ações repetitivas do seu Dev Loop (ex: rodar testes, lint, build)',
+          'Crie um Makefile ou scripts npm que agrupam essas ações',
+          'Exemplo: make dev-loop → lint + test + gera relatório de cobertura',
+          'Integre o output deste script como contexto para o Claude Code quando houver erros',
+          'Cronometre: quanto tempo economizou por ciclo com a automação?'
+        ]
+      },
+      {
+        title: 'Integração básica com GitHub Actions',
+        content: 'Configure um pipeline CI que complementa o fluxo BMAD.',
+        tasks: [
+          'Crie o arquivo .github/workflows/ci.yml no projeto',
+          'Configure: on push → instalar dependências → rodar testes → rodar lint',
+          'Faça um push e observe o pipeline rodar no GitHub',
+          'Configure notificação de falha (email ou GitHub notification)',
+          'Anote: como o CI se encaixa no ciclo BMAD? Quando os agentes devem ser acionados após um CI fail?'
+        ]
+      },
+      {
+        title: 'Revisão da Fase 4 — parte 1',
+        content: 'Consolide o aprendizado de workflows e módulos.',
+        tasks: [
+          'Revise seu workflow customizado: ele está funcionando bem?',
+          'Revise o agente customizado: ele agrega valor real? O que melhorar?',
+          'Liste 3 módulos oficiais que você ainda quer explorar',
+          'Identifique: qual automação implementada teve maior impacto na produtividade?',
+          'Atualize o claude.md com novos aprendizados de arquitetura e padrões'
+        ]
+      },
+      {
+        title: 'Revisão da Fase 4 — parte 2',
+        content: 'Consolide multi-agent teams e preparação para o nível Expert.',
+        tasks: [
+          'Faça uma retrospectiva: o que funcionou bem com times de agentes? O que é difícil?',
+          'Documente seu "BMAD playbook" pessoal: suas melhores práticas até agora',
+          'Escreva um guia de 1 página sobre como você usa BMAD no dia a dia',
+          'Identifique o que ainda te falta para trabalhar com times distribuídos (Fase 5)',
+          'Use @bmad-help para perguntar sobre boas práticas de times e anote os insights'
+        ]
+      },
+      {
+        title: 'Projeto integrador — Fase 4',
+        content: 'Use tudo da Fase 4 num mini-projeto completo.',
+        tasks: [
+          'Defina um mini-projeto diferente do de prática (pode ser pequeno)',
+          'Execute o ciclo completo usando: seu workflow customizado, seu agente customizado, um módulo oficial',
+          'Use o Dev Loop automatizado e o pipeline CI',
+          'Ao final, faça um commit com todos os artefatos e o código: é seu portfólio BMAD',
+          'Anote: quanto tempo levou? Qual seria o tempo sem BMAD?'
+        ]
+      }
+    ]
+  },
+  {
+    id: 5,
+    name: 'Fase 5 — Expert & Enterprise',
+    desc: 'Semanas 10–12 · Escala, compliance e contribuição',
+    color: '#4faaee',
+    bg: '#0d2540',
+    weeks: [10, 11, 12],
+    sessions: [
+      {
+        title: 'Arquitetura BMAD para times distribuídos',
+        content: 'Entenda como escalar o BMAD para múltiplos desenvolvedores.',
+        tasks: [
+          'Leia a documentação sobre uso do BMAD em times (docs.bmad-method.org)',
+          'Estude: como múltiplos devs compartilham o mesmo contexto BMAD?',
+          'Entenda o conceito de "single source of truth" de artefatos em repositórios compartilhados',
+          'Anote: quais conflitos podem surgir quando dois devs editam o mesmo PRD?',
+          'Proponha uma estrutura de pastas que facilite a colaboração em time'
+        ]
+      },
+      {
+        title: 'Estratégia de branching para times',
+        content: 'Defina um workflow Git que funciona com BMAD em equipe.',
+        tasks: [
+          'Pesquise GitHub Flow vs GitFlow e escolha o mais adequado para BMAD',
+          'Defina: quem tem permissão de alterar artefatos (PRD, arquitetura)?',
+          'Configure branch protection rules no GitHub para branches de artefatos',
+          'Crie um template de PR que inclua referência ao artefato BMAD relacionado',
+          'Documente a estratégia num arquivo CONTRIBUTING.md no projeto'
+        ]
+      },
+      {
+        title: 'Ownership de artefatos em time',
+        content: 'Defina responsabilidades claras para cada artefato do BMAD.',
+        tasks: [
+          'Crie um CODEOWNERS file mapeando: quem é o dono de cada pasta de artefatos',
+          'Defina processo para mudanças no PRD (quem aprova? qual o processo de review?)',
+          'Simule: o que acontece quando dois agentes (de devs diferentes) geram arquitetura conflitante?',
+          'Proponha um processo de resolução de conflitos de artefatos',
+          'Documente o processo no CONTRIBUTING.md'
+        ]
+      },
+      {
+        title: 'Compliance e auditabilidade com BMAD',
+        content: 'Entenda como o BMAD cria rastreabilidade natural para compliance.',
+        tasks: [
+          'Leia o artigo "Applied BMAD" sobre compliance (bennycheung.github.io/bmad-reclaiming-control-in-ai-dev)',
+          'Entenda o conceito de "compliance ledger": cada decisão versionada é evidência auditável',
+          'Analise seu projeto de prática: consegue responder "por que esta decisão foi tomada?" para cada artefato?',
+          'Identifique: quais gaps de rastreabilidade existem no seu projeto atual?',
+          'Proponha melhorias no processo para cobrir esses gaps'
+        ]
+      },
+      {
+        title: 'Configurando pipeline de auditoria',
+        content: 'Automatize verificações de consistência entre artefatos.',
+        tasks: [
+          'Defina um checklist de consistência: o código cobre todos os critérios de aceite do PRD?',
+          'Crie um script simples que verifica se todas as stories têm referência no git log',
+          'Configure um GitHub Action que roda esse checklist a cada PR',
+          'Pense: como um auditor externo usaria seu repositório para entender o projeto?',
+          'Documente o processo de auditoria num arquivo AUDIT.md'
+        ]
+      },
+      {
+        title: 'Métricas de qualidade de agentes',
+        content: 'Meça objetivamente o valor que cada agente está gerando.',
+        tasks: [
+          'Defina métricas: cobertura de critérios de aceite, taxa de retrabalho, consistência PRD→código',
+          'Para os últimos 10 commits do projeto de prática, calcule manualmente a taxa de retrabalho',
+          'Identifique: qual agente gerou mais retrabalho? Por quê?',
+          'Anote hipóteses de melhoria para cada agente problemático',
+          'Estabeleça metas: qual taxa de retrabalho você quer atingir no final desta fase?'
+        ]
+      },
+      {
+        title: 'Usando skill-creator para otimizar agentes',
+        content: 'Melhore agentes existentes com base nas métricas coletadas.',
+        tasks: [
+          'Leia a documentação do skill-creator do BMAD',
+          'Escolha o agente com pior desempenho nas suas métricas',
+          'Use o skill-creator para propor melhorias nas skills deste agente',
+          'Atualize o arquivo de definição do agente com as melhorias',
+          'Teste: as métricas melhoraram após a otimização?'
+        ]
+      },
+      {
+        title: 'Criando um módulo de domínio próprio — planejamento',
+        content: 'Planeje um módulo reutilizável para o seu contexto de trabalho.',
+        tasks: [
+          'Identifique um domínio recorrente no seu trabalho que o BMAD padrão não cobre bem',
+          'Exemplos: módulo para projetos de dados, para APIs REST, para apps mobile',
+          'Defina: quais agentes o módulo vai incluir? Quais workflows? Quais artefatos?',
+          'Escreva uma spec de 1 página do módulo: nome, objetivo, agentes, workflows',
+          'Leia documentação de criação de módulos em docs.bmad-method.org/builder'
+        ]
+      },
+      {
+        title: 'Criando um módulo de domínio próprio — implementação',
+        content: 'Implemente o módulo planejado na sessão anterior.',
+        tasks: [
+          'Crie a estrutura de pastas do módulo seguindo o padrão BMAD',
+          'Implemente os agentes do módulo em YAML',
+          'Implemente os workflows do módulo',
+          'Compile com o BMad Builder e teste no projeto de prática',
+          'Documente o módulo com um README explicando uso e instalação'
+        ]
+      },
+      {
+        title: 'Versionando e empacotando o módulo',
+        content: 'Prepare o módulo para distribuição e uso por outros.',
+        tasks: [
+          'Inicialize um repositório Git separado para o módulo',
+          'Configure o package.json com nome, versão (1.0.0) e descrição',
+          'Adicione um CHANGELOG.md documentando a versão inicial',
+          'Crie uma tag semver: git tag v1.0.0 && git push --tags',
+          'Teste a instalação a partir do repositório: npx bmad-method install --source <caminho>'
+        ]
+      },
+      {
+        title: 'Estudando como contribuir ao BMAD',
+        content: 'Entenda o processo de contribuição ao repositório oficial.',
+        tasks: [
+          'Acesse github.com/bmad-code-org/BMAD-METHOD e leia o CONTRIBUTING.md',
+          'Explore as issues abertas: há alguma que você poderia resolver?',
+          'Leia algumas PRs recentes para entender o padrão de contribuição',
+          'Identifique: há alguma gap na documentação que você poderia preencher?',
+          'Faça um fork do repositório para começar a praticar contribuições'
+        ]
+      },
+      {
+        title: 'Abrindo sua primeira issue no BMAD',
+        content: 'Contribua com feedback ou relatório de bug para a comunidade.',
+        tasks: [
+          'Escolha algo para reportar: um bug encontrado, uma sugestão de melhoria, uma dúvida da documentação',
+          'Abra a issue no GitHub seguindo o template fornecido pelo projeto',
+          'Seja detalhado: contexto, passos para reproduzir (se bug), proposta de solução',
+          'Adicione labels relevantes à issue',
+          'Monitore a issue e responda aos comentários da comunidade'
+        ]
+      },
+      {
+        title: 'Propondo uma melhoria via PR',
+        content: 'Faça sua primeira contribuição de código ou documentação ao BMAD.',
+        tasks: [
+          'Escolha uma issue simples (beginner-friendly ou good-first-issue)',
+          'No seu fork, crie uma branch: git checkout -b fix/minha-contribuicao',
+          'Implemente a melhoria (pode ser documentação, correção de typo, novo exemplo)',
+          'Siga o guia de estilo do projeto',
+          'Abra um PR com descrição clara do que foi feito e por quê'
+        ]
+      },
+      {
+        title: 'Construindo seu portfólio BMAD',
+        content: 'Documente tudo que você aprendeu e construiu ao longo do roadmap.',
+        tasks: [
+          'Compile uma lista de todos os projetos e artefatos criados nas 12 semanas',
+          'Escreva um post de reflexão (pode ser no LinkedIn ou num doc interno): o que o BMAD mudou no seu fluxo?',
+          'Prepare uma apresentação de 5 min para mostrar ao seu time como usar BMAD',
+          'Compartilhe seu módulo customizado com um colega e colete feedback',
+          'Defina seus próximos objetivos: o que você quer aprofundar ou explorar no BMAD daqui pra frente?'
+        ]
+      },
+      {
+        title: '🎉 Sessão final — Revisão completa e celebração',
+        content: 'Você concluiu o roadmap completo de BMAD + Claude Code + VSCode!',
+        tasks: [
+          'Revise o progresso desde a Fase 1: como estava seu fluxo de trabalho lá no começo?',
+          'Compare: uma story que demorava X horas agora demora quanto? O que mudou?',
+          'Revise todas as suas anotações e NOTAS.md criadas ao longo das sessões',
+          'Identifique os 3 maiores aprendizados e compartilhe com seu time',
+          'Celebre! Você estudou 30 horas de BMAD + Claude Code + VSCode. Isso é muito. 🚀'
+        ]
+      }
+    ]
+  }
+];
+
+// Weeks config
+const weekPhase = {
+  1:'ph1',2:'ph1',3:'ph2',4:'ph2',5:'ph3',6:'ph3',
+  7:'ph4',8:'ph4',9:'ph4',10:'ph5',11:'ph5',12:'ph5'
+};
+const weekLabel = {
+  ph1:'F1',ph2:'F2',ph3:'F3',ph4:'F4',ph5:'F5'
+};
+
+// Build cronograma
+function buildCrono() {
+  const c = document.getElementById('crono-weeks');
+  for (let w = 1; w <= 12; w++) {
+    const ph = weekPhase[w];
+    const div = document.createElement('div');
+    div.className = 'crono-week';
+    div.innerHTML = `<div class="crono-week-label">S${w}</div><div class="crono-bar ${ph}" id="crono-w${w}">${weekLabel[ph]}</div>`;
+    c.appendChild(div);
+  }
+}
+
+// Storage
+function getCompleted() {
+  try { return JSON.parse(localStorage.getItem('bmad_completed') || '{}'); } catch { return {}; }
+}
+function setCompleted(obj) {
+  localStorage.setItem('bmad_completed', JSON.stringify(obj));
+}
+function key(pi, si) { return `p${pi}_s${si}`; }
+
+// Stats
+function updateStats() {
+  const completed = getCompleted();
+  const total = 60;
+  const done = Object.values(completed).filter(Boolean).length;
+  const pct = Math.round((done / total) * 100);
+  const hours = (done * 0.5).toFixed(1);
+
+  document.getElementById('pct').textContent = pct + '%';
+  document.getElementById('pct-sub').textContent = `${done} de ${total} sessões`;
+  document.getElementById('prog-bar').style.width = pct + '%';
+  document.getElementById('hours').textContent = hours + 'h';
+
+  // Current phase
+  let cur = 0;
+  let cumSessions = 0;
+  for (const p of PHASES) {
+    const total_p = p.sessions.length;
+    let done_p = 0;
+    for (let si = 0; si < total_p; si++) {
+      if (completed[key(p.id, si)]) done_p++;
+    }
+    if (done_p < total_p) { cur = p; break; }
+    cumSessions += total_p;
+  }
+  if (cur) {
+    document.getElementById('cur-phase').textContent = 'Fase ' + cur.id;
+    document.getElementById('cur-phase-sub').textContent = cur.name.split('—')[1].trim();
+  } else {
+    document.getElementById('cur-phase').textContent = '✓ Completo';
+    document.getElementById('cur-phase-sub').textContent = 'Parabéns!';
+  }
+
+  // Finish date
+  const remaining = total - done;
+  if (remaining > 0) {
+    const days = Math.ceil(remaining / 1); // 1 session per day
+    const date = new Date();
+    date.setDate(date.getDate() + days);
+    const opts = { day: 'numeric', month: 'short' };
+    document.getElementById('finish-date').textContent = date.toLocaleDateString('pt-BR', opts);
+    document.getElementById('finish-sub').textContent = `em ${days} dias úteis (~${Math.ceil(days/5)} semanas)`;
+  } else {
+    document.getElementById('finish-date').textContent = '✓ Concluído';
+    document.getElementById('finish-sub').textContent = 'Parabéns pelo esforço!';
+  }
+
+  // Update crono bars
+  PHASES.forEach(p => {
+    const done_p = p.sessions.filter((_, si) => completed[key(p.id, si)]).length;
+    const pct_p = done_p / p.sessions.length;
+    p.weeks.forEach(w => {
+      const bar = document.getElementById('crono-w'+w);
+      if (bar) bar.classList.toggle('done-week', pct_p >= 1);
+    });
+  });
+
+  // Update phase progress labels
+  PHASES.forEach(p => {
+    const done_p = p.sessions.filter((_, si) => completed[key(p.id, si)]).length;
+    const el = document.getElementById('phase-prog-'+p.id);
+    if (el) el.textContent = `${done_p}/${p.sessions.length}`;
+  });
+}
+
+// Toggle session
+function toggleSession(pi, si) {
+  const completed = getCompleted();
+  const k = key(pi, si);
+  completed[k] = !completed[k];
+  setCompleted(completed);
+  renderCheck(pi, si, completed[k]);
+  const titleEl = document.getElementById(`title-${pi}-${si}`);
+  if (titleEl) titleEl.classList.toggle('done-text', completed[k]);
+  updateStats();
+}
+
+function renderCheck(pi, si, done) {
+  const el = document.getElementById(`check-${pi}-${si}`);
+  if (!el) return;
+  el.classList.toggle('done', done);
+  el.textContent = done ? '✓' : '';
+}
+
+function toggleContent(pi, si) {
+  const el = document.getElementById(`content-${pi}-${si}`);
+  if (!el) return;
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
+// Build phases
+function buildPhases() {
+  const container = document.getElementById('phases-container');
+  let sessionNum = 1;
+
+  PHASES.forEach(p => {
+    const completed = getCompleted();
+    const phaseDiv = document.createElement('div');
+    phaseDiv.className = 'phase';
+
+    const done_p = p.sessions.filter((_, si) => completed[key(p.id, si)]).length;
+
+    let sessionsHTML = '';
+    p.sessions.forEach((s, si) => {
+      const isDone = !!completed[key(p.id, si)];
+      const tasksHTML = s.tasks.map(t => `<div class="session-task">${t}</div>`).join('');
+      sessionsHTML += `
+        <div class="session" onclick="toggleContent(${p.id},${si})">
+          <div class="session-check ${isDone?'done':''}" id="check-${p.id}-${si}" onclick="event.stopPropagation();toggleSession(${p.id},${si})">${isDone?'✓':''}</div>
+          <div class="session-main">
+            <div class="session-top">
+              <span class="session-num">Dia ${sessionNum}</span>
+              <span class="session-title ${isDone?'done-text':''}" id="title-${p.id}-${si}">${s.title}</span>
+              <span class="session-time">30 min</span>
+            </div>
+            <div id="content-${p.id}-${si}" style="display:none">
+              <div class="session-content">${s.content}</div>
+              <div class="session-tasks">${tasksHTML}</div>
+            </div>
+          </div>
+        </div>`;
+      sessionNum++;
+    });
+
+    phaseDiv.innerHTML = `
+      <div class="phase-header" onclick="togglePhase(${p.id})">
+        <div class="phase-pip" style="background:${p.color}"></div>
+        <div class="phase-info">
+          <div class="phase-name">${p.name}</div>
+          <div class="phase-desc">${p.desc}</div>
+        </div>
+        <div class="phase-progress-mini" id="phase-prog-${p.id}">${done_p}/${p.sessions.length}</div>
+        <div class="phase-chevron" id="chev-${p.id}">▶</div>
+      </div>
+      <div class="phase-body" id="pbody-${p.id}">${sessionsHTML}</div>`;
+
+    container.appendChild(phaseDiv);
+  });
+}
+
+function togglePhase(pid) {
+  const body = document.getElementById('pbody-'+pid);
+  const chev = document.getElementById('chev-'+pid);
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chev.classList.toggle('open', !isOpen);
+}
+
+function resetProgress() {
+  if (!confirm('Tem certeza que quer reiniciar todo o progresso?')) return;
+  localStorage.removeItem('bmad_completed');
+  location.reload();
+}
+
+// Init
+buildCrono();
+buildPhases();
+updateStats();
+
+// Open first phase
+togglePhase(1);
+</script>
+</body>
+</html>

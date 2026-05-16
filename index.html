@@ -6,704 +6,194 @@
 <title>BMAD Lab</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#0f1117;--surface:#181c27;--surface2:#1f2535;
-  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.13);
-  --text:#e8eaf0;--muted:#7a8099;--faint:#3a3f52;
-  --p1:#3ecf8e;--p1t:#1a5c38;--p1bg:#0c3320;
-  --p2:#7c6fcd;--p2t:#2d2560;--p2bg:#1a1640;
-  --p3:#e8975a;--p3t:#5c3018;--p3bg:#2e1a08;
-  --p4:#e05c7c;--p4t:#5c1830;--p4bg:#2a0e1b;
-  --p5:#4faaee;--p5t:#1a3d60;--p5bg:#0a2038;
+:root {
+  --bg: #0f1117;
+  --surface: #181c27;
+  --surface2: #1f2535;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.14);
+  --text: #e8eaf0;
+  --muted: #7a8099;
+  --faint: #3a3f52;
+  --p1: #3ecf8e; --p1t: #1a5c38; --p1bg: #0c3320;
+  --p2: #7c6fcd; --p2t: #2d2560; --p2bg: #1a1640;
+  --p3: #e8975a; --p3t: #5c3018; --p3bg: #2e1a08;
+  --p4: #e05c7c; --p4t: #5c1830; --p4bg: #2a0e1b;
+  --p5: #4faaee; --p5t: #1a3d60; --p5bg: #0a2038;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.65;min-height:100vh;overflow-x:hidden}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.6;min-height:100vh;overflow-x:hidden}
 
-/* NAV */
-.nav{position:fixed;top:0;left:0;right:0;z-index:200;height:52px;background:rgba(15,17,23,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 28px;gap:4px}
-.nav-logo{font-family:'DM Serif Display',serif;font-size:17px;color:var(--text);margin-right:16px;cursor:pointer;user-select:none;flex-shrink:0}
-.nav-logo em{font-style:italic;color:var(--p2)}
-.nav-sep{width:1px;height:18px;background:var(--faint);margin:0 4px;flex-shrink:0}
-.nb{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.04em;padding:5px 12px;border-radius:6px;border:none;background:none;color:var(--muted);cursor:pointer;transition:color .12s,background .12s;white-space:nowrap}
-.nb:hover{color:var(--text);background:var(--surface)}
-.nb.active{color:var(--text);background:var(--surface2);border:1px solid var(--border2)}
-.nav-sp{flex:1}
-.nav-badge{font-family:'DM Mono',monospace;font-size:10px;padding:3px 9px;border-radius:99px;border:1px solid var(--p2);color:var(--p2)}
+/* ── Grain overlay ── */
+body::before{content:'';position:fixed;inset:0;pointer-events:none;opacity:.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");z-index:999}
 
-/* PAGES */
-.page{display:none;padding-top:52px;min-height:100vh}
-.page.active{display:block}
+/* ── Hero ── */
+.hero{max-width:900px;margin:0 auto;padding:80px 32px 64px}
+.hero-eyebrow{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:20px;display:flex;align-items:center;gap:12px}
+.hero-eyebrow::after{content:'';flex:1;height:1px;background:var(--border)}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(40px,8vw,76px);font-weight:400;line-height:1.05;letter-spacing:-.01em;margin-bottom:20px}
+.hero h1 em{font-style:italic;color:var(--p2)}
+.hero-sub{font-size:16px;color:var(--muted);max-width:520px;margin-bottom:40px;line-height:1.7}
+.hero-tags{display:flex;gap:8px;flex-wrap:wrap}
+.hero-tag{font-family:'DM Mono',monospace;font-size:11px;padding:4px 12px;border-radius:99px;border:1px solid var(--border2);color:var(--muted);letter-spacing:.04em}
+.hero-tag.accent{border-color:var(--p2);color:var(--p2);background:var(--p2bg)}
 
-/* ── HOME ── */
-.h-hero{max-width:840px;margin:0 auto;padding:72px 28px 52px}
-.h-eyebrow{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:18px;display:flex;align-items:center;gap:12px}
-.h-eyebrow::after{content:'';flex:1;height:1px;background:var(--border)}
-.h-hero h1{font-family:'DM Serif Display',serif;font-size:clamp(44px,8vw,78px);font-weight:400;line-height:1.04;letter-spacing:-.01em;margin-bottom:16px}
-.h-hero h1 em{font-style:italic;color:var(--p2)}
-.h-sub{font-size:15px;color:var(--muted);max-width:480px;margin-bottom:32px;line-height:1.7}
-.h-tags{display:flex;gap:7px;flex-wrap:wrap}
-.h-tag{font-family:'DM Mono',monospace;font-size:11px;padding:4px 11px;border-radius:99px;border:1px solid var(--border2);color:var(--muted)}
-.h-tag.hi{border-color:var(--p2);color:var(--p2);background:var(--p2bg)}
+/* ── Grid ── */
+.grid-section{max-width:900px;margin:0 auto;padding:0 32px 80px}
+.grid-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:20px;display:flex;align-items:center;gap:12px}
+.grid-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:16px}
 
-.h-strip{max-width:840px;margin:0 auto;padding:0 28px 44px}
-.h-strip-in{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:26px;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:22px}
-.si-lbl{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;margin-bottom:5px}
-.si-v{font-size:24px;font-weight:600;color:var(--text);line-height:1}
-.si-s{font-size:12px;color:var(--muted);margin-top:3px}
+/* ── Document cards ── */
+.doc-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:border-color .2s,transform .2s,box-shadow .2s;cursor:pointer;text-decoration:none;display:flex;flex-direction:column}
+.doc-card:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 16px 40px rgba(0,0,0,.4)}
+.doc-card-top{padding:28px 28px 0}
+.doc-card-accent{width:36px;height:4px;border-radius:2px;margin-bottom:20px}
+.doc-card-title{font-family:'DM Serif Display',serif;font-size:22px;font-weight:400;line-height:1.2;margin-bottom:8px;color:var(--text)}
+.doc-card-sub{font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.6}
+.doc-card-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:24px}
+.doc-tag{font-size:11px;font-family:'DM Mono',monospace;padding:3px 8px;border-radius:4px;color:var(--muted);background:var(--surface2)}
+.doc-card-divider{height:1px;background:var(--border)}
+.doc-card-bottom{padding:16px 28px;display:flex;align-items:center;justify-content:space-between}
+.doc-card-meta{font-size:12px;color:var(--muted)}
+.doc-card-arrow{font-size:16px;color:var(--muted);transition:transform .15s, color .15s}
+.doc-card:hover .doc-card-arrow{transform:translateX(4px);color:var(--text)}
 
-.h-docs{max-width:840px;margin:0 auto;padding:0 28px 44px}
-.sec-lbl{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;display:flex;align-items:center;gap:12px}
-.sec-lbl::after{content:'';flex:1;height:1px;background:var(--border)}
-.doc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(350px,1fr));gap:12px}
-.dc{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:border-color .18s,transform .18s,box-shadow .18s;display:flex;flex-direction:column}
-.dc:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 16px 40px rgba(0,0,0,.38)}
-.dc-top{padding:22px 22px 0}
-.dc-bar{width:30px;height:4px;border-radius:2px;margin-bottom:16px}
-.dc-title{font-family:'DM Serif Display',serif;font-size:19px;font-weight:400;line-height:1.2;margin-bottom:6px;color:var(--text)}
-.dc-desc{font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.6}
-.dc-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:18px}
-.dctag{font-size:11px;font-family:'DM Mono',monospace;padding:2px 7px;border-radius:4px;color:var(--muted);background:var(--surface2)}
-.dc-div{height:1px;background:var(--border)}
-.dc-bot{padding:13px 22px;display:flex;align-items:center;justify-content:space-between}
-.dc-meta{font-size:12px;color:var(--muted)}
-.dc-arr{font-size:15px;transition:transform .13s,color .13s}
-.dc:hover .dc-arr{transform:translateX(4px)}
+/* ── Info strip ── */
+.info-strip{max-width:900px;margin:0 auto;padding:0 32px 80px}
+.info-strip-inner{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:32px;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:24px}
+.info-item-label{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;margin-bottom:6px}
+.info-item-value{font-size:15px;font-weight:500;color:var(--text)}
+.info-item-sub{font-size:12px;color:var(--muted);margin-top:2px}
 
-.h-agents{max-width:840px;margin:0 auto;padding:0 28px 64px}
-.achips{display:flex;gap:8px;flex-wrap:wrap}
-.ac{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 13px;display:flex;align-items:center;gap:8px;transition:border-color .13s}
-.ac:hover{border-color:var(--border2)}
-.ac-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-.ac-name{font-size:13px;font-weight:500;color:var(--text)}
-.ac-id{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)}
+/* ── Agents strip ── */
+.agents-strip{max-width:900px;margin:0 auto;padding:0 32px 80px}
+.agents-row{display:flex;gap:8px;flex-wrap:wrap}
+.agent-chip{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 14px;display:flex;align-items:center;gap:8px;transition:border-color .15s}
+.agent-chip:hover{border-color:var(--border2)}
+.agent-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.agent-chip-name{font-size:13px;font-weight:500;color:var(--text)}
+.agent-chip-id{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)}
 
-.h-footer{max-width:840px;margin:0 auto;padding:24px 28px 48px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.hf-logo{font-family:'DM Serif Display',serif;font-size:16px;color:var(--muted)}
-.hf-copy{font-size:12px;color:var(--faint)}
+/* ── Footer ── */
+.footer{max-width:900px;margin:0 auto;padding:0 32px 48px;border-top:1px solid var(--border);padding-top:32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:gap}
+.footer-logo{font-family:'DM Serif Display',serif;font-size:18px;color:var(--muted)}
+.footer-copy{font-size:12px;color:var(--faint)}
 
-/* ── STUDY ── */
-.sw{max-width:840px;margin:0 auto;padding:44px 24px 80px}
-.s-lbl{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:9px}
-.sw h2{font-family:'DM Serif Display',serif;font-size:clamp(24px,4vw,38px);font-weight:400;line-height:1.15;margin-bottom:10px}
-.s-meta{font-size:13px;color:var(--muted);display:flex;gap:18px;flex-wrap:wrap;margin-bottom:24px}
-.s-rst{background:none;border:1px solid var(--border);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:12px;padding:5px 13px;border-radius:7px;cursor:pointer;transition:border-color .13s,color .13s;margin-bottom:36px;display:block}
-.s-rst:hover{border-color:var(--border2);color:var(--text)}
-
-.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:10px;margin-bottom:40px}
-.sc{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:14px 16px}
-.sc-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-family:'DM Mono',monospace;margin-bottom:4px}
-.sc-v{font-size:22px;font-weight:600;color:var(--text);line-height:1}
-.sc-s{font-size:11px;color:var(--muted);margin-top:3px}
-.sc-b{height:4px;background:var(--faint);border-radius:2px;margin-top:8px;overflow:hidden}
-.sc-f{height:100%;border-radius:2px;background:var(--p1);transition:width .5s}
-
-.crono{background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:20px;margin-bottom:40px;overflow-x:auto}
-.crono-r{display:grid;grid-template-columns:repeat(12,1fr);gap:4px;min-width:540px}
-.cw-lbl{font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:4px;text-align:center}
-.cb{height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;letter-spacing:.04em;transition:opacity .15s}
-.cb.ph1{background:var(--p1t);color:var(--p1);border:1px solid var(--p1)}
-.cb.ph2{background:var(--p2t);color:var(--p2);border:1px solid var(--p2)}
-.cb.ph3{background:var(--p3t);color:var(--p3);border:1px solid var(--p3)}
-.cb.ph4{background:var(--p4t);color:var(--p4);border:1px solid var(--p4)}
-.cb.ph5{background:var(--p5t);color:var(--p5);border:1px solid var(--p5)}
-.cb.done{opacity:.33}
-.crono-leg{display:flex;gap:14px;flex-wrap:wrap;margin-top:16px;padding-top:13px;border-top:1px solid var(--border)}
-.cl-i{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
-.cl-d{width:9px;height:9px;border-radius:3px}
-
-.icards{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:10px;margin-bottom:32px}
-.icard{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:14px 16px}
-.ic-ico{font-size:17px;margin-bottom:6px}
-.ic-t{font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px}
-.ic-tx{font-size:12px;color:var(--muted);line-height:1.55}
-
-.stitle{font-family:'DM Serif Display',serif;font-size:16px;font-weight:400;margin-bottom:14px;color:var(--text);display:flex;align-items:center;gap:10px}
-.stitle::after{content:'';flex:1;height:1px;background:var(--border)}
-
-.phase{margin-bottom:9px}
-.phh{display:flex;align-items:center;gap:11px;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:11px;cursor:pointer;user-select:none;transition:background .12s,border-color .12s}
-.phh:hover{background:var(--surface2);border-color:var(--border2)}
-.phh.open{border-radius:11px 11px 0 0;border-bottom-color:transparent}
-.ph-pip{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.ph-inf{flex:1}
-.ph-nm{font-size:13px;font-weight:600;color:var(--text)}
-.ph-ds{font-size:11px;color:var(--muted);margin-top:1px}
-.ph-pr{font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;white-space:nowrap}
-.ph-cv{color:var(--muted);font-size:11px;transition:transform .18s}
-.ph-cv.open{transform:rotate(90deg)}
-.phb{display:none;background:var(--surface);border:1px solid var(--border);border-top:none;border-radius:0 0 11px 11px;padding:5px 9px 12px}
-.phb.open{display:block}
-
-.sess{display:flex;gap:10px;align-items:flex-start;padding:11px 9px;border-radius:8px;cursor:pointer;transition:background .1s;border-bottom:1px solid var(--border)}
-.sess:last-child{border-bottom:none}
-.sess:hover{background:var(--surface2)}
-.sck{width:18px;height:18px;border-radius:5px;border:1.5px solid var(--faint);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;transition:background .13s,border-color .13s;font-size:10px;cursor:pointer}
-.sck.done{background:var(--p1);border-color:var(--p1);color:#000;font-weight:700}
-.sm{flex:1}
-.stop{display:flex;align-items:center;gap:7px;margin-bottom:3px}
-.snum{font-size:10px;font-family:'DM Mono',monospace;color:var(--muted);background:var(--faint);padding:1px 5px;border-radius:3px}
-.stit{font-size:13px;font-weight:500;color:var(--text)}
-.stit.done{opacity:.42;text-decoration:line-through}
-.stime{font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;margin-left:auto;flex-shrink:0}
-.sbody{display:none;margin-top:7px}
-.sdesc{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:6px}
-.stasks{display:flex;flex-direction:column;gap:4px}
-.stask{font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:6px}
-.stask::before{content:'→';color:var(--faint);font-size:11px;flex-shrink:0;margin-top:2px}
-
-/* ── GUIDE ── */
-.gl{display:flex;max-width:1040px;margin:0 auto;padding:44px 24px 80px;gap:40px}
-.gtoc{width:200px;flex-shrink:0}
-.gtoc-s{position:sticky;top:72px}
-.toc-lbl{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
-.toc-lst{list-style:none;display:flex;flex-direction:column;gap:1px}
-.toc-lst li a{font-size:12px;color:var(--muted);text-decoration:none;display:block;padding:4px 8px;border-radius:5px;transition:color .1s,background .1s}
-.toc-lst li a:hover{color:var(--text);background:var(--surface)}
-.toc-lst li a.active{color:var(--p2);background:var(--p2bg)}
-.toc-sec{font-family:'DM Mono',monospace;font-size:10px;color:var(--faint);letter-spacing:.1em;text-transform:uppercase;padding:8px 8px 2px;margin-top:3px}
-.gcnt{flex:1;min-width:0}
-
-.g-hdr{margin-bottom:40px;padding-bottom:26px;border-bottom:1px solid var(--border)}
-.g-ey{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
-.g-hdr h2{font-family:'DM Serif Display',serif;font-size:clamp(22px,3.5vw,36px);font-weight:400;line-height:1.15;margin-bottom:8px}
-.g-s{font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.6}
-.g-tg{display:flex;gap:7px;flex-wrap:wrap}
-.gtag{font-size:11px;font-family:'DM Mono',monospace;padding:3px 10px;border-radius:99px;border:1px solid var(--border2);color:var(--muted)}
-
-.gsec{margin-bottom:40px;scroll-margin-top:80px}
-.gh{font-family:'DM Serif Display',serif;font-size:20px;font-weight:400;color:var(--text);margin-bottom:13px;display:flex;align-items:center;gap:10px}
-.gn{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);background:var(--surface);border:1px solid var(--border);padding:2px 7px;border-radius:4px}
-.gbody{color:var(--muted);font-size:14px;line-height:1.75}
-.gbody p{margin-bottom:10px}
-
-.gsub{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:10px}
-.gsub-t{font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:7px}
-.gsub-d{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-.gsub p,.gsub li{font-size:13px;color:var(--muted);line-height:1.65}
-.gsub ul,.gsub ol{padding-left:18px;display:flex;flex-direction:column;gap:5px}
-
-.gcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:10px}
-.gcard{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:15px}
-.gci{font-size:17px;margin-bottom:6px}
-.gct{font-size:13px;font-weight:600;color:var(--text);margin-bottom:5px}
-.gcb{font-size:12px;color:var(--muted);line-height:1.6}
-.gcl{padding-left:0;list-style:none;display:flex;flex-direction:column;gap:3px;margin-top:5px}
-.gcl li{font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:5px}
-.gcl li::before{content:'·';color:var(--faint);flex-shrink:0}
-
-.gflow{display:flex;align-items:center;gap:0;margin:12px 0;flex-wrap:wrap}
-.gfs{background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:6px 12px;font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;margin:3px 0}
-.gfa{font-size:13px;color:var(--faint);padding:0 5px;flex-shrink:0}
-
-.gagents{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:10px}
-.ga{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;transition:border-color .13s}
-.ga:hover{border-color:var(--border2)}
-.ga-h{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-.ga-d{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-.ga-n{font-size:13px;font-weight:600;color:var(--text)}
-.ga-i{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);background:var(--faint);padding:1px 5px;border-radius:3px;margin-left:auto}
-.ga-l{padding-left:0;list-style:none;display:flex;flex-direction:column;gap:3px}
-.ga-l li{font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:5px}
-.ga-l li::before{content:'→';color:var(--faint);font-size:11px;margin-top:2px;flex-shrink:0}
-
-pre{background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:14px;overflow-x:auto;margin:10px 0}
-code{font-family:'DM Mono',monospace;font-size:12px;color:#a8d8a8;line-height:1.7}
-p code,li code{background:var(--faint);padding:1px 5px;border-radius:4px;color:var(--text);font-size:12px}
-
-.gchecks{display:flex;flex-direction:column;gap:5px;margin-top:8px}
-.gchk{display:flex;align-items:flex-start;gap:9px;padding:8px 12px;background:var(--surface);border:1px solid var(--border);border-radius:7px;font-size:13px}
-.gchk.ok{border-left:3px solid var(--p1)}
-.gchk.no{border-left:3px solid var(--p4)}
-.gchk-tx{color:var(--muted);line-height:1.5}
-.gchk-tx strong{color:var(--text);font-weight:500}
-
-.gdiv{height:1px;background:var(--border);margin:32px 0}
-
-@media(max-width:768px){
-  .gl{flex-direction:column;padding:28px 16px 60px}
-  .gtoc{display:none}
-  .h-hero,.h-strip,.h-docs,.h-agents,.h-footer{padding-left:16px;padding-right:16px}
-  .sw{padding:28px 16px 60px}
-  .doc-grid{grid-template-columns:1fr}
+@media(max-width:600px){
+  .hero{padding:48px 20px 40px}
+  .grid-section,.info-strip,.agents-strip,.footer{padding-left:20px;padding-right:20px}
+  .grid{grid-template-columns:1fr}
 }
 </style>
 </head>
 <body>
 
-<nav class="nav">
-  <div class="nav-logo" onclick="go('home')">BMAD<em>Lab</em></div>
-  <div class="nav-sep"></div>
-  <button class="nb active" id="nb-home" onclick="go('home')">Home</button>
-  <button class="nb" id="nb-study" onclick="go('study')">Plano de Estudos</button>
-  <button class="nb" id="nb-guide" onclick="go('guide')">Guia Enterprise</button>
-  <div class="nav-sp"></div>
-  <span class="nav-badge">v6</span>
-</nav>
-
-<!-- HOME -->
-<div class="page active" id="page-home">
-  <div class="h-hero">
-    <div class="h-eyebrow">Knowledge Base</div>
-    <h1>BMAD<br><em>Lab</em></h1>
-    <div class="h-sub">Material de referência para aprender e aplicar o BMAD Method com Claude Code e VSCode — do básico ao enterprise.</div>
-    <div class="h-tags">
-      <span class="h-tag hi">BMAD Method v6</span>
-      <span class="h-tag">Claude Code</span><span class="h-tag">VSCode</span>
-      <span class="h-tag">Enterprise</span><span class="h-tag">Context Engineering</span>
-    </div>
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-eyebrow">Knowledge Base</div>
+  <h1>BMAD<br><em>Lab</em></h1>
+  <div class="hero-sub">Material de referência para aprender e aplicar o BMAD Method com Claude Code e VSCode — do básico ao enterprise.</div>
+  <div class="hero-tags">
+    <span class="hero-tag accent">BMAD Method</span>
+    <span class="hero-tag">Claude Code</span>
+    <span class="hero-tag">VSCode</span>
+    <span class="hero-tag">Enterprise</span>
+    <span class="hero-tag">Context Engineering</span>
   </div>
-  <div class="h-strip">
-    <div class="h-strip-in">
-      <div><div class="si-lbl">Documentos</div><div class="si-v">2</div><div class="si-s">Guias disponíveis</div></div>
-      <div><div class="si-lbl">Sessões</div><div class="si-v">60</div><div class="si-s">30 min cada</div></div>
-      <div><div class="si-lbl">Total</div><div class="si-v">30h</div><div class="si-s">12 semanas</div></div>
-      <div><div class="si-lbl">Agentes</div><div class="si-v">6</div><div class="si-s">Oficiais BMAD v6</div></div>
-    </div>
-  </div>
-  <div class="h-docs">
-    <div class="sec-lbl">Documentos</div>
-    <div class="doc-grid">
-      <div class="dc" onclick="go('study')">
-        <div class="dc-top">
-          <div class="dc-bar" style="background:var(--p1)"></div>
-          <div class="dc-title">Plano de Estudos<br>BMAD + Claude Code</div>
-          <div class="dc-desc">60 sessões de 30 minutos com cronograma, progresso salvo no navegador e tarefas práticas do zero ao avançado.</div>
-          <div class="dc-tags"><span class="dctag">Iniciante→Expert</span><span class="dctag">12 semanas</span><span class="dctag">30h</span><span class="dctag">Interativo</span></div>
-        </div>
-        <div class="dc-div"></div>
-        <div class="dc-bot"><div class="dc-meta">60 sessões · progresso rastreado</div><div class="dc-arr" style="color:var(--p1)">→</div></div>
-      </div>
-      <div class="dc" onclick="go('guide')">
-        <div class="dc-top">
-          <div class="dc-bar" style="background:var(--p2)"></div>
-          <div class="dc-title">Guia Enterprise<br>Tiny Teams</div>
-          <div class="dc-desc">Estratégia e operação do BMAD em times pequenos. OpenAPI First, Context Engineering, ADRs, monorepo vs multirepo e pipelines corporativas.</div>
-          <div class="dc-tags"><span class="dctag">Enterprise</span><span class="dctag">Context Repo</span><span class="dctag">OpenAPI First</span><span class="dctag">ADR</span></div>
-        </div>
-        <div class="dc-div"></div>
-        <div class="dc-bot"><div class="dc-meta">22 seções · índice navegável</div><div class="dc-arr" style="color:var(--p2)">→</div></div>
-      </div>
-    </div>
-  </div>
-  <div class="h-agents">
-    <div class="sec-lbl">Agentes oficiais BMAD v6</div>
-    <div class="achips">
-      <div class="ac"><div class="ac-dot" style="background:#3ecf8e"></div><span class="ac-name">Analyst (Mary)</span><span class="ac-id">bmad-analyst</span></div>
-      <div class="ac"><div class="ac-dot" style="background:#7c6fcd"></div><span class="ac-name">PM (John)</span><span class="ac-id">bmad-pm</span></div>
-      <div class="ac"><div class="ac-dot" style="background:#e8975a"></div><span class="ac-name">Architect (Winston)</span><span class="ac-id">bmad-architect</span></div>
-      <div class="ac"><div class="ac-dot" style="background:#4faaee"></div><span class="ac-name">Developer (Amelia)</span><span class="ac-id">bmad-agent-dev</span></div>
-      <div class="ac"><div class="ac-dot" style="background:#e05c7c"></div><span class="ac-name">UX Designer (Sally)</span><span class="ac-id">bmad-ux-designer</span></div>
-      <div class="ac"><div class="ac-dot" style="background:#aaa"></div><span class="ac-name">Tech Writer (Paige)</span><span class="ac-id">bmad-tech-writer</span></div>
-    </div>
-  </div>
-  <div class="h-footer"><div class="hf-logo">BMAD Lab</div><div class="hf-copy">Gerado com Claude · 2026</div></div>
 </div>
 
-<!-- STUDY -->
-<div class="page" id="page-study">
-<div class="sw">
-  <div class="s-lbl">Plano de estudos · 30 min/dia</div>
-  <h2>BMAD Method com Claude Code + VSCode</h2>
-  <div class="s-meta"><span>📅 12 semanas</span><span>⏱ 60 sessões × 30 min</span><span>🎯 30 horas</span><span>📆 5 dias/semana</span></div>
-  <button class="s-rst" onclick="resetProgress()">↺ Reiniciar progresso</button>
-  <div class="sg">
-    <div class="sc"><div class="sc-lbl">Progresso</div><div class="sc-v" id="pct">0%</div><div class="sc-s" id="pct-sub">0 de 60</div><div class="sc-b"><div class="sc-f" id="prog-bar" style="width:0%"></div></div></div>
-    <div class="sc"><div class="sc-lbl">Horas</div><div class="sc-v" id="hours">0h</div><div class="sc-s">de 30h</div></div>
-    <div class="sc"><div class="sc-lbl">Fase atual</div><div class="sc-v" id="cur-phase" style="font-size:16px">Fase 1</div><div class="sc-s" id="cur-phase-sub">Fundamentos</div></div>
-    <div class="sc"><div class="sc-lbl">Término</div><div class="sc-v" id="finish-date" style="font-size:14px">—</div><div class="sc-s" id="finish-sub">a partir de hoje</div></div>
-  </div>
-  <div class="stitle">Cronograma</div>
-  <div class="crono">
-    <div class="crono-r" id="crono-weeks"></div>
-    <div class="crono-leg">
-      <div class="cl-i"><div class="cl-d" style="background:#3ecf8e"></div>F1 Fundamentos</div>
-      <div class="cl-i"><div class="cl-d" style="background:#7c6fcd"></div>F2 Fluxo básico</div>
-      <div class="cl-i"><div class="cl-d" style="background:#e8975a"></div>F3 VSCode + Claude Code</div>
-      <div class="cl-i"><div class="cl-d" style="background:#e05c7c"></div>F4 Avançado</div>
-      <div class="cl-i"><div class="cl-d" style="background:#4faaee"></div>F5 Expert</div>
+<!-- Stats -->
+<div class="info-strip">
+  <div class="info-strip-inner">
+    <div>
+      <div class="info-item-label">Documentos</div>
+      <div class="info-item-value">2</div>
+      <div class="info-item-sub">Guias disponíveis</div>
+    </div>
+    <div>
+      <div class="info-item-label">Sessões de estudo</div>
+      <div class="info-item-value">60</div>
+      <div class="info-item-sub">30 min cada</div>
+    </div>
+    <div>
+      <div class="info-item-label">Total de horas</div>
+      <div class="info-item-value">30h</div>
+      <div class="info-item-sub">12 semanas</div>
+    </div>
+    <div>
+      <div class="info-item-label">Framework</div>
+      <div class="info-item-value">v6</div>
+      <div class="info-item-sub">BMAD Method</div>
     </div>
   </div>
-  <div class="icards">
-    <div class="icard"><div class="ic-ico">⏱</div><div class="ic-t">Como usar</div><div class="ic-tx">30 min por sessão. Siga as tarefas em ordem e marque ao terminar.</div></div>
-    <div class="icard"><div class="ic-ico">📌</div><div class="ic-t">Progresso salvo</div><div class="ic-tx">Salvo no navegador automaticamente. Volte quando quiser.</div></div>
-    <div class="icard"><div class="ic-ico">🔁</div><div class="ic-t">Revisões</div><div class="ic-tx">Sessão de revisão ao final de cada fase. Consolide antes de avançar.</div></div>
-  </div>
-  <div class="stitle">Sessões de estudo</div>
-  <div id="phases-container"></div>
-</div>
 </div>
 
-<!-- GUIDE -->
-<div class="page" id="page-guide">
-<div class="gl">
-  <aside class="gtoc">
-    <div class="gtoc-s">
-      <div class="toc-lbl">Sumário</div>
-      <ul class="toc-lst" id="toc-list">
-        <li class="toc-sec">Fundamentos</li>
-        <li><a href="#g1">1. Introdução</a></li><li><a href="#g2">2. O que é BMAD</a></li>
-        <li><a href="#g3">3. Objetivos</a></li><li><a href="#g4">4. Quando faz sentido</a></li>
-        <li><a href="#g5">5. Papel da IA</a></li>
-        <li class="toc-sec">Operação</li>
-        <li><a href="#g6">6. Modelo operacional</a></li><li><a href="#g7">7. Fluxo dos agentes</a></li>
-        <li class="toc-sec">Artefatos</li>
-        <li><a href="#g8">8. PRD</a></li><li><a href="#g9">9. ADR</a></li>
-        <li><a href="#g10">10. OpenAPI</a></li><li><a href="#g11">11. Context Engineering</a></li>
-        <li class="toc-sec">Repositórios</li>
-        <li><a href="#g12">12. Organização</a></li><li><a href="#g13">13. Monorepo</a></li>
-        <li><a href="#g14">14. Multirepo</a></li><li><a href="#g15">15. Context Repo</a></li>
-        <li><a href="#g16">16. Estrutura projetos</a></li><li><a href="#g17">17. Contexto IA</a></li>
-        <li class="toc-sec">Práticas</li>
-        <li><a href="#g18">18. Fluxo do time</a></li><li><a href="#g19">19. Pipelines</a></li>
-        <li><a href="#g20">20. Melhores práticas</a></li><li><a href="#g21">21. O que evitar</a></li>
-        <li><a href="#g22">22. Recomendações</a></li>
-      </ul>
-    </div>
-  </aside>
-  <main class="gcnt">
-    <div class="g-hdr">
-      <div class="g-ey">Guia Estratégico e Operacional</div>
-      <h2>BMAD em Times Enterprise Pequenos</h2>
-      <div class="g-s">Uso de IA no Desenvolvimento de Software com foco em tiny teams (PM, Backend, Frontend, QA)</div>
-      <div class="g-tg"><span class="gtag">Enterprise</span><span class="gtag">Tiny Teams</span><span class="gtag">Context Engineering</span><span class="gtag">OpenAPI First</span></div>
-    </div>
+<!-- Documents -->
+<div class="grid-section">
+  <div class="grid-label">Documentos</div>
+  <div class="grid">
 
-    <div class="gsec" id="g1"><div class="gh"><span class="gn">01</span>Introdução</div>
-      <div class="gbody"><p>Melhores práticas para adoção do BMAD em ambientes corporativos, especialmente em <strong style="color:var(--text)">tiny teams</strong> compostos por PM, Backend, Frontend e QA.</p></div>
-      <div class="gcards">
-        <div class="gcard"><div class="gci">🎯</div><div class="gct">Foco principal</div><ul class="gcl"><li>Uso estratégico de IA</li><li>Compartilhamento de contexto</li><li>Integração frontend/backend</li><li>Arquitetura sustentável</li><li>Rastreabilidade</li></ul></div>
-        <div class="gcard"><div class="gci">👥</div><div class="gct">Perfil do time</div><ul class="gcl"><li>Product Manager</li><li>Dev Backend</li><li>Dev Frontend</li><li>QA Engineer</li></ul></div>
-      </div>
-    </div><div class="gdiv"></div>
-
-    <div class="gsec" id="g2"><div class="gh"><span class="gn">02</span>O que é BMAD</div>
-      <div class="gbody"><p>Metodologia de desenvolvimento orientada por IA baseada em agentes especializados, contexto estruturado, documentação versionada, contratos compartilhados e fluxo colaborativo.</p></div>
-      <div class="gsub" style="margin-top:12px"><div class="gsub-t"><div class="gsub-d" style="background:var(--p1)"></div>Objetivo central</div><p>O objetivo <strong style="color:var(--text)">NÃO</strong> é substituir pessoas, mas <strong style="color:var(--text)">ampliar a capacidade do time</strong>, reduzir perda de contexto, aumentar consistência e acelerar execução.</p></div>
-    </div><div class="gdiv"></div>
-
-    <div class="gsec" id="g3"><div class="gh"><span class="gn">03</span>Objetivos do BMAD</div>
-      <div class="gcards"><div class="gcard" style="border-left:3px solid var(--p4)"><div class="gct">Problemas que resolve</div><ul class="gcl"><li>Contexto espalhado</li><li>Documentação inexistente</li><li>Dependência de pessoas-chave</li><li>Desalinhamento frontend/backend</li><li>Perda de decisões arquiteturais</li><li>Retrabalho e inconsistência</li></ul></div></div>
-    </div><div class="gdiv"></div>
-
-    <div class="gsec" id="g4"><div class="gh"><span class="gn">04</span>Quando BMAD faz sentido</div>
-      <div class="gcards"><div class="gcard" style="border-left:3px solid var(--p1)"><div class="gct">✅ Contextos ideais</div><ul class="gcl"><li>Tiny teams</li><li>Produtos complexos</li><li>APIs enterprise</li><li>Times altamente técnicos</li><li>Sistemas com muitas regras de negócio</li><li>Integração forte frontend/backend</li></ul></div></div>
-    </div><div class="gdiv"></div>
-
-    <div class="gsec" id="g5"><div class="gh"><span class="gn">05</span>O papel da IA dentro do BMAD</div>
-      <div class="gcards">
-        <div class="gcard" style="border-left:3px solid var(--p2)"><div class="gci">🧠</div><div class="gct">Humanos fazem</div><ul class="gcl"><li>Estratégia</li><li>Domínio</li><li>Arquitetura</li><li>Validação</li></ul></div>
-        <div class="gcard" style="border-left:3px solid var(--p1)"><div class="gci">⚡</div><div class="gct">IA faz</div><ul class="gcl"><li>Aceleração</li><li>Boilerplate</li><li>Documentação</li><li>Análise</li><li>Auxílio operacional</li></ul></div>
-      </div>
-    </div><div class="gdiv"></div>
-
-    <div class="gsec" id="g6"><div class="gh"><span class="gn">06</span>Modelo operacional recomendado</div>
-      <div class="gbody"><p>O modelo <strong style="color:var(--text)">Human-led AI Development</strong>:</p></div>
-      <div class="gflow"><div class="gfs" style="border-color:var(--p2);color:var(--p2)">Humano define direção</div><div class="gfa">→</div><div class="gfs" style="border-color:var(--p1);color:var(--p1)">IA acelera execução</div><div class="gfa">→</div><div class="gfs" style="border-color:var(--p3);color:var(--p3)">Humano valida</div></div>
-    </div><div class="gdiv"></div>
-
-    <div class="gsec" id="g7"><div class="gh"><span class="gn">07</span>Fluxo ideal entre os agentes BMAD</div>
-      <div class="gflow" style="flex-wrap:wrap">
-        <div class="gfs">Discovery</div><div class="gfa">→</div><div class="gfs">PRD</div><div class="gfa">→</div><div class="gfs">ADR</div><div class="gfa">→</div><div class="gfs">OpenAPI</div><div class="gfa">→</div><div class="gfs">Backend+Frontend</div><div class="gfa">→</div><div class="gfs">QA</div><div class="gfa">→</div><div class="gfs" style="border-color:var(--p1);color:var(--p1)">Deploy</div>
-      </div>
-      <div class="gagents">
-        <div class="ga"><div class="ga-h"><div class="ga-d" style="background:#3ecf8e"></div><div class="ga-n">Analyst (Mary)</div><div class="ga-i">bmad-analyst</div></div><ul class="ga-l"><li>Entendimento do domínio</li><li>Escopo e regras iniciais</li></ul></div>
-        <div class="ga"><div class="ga-h"><div class="ga-d" style="background:#7c6fcd"></div><div class="ga-n">PM (John)</div><div class="ga-i">bmad-pm</div></div><ul class="ga-l"><li>PRD, epics e stories</li><li>Critérios de aceite</li></ul></div>
-        <div class="ga"><div class="ga-h"><div class="ga-d" style="background:#e8975a"></div><div class="ga-n">Architect (Winston)</div><div class="ga-i">bmad-architect</div></div><ul class="ga-l"><li>Arquitetura e contratos</li><li>ADRs e decisões técnicas</li></ul></div>
-        <div class="ga"><div class="ga-h"><div class="ga-d" style="background:#4faaee"></div><div class="ga-n">Developer (Amelia)</div><div class="ga-i">bmad-agent-dev</div></div><ul class="ga-l"><li>APIs, services, integração</li><li>Sprint planning e stories (SP/CS)</li></ul></div>
-        <div class="ga"><div class="ga-h"><div class="ga-d" style="background:#e05c7c"></div><div class="ga-n">UX Designer (Sally)</div><div class="ga-i">bmad-ux-designer</div></div><ul class="ga-l"><li>UX Design e fluxos visuais</li></ul></div>
-        <div class="ga"><div class="ga-h"><div class="ga-d" style="background:#aaa"></div><div class="ga-n">Tech Writer (Paige)</div><div class="ga-i">bmad-tech-writer</div></div><ul class="ga-l"><li>Documentação técnica e padrões</li></ul></div>
-      </div>
-    </div><div class="gdiv"></div>
-
-    <div class="gsec" id="g8"><div class="gh"><span class="gn">08</span>PRD — Product Requirements Document</div>
-      <div class="gbody"><p>Documento funcional: problema, objetivos, regras, requisitos e comportamento esperado.</p></div>
-      <div class="gsub" style="margin-top:12px"><div class="gsub-t"><div class="gsub-d" style="background:var(--p2)"></div>Estrutura recomendada</div><ol style="padding-left:18px;display:flex;flex-direction:column;gap:5px;font-size:13px;color:var(--muted)"><li>Objetivo</li><li>Problema</li><li>Escopo</li><li>Regras de negócio</li><li>Fluxos</li><li>Critérios de aceite</li><li>Requisitos funcionais</li><li>Requisitos não funcionais</li></ol></div>
-    </div><div class="gdiv"></div>
-
-    <div class="gsec" id="g9"><div class="gh"><span class="gn">09</span>ADR — Architecture Decision Record</div>
-      <div class="gbody"><p>Registra decisões arquiteturais, contexto, tradeoffs e impactos — garante rastreabilidade total.</p></div>
-      <div class="gsub" style="margin-top:12px"><div class="gsub-t"><div class="gsub-d" style="background:var(--p3)"></div>Estrutura recomendada</div><ol style="padding-left:18px;display:flex;flex-direction:column;gap:5px;font-size:13px;color:var(--muted)"><li>Título</li><li>Status (proposed / accepted / deprecated)</li><li>Contexto</li><li>Decisão</li><li>Consequências</li><li>Alternativas consideradas</li><li>Referências</li></ol></div>
-    </div><div class="gdiv"></div>
-
-    <div class="gsec" id="g10"><div class="gh"><span class="gn">10</span>OpenAPI como contrato central</div>
-      <div class="gbody"><p>Definido <strong style="color:var(--text)">antes</strong> da implementação — centralizado, versionado e compartilhado.</p></div>
-      <div class="gflow" style="margin-top:12px"><div class="gfs">Regras</div><div class="gfa">→</div><div class="gfs" style="border-color:var(--p2);color:var(--p2)">Contratos OpenAPI</div><div class="gfa">→</div><div class="gfs">Backend</div><div class="gfa">→</div><div class="gfs">Frontend</div><div class="gfa">→</div><div class="gfs" style="border-color:var(--p1);color:var(--p1)">QA</div></div>
-    </div><div class="gdiv"></div>
-
-    <div class="gsec" id="g11"><div class="gh"><span class="gn">11</span>Context Engineering</div>
-      <div class="gbody"><p>Processo de estruturar, versionar e compartilhar conhecimento para que a IA receba contexto correto em cada etapa.</p></div>
-      <div class="gcards">
-        <div class="gcard"><div class="gci">📐</div><div class="gct">Estruturar</div><div class="gcb">PRD, ADR, OpenAPI, claude.md em artefatos claros</div></div>
-        <div class="gcard"><div class="gci">📦</div><div class="gct">Versionar</div><div class="gcb">Todo contexto no Git com histórico auditável</div></div>
-        <div class="gcard"><div class="gci">🔗</div><div class="gct">Compartilhar</div><div class="gcb">Context repo central como fonte da verdade</div></div>
-      </div>
-    </div><div class="gdiv"></div>
-
-    <div class="gsec" id="g12"><div class="gh"><span class="gn">12</span>Organização de repositórios</div>
-      <div class="gbody"><p>Dois modelos: <strong style="color:var(--text)">Monorepo</strong> e <strong style="color:var(--text)">Multirepo</strong>. A escolha depende do time, pipelines e necessidade de deploy independente.</p></div>
-    </div><div class="gdiv"></div>
-
-    <div class="gsec" id="g13"><div class="gh"><span class="gn">13</span>Estratégia Monorepo</div>
-      <div class="gsub"><div class="gsub-t"><div class="gsub-d" style="background:var(--p2)"></div>Estrutura</div><pre><code>produto/
-├── apps/
-│   ├── backend/
-│   └── frontend/
-└── docs/
-    ├── contracts/
-    ├── adr/
-    └── .ai/</code></pre></div>
-      <div class="gcards"><div class="gcard" style="border-left:3px solid var(--p1)"><div class="gct">✅ Fazer</div><ul class="gcl"><li>Um único Git repository</li><li>Pipelines separadas por path</li></ul></div><div class="gcard" style="border-left:3px solid var(--p4)"><div class="gct">❌ Evitar</div><ul class="gcl"><li>Múltiplos .git internos</li><li>Nested repositories</li></ul></div></div>
-    </div><div class="gdiv"></div>
-
-    <div class="gsec" id="g14"><div class="gh"><span class="gn">14</span>Estratégia Multirepo</div>
-      <div class="gsub"><div class="gsub-t"><div class="gsub-d" style="background:var(--p3)"></div>Estrutura</div><pre><code>produto-context/
-produto-backend/
-produto-frontend/</code></pre></div>
-      <div class="gsub"><div class="gsub-t"><div class="gsub-d" style="background:var(--p1)"></div>Melhor prática</div><ul><li>Context repo centralizado</li><li>Workspace compartilhado</li><li>Pipelines independentes por repo</li></ul></div>
-    </div><div class="gdiv"></div>
-
-    <div class="gsec" id="g15"><div class="gh"><span class="gn">15</span>Context Repository</div>
-      <div class="gbody"><p>O <strong style="color:var(--text)">cérebro do produto</strong> — fonte da verdade e camada compartilhada de contexto.</p></div>
-      <div class="gsub" style="margin-top:12px"><div class="gsub-t"><div class="gsub-d" style="background:var(--p5)"></div>Estrutura</div><pre><code>context-repo/
-├── docs/
-├── contracts/     ← OpenAPI e contratos
-├── adr/           ← Architecture Decision Records
-├── .ai/           ← Contexto para agentes IA
-├── flows/         ← Fluxos de negócio
-└── stories/       ← Stories e epics</code></pre></div>
-    </div><div class="gdiv"></div>
-
-    <div class="gsec" id="g16"><div class="gh"><span class="gn">16</span>Estrutura ideal dos projetos</div>
-      <div class="gsub"><div class="gsub-t"><div class="gsub-d" style="background:var(--p1)"></div>Workspace multirepo</div><pre><code>workspace/
-├── produto-context/     ← fonte da verdade
-├── produto-backend/     ← API e serviços
-└── produto-frontend/    ← interface e UX</code></pre></div>
-    </div><div class="gdiv"></div>
-
-    <div class="gsec" id="g17"><div class="gh"><span class="gn">17</span>Estrutura de contexto para IA</div>
-      <div class="gsub"><div class="gsub-t"><div class="gsub-d" style="background:var(--p2)"></div>Pasta .ai/ por escopo</div><pre><code>.ai/
-├── shared/
-│   └── company-standards.md
-├── backend/
-│   └── backend-agent.md
-└── frontend/
-    └── angular-guidelines.md</code></pre></div>
-      <div class="gbody" style="margin-top:10px"><p>Cada agente recebe apenas o contexto necessário — evita poluição e respostas genéricas.</p></div>
-    </div><div class="gdiv"></div>
-
-    <div class="gsec" id="g18"><div class="gh"><span class="gn">18</span>Fluxo operacional do time</div>
-      <div class="gcards">
-        <div class="gcard" style="border-left:3px solid var(--p2)"><div class="gci">🏗</div><div class="gct">Macro — sequencial</div><div class="gcb">Discovery → PRD → ADR → OpenAPI → Implementação → QA → Deploy.</div></div>
-        <div class="gcard" style="border-left:3px solid var(--p1)"><div class="gci">⚡</div><div class="gct">Micro — paralelo</div><div class="gcb">Com OpenAPI definido, backend e frontend trabalham em paralelo sem bloqueio.</div></div>
-      </div>
-    </div><div class="gdiv"></div>
-
-    <div class="gsec" id="g19"><div class="gh"><span class="gn">19</span>Integração com pipelines corporativas</div>
-      <div class="gcards">
-        <div class="gcard" style="border-left:3px solid var(--p1)"><div class="gct">Manter</div><ul class="gcl"><li>Pipelines independentes por serviço</li><li>Deploy separado por repo</li></ul></div>
-        <div class="gcard" style="border-left:3px solid var(--p2)"><div class="gct">Adicionar</div><ul class="gcl"><li>Context repo compartilhado</li><li>OpenAPI centralizado</li><li>Workspace compartilhado</li></ul></div>
-      </div>
-    </div><div class="gdiv"></div>
-
-    <div class="gsec" id="g20"><div class="gh"><span class="gn">20</span>Melhores práticas</div>
-      <div class="gchecks">
-        <div class="gchk ok"><span>✅</span><div class="gchk-tx"><strong>OpenAPI First</strong> — defina contratos antes de implementar</div></div>
-        <div class="gchk ok"><span>✅</span><div class="gchk-tx"><strong>Context-first development</strong> — estruture o contexto antes de invocar qualquer agente</div></div>
-        <div class="gchk ok"><span>✅</span><div class="gchk-tx"><strong>ADRs curtos e objetivos</strong> — documente decisões no momento em que são tomadas</div></div>
-        <div class="gchk ok"><span>✅</span><div class="gchk-tx"><strong>PRD versionado</strong> — trate o PRD como código, com histórico e revisões</div></div>
-        <div class="gchk ok"><span>✅</span><div class="gchk-tx"><strong>IA contextualizada</strong> — forneça o contexto correto antes de qualquer prompt</div></div>
-        <div class="gchk ok"><span>✅</span><div class="gchk-tx"><strong>Contratos centralizados</strong> — um único lugar para OpenAPI, acessível a todos</div></div>
-        <div class="gchk ok"><span>✅</span><div class="gchk-tx"><strong>Padrões corporativos compartilhados</strong> — <code>.ai/shared/company-standards.md</code></div></div>
-      </div>
-    </div><div class="gdiv"></div>
-
-    <div class="gsec" id="g21"><div class="gh"><span class="gn">21</span>O que evitar</div>
-      <div class="gchecks">
-        <div class="gchk no"><span>❌</span><div class="gchk-tx"><strong>IA sem contexto</strong> — gera alucinações e código inconsistente</div></div>
-        <div class="gchk no"><span>❌</span><div class="gchk-tx"><strong>OpenAPI apenas no backend</strong> — frontend perde a fonte da verdade</div></div>
-        <div class="gchk no"><span>❌</span><div class="gchk-tx"><strong>Regras fora do Git</strong> — decisões em Slack, e-mail ou cabeças de pessoas</div></div>
-        <div class="gchk no"><span>❌</span><div class="gchk-tx"><strong>Documentação desconectada</strong> — docs que não acompanham o código ficam obsoletos</div></div>
-        <div class="gchk no"><span>❌</span><div class="gchk-tx"><strong>Duplicação manual de contexto</strong> — cada repo replicando as mesmas regras</div></div>
-        <div class="gchk no"><span>❌</span><div class="gchk-tx"><strong>Nested repositories</strong> — múltiplos <code>.git</code> dentro de um mesmo repo</div></div>
-      </div>
-    </div><div class="gdiv"></div>
-
-    <div class="gsec" id="g22"><div class="gh"><span class="gn">22</span>Recomendações finais</div>
-      <div class="gsub" style="border-color:var(--p2)"><div class="gsub-t"><div class="gsub-d" style="background:var(--p2)"></div>Modelo recomendado para tiny teams enterprise</div>
-        <div class="gflow" style="flex-wrap:wrap;margin-top:8px">
-          <div class="gfs" style="border-color:var(--p2);color:var(--p2)">Multirepo</div><div class="gfa">+</div>
-          <div class="gfs" style="border-color:var(--p1);color:var(--p1)">Context Repo</div><div class="gfa">+</div>
-          <div class="gfs" style="border-color:var(--p3);color:var(--p3)">Workspace Compartilhado</div><div class="gfa">+</div>
-          <div class="gfs" style="border-color:var(--p5);color:var(--p5)">OpenAPI Centralizado</div>
+    <a class="doc-card" href="material-estudo-bmad.html">
+      <div class="doc-card-top">
+        <div class="doc-card-accent" style="background:var(--p1)"></div>
+        <div class="doc-card-title">Plano de Estudos<br>BMAD + Claude Code</div>
+        <div class="doc-card-sub">Material interativo com 60 sessões de 30 minutos. Cronograma completo, progresso salvo no navegador e tarefas práticas do zero ao avançado.</div>
+        <div class="doc-card-tags">
+          <span class="doc-tag">Iniciante → Expert</span>
+          <span class="doc-tag">12 semanas</span>
+          <span class="doc-tag">30h totais</span>
+          <span class="doc-tag">Interativo</span>
         </div>
       </div>
-      <div class="gsub" style="margin-top:10px"><div class="gsub-t"><div class="gsub-d" style="background:var(--p1)"></div>BMAD entrega mais valor quando</div>
-        <ul><li>Humanos lideram a estratégia</li><li>IA acelera a execução</li><li>Contexto é estruturado e versionado</li><li>Contratos são compartilhados</li><li>Arquitetura é rastreável via ADRs</li><li>Padrões corporativos são respeitados</li></ul>
+      <div class="doc-card-divider"></div>
+      <div class="doc-card-bottom">
+        <div class="doc-card-meta">60 sessões · progresso rastreado</div>
+        <div class="doc-card-arrow" style="color:var(--p1)">→</div>
       </div>
-    </div>
-  </main>
+    </a>
+
+    <a class="doc-card" href="guia-enterprise.html">
+      <div class="doc-card-top">
+        <div class="doc-card-accent" style="background:var(--p2)"></div>
+        <div class="doc-card-title">Guia Enterprise<br>Tiny Teams</div>
+        <div class="doc-card-sub">Estratégia e operação do BMAD em times pequenos com IA. Cobre OpenAPI First, Context Engineering, ADRs, monorepo vs multirepo e pipelines corporativas.</div>
+        <div class="doc-card-tags">
+          <span class="doc-tag">Enterprise</span>
+          <span class="doc-tag">Context Repo</span>
+          <span class="doc-tag">OpenAPI First</span>
+          <span class="doc-tag">ADR</span>
+        </div>
+      </div>
+      <div class="doc-card-divider"></div>
+      <div class="doc-card-bottom">
+        <div class="doc-card-meta">22 seções · índice navegável</div>
+        <div class="doc-card-arrow" style="color:var(--p2)">→</div>
+      </div>
+    </a>
+
+  </div>
 </div>
+
+<!-- Agents -->
+<div class="agents-strip">
+  <div class="grid-label">Agentes oficiais BMAD v6</div>
+  <div class="agents-row">
+    <div class="agent-chip"><div class="agent-dot" style="background:#3ecf8e"></div><span class="agent-chip-name">Analyst (Mary)</span><span class="agent-chip-id">bmad-analyst</span></div>
+    <div class="agent-chip"><div class="agent-dot" style="background:#7c6fcd"></div><span class="agent-chip-name">PM (John)</span><span class="agent-chip-id">bmad-pm</span></div>
+    <div class="agent-chip"><div class="agent-dot" style="background:#e8975a"></div><span class="agent-chip-name">Architect (Winston)</span><span class="agent-chip-id">bmad-architect</span></div>
+    <div class="agent-chip"><div class="agent-dot" style="background:#4faaee"></div><span class="agent-chip-name">Developer (Amelia)</span><span class="agent-chip-id">bmad-agent-dev</span></div>
+    <div class="agent-chip"><div class="agent-dot" style="background:#e05c7c"></div><span class="agent-chip-name">UX Designer (Sally)</span><span class="agent-chip-id">bmad-ux-designer</span></div>
+    <div class="agent-chip"><div class="agent-dot" style="background:#aaa"></div><span class="agent-chip-name">Tech Writer (Paige)</span><span class="agent-chip-id">bmad-tech-writer</span></div>
+  </div>
 </div>
 
-<script>
-/* ── Router ── */
-const PAGES=['home','study','guide'];
-function go(id){
-  PAGES.forEach(p=>{
-    document.getElementById('page-'+p).classList.toggle('active',p===id);
-    document.getElementById('nb-'+p).classList.toggle('active',p===id);
-  });
-  window.scrollTo(0,0);
-  if(id==='study'&&!studyBuilt)initStudy();
-  if(id==='guide')setTimeout(initGuideToc,80);
-  history.replaceState(null,'','#'+id);
-}
-window.addEventListener('hashchange',()=>{const h=location.hash.replace('#','');if(PAGES.includes(h))go(h);});
-if(PAGES.includes(location.hash.replace('#','')))go(location.hash.replace('#',''));
+<!-- Footer -->
+<div class="footer">
+  <div class="footer-logo">BMAD Lab</div>
+  <div class="footer-copy">Gerado com Claude · 2026</div>
+</div>
 
-/* ── Study Data ── */
-let studyBuilt=false;
-const PHASES=[
-  {id:1,name:'Fase 1 — Fundamentos',desc:'Semanas 1–2 · Ambiente, conceitos e primeiros passos',color:'#3ecf8e',weeks:[1,2],sessions:[
-    {t:'Instalação do VSCode e extensão Claude Code',c:'Configure o ambiente base de desenvolvimento.',k:['Instale o VSCode em code.visualstudio.com','Abra Extensions (Ctrl+Shift+X) → pesquise "Claude Code" e instale','Faça login com sua conta Anthropic na extensão','Crie pasta de teste: mkdir bmad-hello && cd bmad-hello','Confirme que o painel Claude Code aparece na barra lateral']},
-    {t:'Instalação do Node.js e BMAD',c:'Instale as dependências e o framework BMAD.',k:['Verifique Node.js: node --version (precisa ser v18+)','Se não tiver, baixe em nodejs.org a versão LTS','No terminal do VSCode execute: npx bmad-method install','Siga todos os prompts do instalador','Explore a estrutura: .bmad/, agentes (.md) e workflows']},
-    {t:'Explorando a estrutura de arquivos do BMAD',c:'Entenda o que cada arquivo e pasta do BMAD faz.',k:['Abra o Explorer do VSCode e navegue pela pasta .bmad/','Leia o README ou SKILL.md do BMAD','Abra um arquivo de agente (ex: analyst.md) — leia persona e skills','Abra um arquivo .yaml da pasta de workflows','Anote suas dúvidas para explorar nas próximas sessões']},
-    {t:'Entendendo os 6 agentes oficiais do BMAD',c:'Conheça cada agente e sua responsabilidade.',k:['Planejamento: Analyst (Mary) bmad-analyst, PM (John) bmad-pm, Architect (Winston) bmad-architect','Execução: Developer (Amelia) bmad-agent-dev, UX Designer (Sally) bmad-ux-designer, Tech Writer (Paige) bmad-tech-writer','Para cada um: persona, triggers e quando usá-lo','Acesse docs.bmad-method.org/reference/agents — leia a tabela de triggers','Desenhe o fluxo: PM via CE e Developer via SP/CS criam as stories']},
-    {t:'Primeiro contato com @bmad-help',c:'Use o agente de ajuda para se orientar.',k:['Abra o painel Claude Code no VSCode','Digite: @bmad-help e pressione Enter','Leia toda a resposta do agente','Pergunte: "what modules are available?"','Pergunte: "I am a beginner, what should I do first?"']},
-    {t:'Documentação oficial — Getting Started',c:'Leitura estruturada para construir base sólida.',k:['Acesse docs.bmad-method.org','Leia "Getting Started" completo, sem pular partes','Atenção especial a instalação e primeiros comandos','Anote os 3 conceitos mais importantes','Salve nos favoritos as páginas de referência frequente']},
-    {t:'Documentação oficial — Core Concepts',c:'Compreenda os pilares conceituais do BMAD.',k:['Leia a seção "Core Concepts" completa','Entenda "artifact-driven development"','Estude o ciclo: Ideação → PRD → Arquitetura → Stories → Código','Leia sobre "agent handoff" — como um agente passa para o próximo','Escreva: o que diferencia BMAD de usar Claude diretamente?']},
-    {t:'Criando o projeto de prática',c:'Configure um projeto simples para praticar o roadmap.',k:['Decida um projeto pequeno (ex: app de lista de tarefas)','Crie a pasta: mkdir meu-projeto-bmad && cd meu-projeto-bmad','Execute: npx bmad-method install','Inicialize Git: git init && git add . && git commit -m "chore: init bmad"','Abra no VSCode e confirme que tudo funciona']},
-    {t:'Explorando os 6 agentes na prática',c:'Interaja com cada agente para entender suas personas.',k:['Ative Analyst (Mary) via bmad-analyst — diga "hello, what can you do?"','Faça o mesmo com PM (John) via bmad-pm e Architect (Winston) via bmad-architect','Experimente Developer (Amelia), UX Designer (Sally) e Tech Writer (Paige)','Observe diferenças de persona, tom e foco de cada agente','Documente em NOTAS.md: qual agente usar em qual momento?']},
-    {t:'Revisão da Fase 1',c:'Consolide antes de avançar para o fluxo completo.',k:['Revise suas anotações das 9 sessões anteriores','Consegue instalar o BMAD do zero sem tutorial?','Sabe identificar para que serve cada agente?','Ambiente VSCode + Claude Code funcionando?','Use @bmad-help: "I finished the basics setup, what is next?"']}
-  ]},
-  {id:2,name:'Fase 2 — Fluxo de trabalho básico',desc:'Semanas 3–4 · Usando agentes para criar um projeto do zero',color:'#7c6fcd',weeks:[3,4],sessions:[
-    {t:'Agente Analyst — iniciando o briefing',c:'Use o Analyst para estruturar o problema.',k:['Abra o projeto de prática no VSCode','Ative bmad-analyst','Diga: "I want to create [projeto]. Can you help me define the problem?"','Responda às perguntas sobre problema, público-alvo e contexto','Salve as perguntas — elas revelam como o framework pensa']},
-    {t:'Agente Analyst — finalizando o Project Brief',c:'Complete e refine o briefing.',k:['Continue ou reative o Analyst com o contexto','Peça análise de mercado simplificada','Peça os principais diferenciais do projeto','Solicite o Project Brief final em markdown','Salve como docs/project-brief.md e faça commit']},
-    {t:'Agente PM — criando o PRD',c:'Transforme o Brief em documento de requisitos.',k:['Cole o project-brief.md no contexto','Ative bmad-pm','Diga: "Here is our project brief. Please create the PRD."','Deixe o PM criar PRD com stories e critérios de aceite','Salve como docs/prd.md e faça commit']},
-    {t:'Agente PM — revisando e iterando o PRD',c:'Refine o PRD antes de ir para a arquitetura.',k:['Leia o PRD linha por linha com atenção crítica','Stories fazem sentido? Critérios de aceite são testáveis?','Peça ao PM para refinar 2-3 user stories vagas','Adicione uma seção "non-goals"','Commit: git commit -m "docs: finalize prd v1"']},
-    {t:'Agente Architect — proposta de arquitetura',c:'Use o Architect para desenhar a solução técnica.',k:['Cole o PRD como contexto','Ative bmad-architect','Diga: "Based on this PRD, propose an architecture"','Analise: stack, estrutura de pastas, decisões de design','Pergunte: "What are the main technical risks?"']},
-    {t:'Agente Architect — refinando e documentando',c:'Finalize o documento de arquitetura.',k:['Peça ao Architect os contratos de API principais','Solicite diagrama de componentes (ASCII ou mermaid)','Pergunte sobre estratégia de banco de dados','Salve como docs/architecture.md e faça commit','A arquitetura resolve todos os requisitos do PRD?']},
-    {t:'Agente PM — criando epics e stories (trigger CE)',c:'PM quebra o PRD em epics e stories.',k:['Cole PRD + arquitetura como contexto','Ative bmad-pm e use trigger CE (Create Epics and Stories)','PM gera epics por funcionalidade e stories de cada epic','Cada story tem contexto, critério de aceite e é independente?','Salve em docs/stories/ e faça commit']},
-    {t:'Agente Developer — Sprint Planning (triggers SP e CS)',c:'Developer planeja o sprint e detalha stories tecnicamente.',k:['Ative bmad-agent-dev com as stories do PM','Use trigger SP (Sprint Planning) para priorizar stories','Para stories vagas, use trigger CS (Create Story) para detalhar','Cada story define claramente o que implementar?','Commit: git commit -m "docs: finalize stories v1"']},
-    {t:'Agente Developer — primeira story',c:'Implemente a primeira story com o Developer.',k:['Escolha a story mais simples e sem dependências','Cole a story como contexto e ative bmad-agent-dev','Use trigger DS (Dev Story)','O código gerado está alinhado com a arquitetura?','Salve, rode localmente se possível, faça commit']},
-    {t:'Revisão do ciclo completo — Fase 2',c:'Consolide o fluxo Brief → PRD → Arquitetura → Stories → Código.',k:['Revise todos os artefatos: brief, PRD, arquitetura, stories, código','O código resolve o que o PRD prometeu?','O que foi difícil? O que foi surpreendentemente fácil?','Qual agente foi mais valioso? Por quê?','Use @bmad-help: "I completed the first cycle, what should I improve?"']}
-  ]},
-  {id:3,name:'Fase 3 — Integração VSCode + Claude Code',desc:'Semanas 5–6 · Produtividade máxima no editor',color:'#e8975a',weeks:[5,6],sessions:[
-    {t:'Explorando o painel Claude Code no VSCode',c:'Domine todos os recursos da extensão.',k:['Explore ícones e botões do painel lateral','Aprenda o atalho para abrir/fechar o painel','Selecione código e peça análise ao Claude Code','Explore como adicionar arquivos específicos ao contexto','Configure em Settings → Extensions → Claude Code']},
-    {t:'Escrevendo um claude.md eficiente',c:'Contexto persistente que alimenta todos os agentes.',k:['Crie claude.md na raiz do projeto','Adicione: nome/descrição do projeto, stack técnica','Adicione: convenções de código, padrão de commits, estrutura','Adicione: restrições importantes','Abra nova sessão com bmad-agent-dev e confirme absorção do claude.md']},
-    {t:'Técnicas avançadas de seleção de contexto',c:'Contexto cirúrgico para respostas melhores.',k:['Adicione apenas o arquivo relevante (não o projeto inteiro)','Abra dois arquivos e peça ao Developer para integrá-los','Adicione erro do terminal como contexto','Referencie problemas do VSCode (aba Problems)','Qual combinação gerou a resposta mais precisa?']},
-    {t:'Handoff Analyst → PM com contexto preservado',c:'Transição entre agentes sem perder informação.',k:['Simule um segundo projeto fictício','Complete o briefing com o Analyst','Ao ativar o PM, cole o project-brief.md antes de qualquer pergunta','O PM entende sem explicação verbal?','Anote as estratégias de handoff que funcionaram']},
-    {t:'Handoff PM → Architect → Developer',c:'Ciclo completo focando na qualidade dos handoffs.',k:['Continue o projeto fictício anterior','Passe o PRD completo para o Architect','Do Architect, passe arquitetura + story para o Developer','O código foi consistente com a arquitetura?','Documente a forma ideal de passar contexto entre agentes']},
-    {t:'Dev Loop: código → revisão → refinamento',c:'Ciclo de qualidade com o Developer.',k:['Pegue o código da última sessão','Use trigger CR (Code Review) no bmad-agent-dev com a story','Corrija os problemas encontrados','Repita até o código passar em todos os critérios de aceite','Esse é o Dev Loop básico do BMAD']},
-    {t:'Automatizando o Dev Loop no terminal do VSCode',c:'Terminal integrado para acelerar o ciclo.',k:['Configure scripts npm: test, lint, build','Rode testes no terminal integrado (Ctrl+`)','Cole erros no Claude Code para o Developer corrigir','Ciclo: código → npm test → erro → Claude Code → passa','Cronometre uma iteração — estabeleça sua baseline']},
-    {t:'Git como camada de governança do BMAD',c:'Versione artefatos e código de forma rastreável.',k:['Branches: main, develop, feature/*, docs/*','Crie branches separadas para artefatos (docs/prd) e código (feat/user-auth)','Template de commit com agente: "feat(developer): implement user auth story #3"','Faça git log — cada decisão é rastreável','Versione artefatos BMAD junto com o código']},
-    {t:'Otimizando o claude.md com aprendizados',c:'Refine o contexto com o que aprendeu.',k:['Revise o claude.md criado na sessão 2 desta fase','Adicione: lições sobre a arquitetura do projeto','Adicione: padrões de código que os agentes devem seguir','Adicione: seção "do not do" com anti-patterns','O novo claude.md melhorou a qualidade das respostas?']},
-    {t:'Revisão da Fase 3',c:'Avalie produtividade e identifique gargalos.',k:['Compare velocidade com a Fase 2: o que melhorou?','Qual etapa ainda consome mais tempo?','Revise o claude.md e ajuste se necessário','Documente o dev loop ideal: tempo por story do zero ao commit','Use @bmad-help: "how can I further optimize my workflow?"']}
-  ]},
-  {id:4,name:'Fase 4 — Workflows avançados',desc:'Semanas 7–9 · Automação e customização de fluxos',color:'#e05c7c',weeks:[7,8,9],sessions:[
-    {t:'Estudando workflows YAML do BMAD',c:'Entenda a estrutura dos workflows padrão.',k:['Abra a pasta de workflows no Explorer','Leia um workflow padrão completo linha por linha','Como são definidas as etapas e dependências?','Leia a documentação em docs.bmad-method.org','Anote a estrutura mínima: name, steps, inputs, outputs']},
-    {t:'Criando seu primeiro workflow YAML customizado',c:'Escreva um workflow para o projeto de prática.',k:['Defina fluxo de 3 etapas (ex: research → design → implement)','Crie .bmad/workflows/meu-workflow.yaml','Defina: agent, input (artefatos), output por etapa','Adicione descrição de quando usar','Compare com workflow padrão para garantir sintaxe correta']},
-    {t:'Testando o workflow customizado',c:'Execute e itere o workflow.',k:['Use @bmad-help para saber como executar workflow customizado','Execute no projeto de prática','Os agentes seguem a sequência correta?','Onde precisou de intervenção manual?','Refine o YAML e execute novamente']},
-    {t:'Explorando módulos oficiais do BMAD',c:'Conheça os módulos para expandir o framework.',k:['Acesse docs.bmad-method.org/reference/modules','Leia a descrição de cada módulo','Identifique 2 módulos relevantes para o projeto','Leia a documentação completa de um módulo','Quais agentes e workflows cada módulo adiciona?']},
-    {t:'Instalando e testando um módulo oficial',c:'Adicione um módulo e integre ao fluxo.',k:['Instale: npx bmad-method install --module <nome>','Explore a estrutura adicionada pelo módulo','Ative um novo agente do módulo','Integre ao workflow customizado','Commit: git commit -m "chore: add bmad module X"']},
-    {t:'Conceito de times de agentes (multi-agent teams)',c:'Agentes trabalhando em paralelo.',k:['Leia "Cross Platform Agent Team" nos docs','Como agentes diferentes trabalham no mesmo contexto?','Caso de uso: Developer-Frontend e Developer-Backend em paralelo','Como o contexto é compartilhado no time?','Como usaria times no projeto de prática?']},
-    {t:'Configurando um time de agentes',c:'Dois agentes em paralelo no mesmo projeto.',k:['Escolha story com componente frontend e backend','Abra duas sessões do Claude Code','Uma para backend (bmad-agent-dev), outra para frontend','Ambas com mesmo claude.md e arquitetura como contexto','Integre os outputs — houve inconsistências? Como resolver?']},
-    {t:'Introdução ao BMad Builder (BMB)',c:'Ferramenta para criar agentes customizados.',k:['Leia documentação em bmad-builder-docs.bmad-method.org','Estrutura YAML: name, persona, skills, workflows','Abra um agente padrão (ex: analyst.agent.yaml)','Como a persona influencia o comportamento?','Esboce: que agente customizado seria útil no seu trabalho?']},
-    {t:'Criando um agente customizado — definição YAML',c:'Escreva a definição do primeiro agente customizado.',k:['Crie .bmad/custom/agents/meu-agente.agent.yaml','Defina: name, description, persona (quem é? como fala?)','Defina: skills (o que sabe?) e workflows','Seja específico na persona — agentes genéricos são menos úteis','Compare com agente padrão para garantir sintaxe']},
-    {t:'Compilando e testando o agente customizado',c:'BMB para compilar e ativar o agente.',k:['Compile com o BMad Builder (consulte docs para o comando)','Confirme que o .md aparece em .bmad/custom/agents/','Ative e diga "hello, what can you do?"','O agente responde como esperado?','Refine persona ou skills e recompile se necessário']},
-    {t:'Dev Loop automation com scripts',c:'Automatize partes repetitivas.',k:['Identifique 2-3 ações repetitivas do Dev Loop','Crie Makefile ou scripts npm (ex: make dev-loop → lint + test)','Integre o output como contexto para Claude Code em erros','Quanto tempo economizou por ciclo?','Documente as automações no README do projeto']},
-    {t:'Integração básica com GitHub Actions',c:'Pipeline CI que complementa o BMAD.',k:['Crie .github/workflows/ci.yml','Configure: on push → instalar → testes → lint','Faça push e observe o pipeline no GitHub','Configure notificação de falha','Como o CI se encaixa no ciclo BMAD?']},
-    {t:'Revisão da Fase 4 — parte 1',c:'Consolide workflows e módulos.',k:['O workflow customizado funciona bem?','O agente customizado agrega valor real?','Liste 3 módulos que ainda quer explorar','Qual automação teve maior impacto?','Atualize o claude.md com novos aprendizados']},
-    {t:'Revisão da Fase 4 — parte 2',c:'Consolide multi-agent teams e prepare para Expert.',k:['O que funcionou com times de agentes? O que é difícil?','Documente seu "BMAD playbook" pessoal','Escreva guia de 1 página sobre como usa BMAD','O que falta para trabalhar com times distribuídos?','Use @bmad-help sobre boas práticas de times']},
-    {t:'Projeto integrador — Fase 4',c:'Use tudo da Fase 4 num mini-projeto.',k:['Defina um mini-projeto diferente do de prática','Execute com: workflow customizado, agente customizado, módulo oficial','Use Dev Loop automatizado e pipeline CI','Commit de todos os artefatos e código','Quanto tempo levou? Qual seria sem BMAD?']}
-  ]},
-  {id:5,name:'Fase 5 — Expert & Enterprise',desc:'Semanas 10–12 · Escala, compliance e contribuição',color:'#4faaee',weeks:[10,11,12],sessions:[
-    {t:'Arquitetura BMAD para times distribuídos',c:'Como escalar para múltiplos devs.',k:['Leia sobre uso do BMAD em times','Como múltiplos devs compartilham o mesmo contexto?','Entenda "single source of truth" de artefatos','Quais conflitos surgem quando dois devs editam o mesmo PRD?','Proponha estrutura de pastas para colaboração']},
-    {t:'Estratégia de branching para times',c:'Workflow Git para equipe com BMAD.',k:['GitHub Flow vs GitFlow para BMAD','Quem pode alterar artefatos (PRD, arquitetura)?','Configure branch protection rules no GitHub','Crie template de PR com referência ao artefato BMAD','Documente em CONTRIBUTING.md']},
-    {t:'Ownership de artefatos em time',c:'Responsabilidades claras para cada artefato.',k:['Crie CODEOWNERS mapeando donos por pasta','Defina processo para mudanças no PRD (quem aprova?)','O que acontece com arquitetura conflitante de dois devs?','Proponha processo de resolução de conflitos','Documente no CONTRIBUTING.md']},
-    {t:'Compliance e auditabilidade com BMAD',c:'Rastreabilidade natural para compliance.',k:['Leia "Applied BMAD" em bennycheung.github.io/bmad-reclaiming-control-in-ai-dev','Entenda "compliance ledger": cada decisão versionada é evidência','Consegue responder "por que esta decisão?" para cada artefato?','Quais gaps de rastreabilidade existem?','Proponha melhorias para cobrir esses gaps']},
-    {t:'Configurando pipeline de auditoria',c:'Automatize verificações de consistência.',k:['Checklist: o código cobre todos os critérios do PRD?','Script que verifica se stories têm referência no git log','GitHub Action que roda checklist a cada PR','Como um auditor usaria o repositório?','Documente em AUDIT.md']},
-    {t:'Métricas de qualidade de agentes',c:'Meça o valor que cada agente gera.',k:['Métricas: cobertura de critérios, taxa de retrabalho, consistência','Calcule taxa de retrabalho dos últimos 10 commits','Qual agente gerou mais retrabalho? Por quê?','Hipóteses de melhoria para cada agente problemático','Qual taxa de retrabalho quer atingir no final desta fase?']},
-    {t:'Usando skill-creator para otimizar agentes',c:'Melhore agentes com base nas métricas.',k:['Leia documentação do skill-creator','Escolha o agente com pior desempenho','Use skill-creator para propor melhorias','Atualize o arquivo de definição do agente','As métricas melhoraram após a otimização?']},
-    {t:'Criando um módulo de domínio próprio — planejamento',c:'Planeje módulo reutilizável.',k:['Identifique domínio recorrente que BMAD padrão não cobre','Exemplos: dados, APIs REST, apps mobile','Quais agentes, workflows e artefatos o módulo inclui?','Escreva spec de 1 página: nome, objetivo, agentes, workflows','Leia docs em bmad-builder-docs.bmad-method.org']},
-    {t:'Criando um módulo de domínio próprio — implementação',c:'Implemente o módulo planejado.',k:['Crie estrutura seguindo padrão BMAD','Implemente agentes em YAML','Implemente workflows','Compile com BMad Builder e teste','Documente com README de uso e instalação']},
-    {t:'Versionando e empacotando o módulo',c:'Prepare para distribuição.',k:['Inicialize repositório Git separado','Configure package.json com nome, versão (1.0.0) e descrição','Adicione CHANGELOG.md para v1.0.0','Tag: git tag v1.0.0 && git push --tags','Teste instalação: npx bmad-method install --source <caminho>']},
-    {t:'Estudando como contribuir ao BMAD',c:'Processo de contribuição oficial.',k:['Acesse github.com/bmad-code-org/BMAD-METHOD e leia CONTRIBUTING.md','Explore issues abertas — há alguma que você pode resolver?','Leia PRs recentes para entender o padrão','Há gaps na documentação que você pode preencher?','Faça fork para começar a contribuir']},
-    {t:'Abrindo sua primeira issue no BMAD',c:'Contribua com a comunidade.',k:['Escolha o que reportar: bug, sugestão ou dúvida de doc','Abra a issue seguindo o template do projeto','Seja detalhado: contexto, passos para reproduzir, proposta','Adicione labels relevantes','Monitore e responda aos comentários']},
-    {t:'Propondo uma melhoria via PR',c:'Primeira contribuição de código ou doc.',k:['Escolha issue beginner-friendly ou good-first-issue','Branch: git checkout -b fix/minha-contribuicao','Implemente (doc, correção, novo exemplo)','Siga o guia de estilo do projeto','PR com descrição clara do que e por quê']},
-    {t:'Construindo seu portfólio BMAD',c:'Documente o que aprendeu e construiu.',k:['Liste todos os projetos e artefatos das 12 semanas','Post de reflexão: o que o BMAD mudou no seu fluxo?','Apresentação de 5 min para o time','Compartilhe o módulo customizado com um colega','Defina próximos objetivos com BMAD']},
-    {t:'🎉 Sessão final — Revisão e celebração',c:'Você concluiu o roadmap completo!',k:['Como estava seu fluxo de trabalho na Fase 1?','Uma story que demorava X horas agora demora quanto?','Revise todas as anotações e NOTAS.md','Identifique os 3 maiores aprendizados e compartilhe com o time','Celebre! Você estudou 30h de BMAD + Claude Code + VSCode. 🚀']}
-  ]}
-];
-
-const wkPh={1:'ph1',2:'ph1',3:'ph2',4:'ph2',5:'ph3',6:'ph3',7:'ph4',8:'ph4',9:'ph4',10:'ph5',11:'ph5',12:'ph5'};
-const wkLb={ph1:'F1',ph2:'F2',ph3:'F3',ph4:'F4',ph5:'F5'};
-function getC(){try{return JSON.parse(localStorage.getItem('bmad_c')||'{}')}catch{return{}}}
-function setC(o){localStorage.setItem('bmad_c',JSON.stringify(o))}
-function key(pi,si){return'p'+pi+'_s'+si}
-
-function updateStats(){
-  const c=getC(),tot=60,done=Object.values(c).filter(Boolean).length,p=Math.round(done/tot*100);
-  document.getElementById('pct').textContent=p+'%';
-  document.getElementById('pct-sub').textContent=done+' de '+tot;
-  document.getElementById('prog-bar').style.width=p+'%';
-  document.getElementById('hours').textContent=(done*.5).toFixed(1)+'h';
-  let cur=null;
-  for(const ph of PHASES){if(ph.sessions.filter((_,si)=>c[key(ph.id,si)]).length<ph.sessions.length){cur=ph;break;}}
-  document.getElementById('cur-phase').textContent=cur?'Fase '+cur.id:'✓ Completo';
-  document.getElementById('cur-phase-sub').textContent=cur?cur.name.split('—')[1].trim():'Parabéns!';
-  const rem=tot-done;
-  if(rem>0){const d=new Date();d.setDate(d.getDate()+rem);document.getElementById('finish-date').textContent=d.toLocaleDateString('pt-BR',{day:'numeric',month:'short'});document.getElementById('finish-sub').textContent='em '+rem+' dias (~'+Math.ceil(rem/5)+' sem)';}
-  else{document.getElementById('finish-date').textContent='✓ Concluído';document.getElementById('finish-sub').textContent='Parabéns!';}
-  PHASES.forEach(ph=>{
-    const dp=ph.sessions.filter((_,si)=>c[key(ph.id,si)]).length/ph.sessions.length;
-    ph.weeks.forEach(w=>{const b=document.getElementById('cw-'+w);if(b)b.classList.toggle('done',dp>=1);});
-    const el=document.getElementById('pp-'+ph.id);if(el)el.textContent=ph.sessions.filter((_,si)=>c[key(ph.id,si)]).length+'/'+ph.sessions.length;
-  });
-}
-function toggleSess(pi,si){
-  const c=getC(),k=key(pi,si);c[k]=!c[k];setC(c);
-  const ch=document.getElementById('ck-'+pi+'-'+si);if(ch){ch.classList.toggle('done',c[k]);ch.textContent=c[k]?'✓':'';}
-  const t=document.getElementById('st-'+pi+'-'+si);if(t)t.classList.toggle('done',c[k]);
-  updateStats();
-}
-function toggleBody(pi,si){const b=document.getElementById('sb-'+pi+'-'+si);if(b)b.style.display=b.style.display==='none'?'block':'none';}
-function togglePhase(pid){
-  const b=document.getElementById('phb-'+pid),cv=document.getElementById('phcv-'+pid),hd=document.getElementById('phh-'+pid);
-  if(!b)return;const o=b.classList.contains('open');
-  b.classList.toggle('open',!o);cv.classList.toggle('open',!o);hd.classList.toggle('open',!o);
-}
-function resetProgress(){if(!confirm('Reiniciar todo o progresso?'))return;localStorage.removeItem('bmad_c');location.reload();}
-
-function initStudy(){
-  studyBuilt=true;
-  const cw=document.getElementById('crono-weeks');
-  for(let w=1;w<=12;w++){const ph=wkPh[w],d=document.createElement('div');d.innerHTML='<div class="cw-lbl">S'+w+'</div><div class="cb '+ph+'" id="cw-'+w+'">'+wkLb[ph]+'</div>';cw.appendChild(d);}
-  const pc=document.getElementById('phases-container');let sn=1;
-  PHASES.forEach(ph=>{
-    const c=getC(),div=document.createElement('div');div.className='phase';
-    const dp=ph.sessions.filter((_,si)=>c[key(ph.id,si)]).length;
-    let sh='';
-    ph.sessions.forEach((s,si)=>{
-      const isDone=!!c[key(ph.id,si)];
-      const tasks=s.k.map(t=>'<div class="stask">'+t+'</div>').join('');
-      sh+='<div class="sess" onclick="toggleBody('+ph.id+','+si+')"><div class="sck'+(isDone?' done':'')+'" id="ck-'+ph.id+'-'+si+'" onclick="event.stopPropagation();toggleSess('+ph.id+','+si+')">'+(isDone?'✓':'')+'</div><div class="sm"><div class="stop"><span class="snum">Dia '+sn+'</span><span class="stit'+(isDone?' done':'')+'" id="st-'+ph.id+'-'+si+'">'+s.t+'</span><span class="stime">30 min</span></div><div class="sbody" id="sb-'+ph.id+'-'+si+'" style="display:none"><div class="sdesc">'+s.c+'</div><div class="stasks">'+tasks+'</div></div></div></div>';
-      sn++;
-    });
-    div.innerHTML='<div class="phh" id="phh-'+ph.id+'" onclick="togglePhase('+ph.id+')"><div class="ph-pip" style="background:'+ph.color+'"></div><div class="ph-inf"><div class="ph-nm">'+ph.name+'</div><div class="ph-ds">'+ph.desc+'</div></div><div class="ph-pr" id="pp-'+ph.id+'">'+dp+'/'+ph.sessions.length+'</div><div class="ph-cv" id="phcv-'+ph.id+'">▶</div></div><div class="phb" id="phb-'+ph.id+'">'+sh+'</div>';
-    pc.appendChild(div);
-  });
-  updateStats();togglePhase(1);
-}
-
-function initGuideToc(){
-  const secs=document.querySelectorAll('.gsec[id]');
-  const links=document.querySelectorAll('#toc-list li a');
-  const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){links.forEach(l=>l.classList.remove('active'));const a=document.querySelector('#toc-list li a[href="#'+e.target.id+'"]');if(a)a.classList.add('active');}});},{rootMargin:'-15% 0px -70% 0px'});
-  secs.forEach(s=>obs.observe(s));
-  document.querySelectorAll('#toc-list li a').forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth'});});});
-}
-</script>
 </body>
 </html>
