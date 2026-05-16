@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BMAD para Devs — Guia de Desenvolvimento</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f1117;--surface:#181c27;--surface2:#1f2535;
+  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.13);
+  --text:#e8eaf0;--muted:#7a8099;--faint:#3a3f52;
+  --p1:#3ecf8e;--p1t:#1a5c38;--p1bg:#0c3320;
+  --p2:#7c6fcd;--p2t:#2d2560;--p2bg:#1a1640;
+  --p3:#e8975a;--p3t:#5c3018;--p3bg:#2e1a08;
+  --p4:#e05c7c;--p4t:#5c1830;--p4bg:#2a0e1b;
+  --p5:#4faaee;--p5t:#1a3d60;--p5bg:#0a2038;
+  --accent:#3ecf8e;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.7;min-height:100vh}
+
+.topnav{position:sticky;top:0;z-index:100;background:rgba(15,17,23,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 24px;height:52px;display:flex;align-items:center;gap:16px}
+.topnav-home{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .15s}
+.topnav-home:hover{color:var(--text)}
+.topnav-sep{color:var(--faint);font-size:12px}
+.topnav-title{font-family:'DM Mono',monospace;font-size:12px;color:var(--text)}
+.topnav-badge{margin-left:auto;font-family:'DM Mono',monospace;font-size:10px;padding:3px 9px;border-radius:99px;border:1px solid var(--p1);color:var(--p1)}
+
+.layout{display:flex;max-width:1100px;margin:0 auto;padding:48px 24px 80px;gap:44px}
+.toc{width:210px;flex-shrink:0}
+.toc-sticky{position:sticky;top:72px}
+.toc-lbl{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.toc-list{list-style:none;display:flex;flex-direction:column;gap:1px}
+.toc-list li a{font-size:12px;color:var(--muted);text-decoration:none;display:block;padding:4px 8px;border-radius:5px;transition:color .1s,background .1s}
+.toc-list li a:hover{color:var(--text);background:var(--surface)}
+.toc-list li a.active{color:var(--p1);background:var(--p1bg)}
+.toc-sec{font-family:'DM Mono',monospace;font-size:10px;color:var(--faint);letter-spacing:.1em;text-transform:uppercase;padding:8px 8px 2px;margin-top:4px}
+
+.content{flex:1;min-width:0}
+
+.page-header{margin-bottom:44px;padding-bottom:28px;border-bottom:1px solid var(--border)}
+.header-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.page-header h1{font-family:'DM Serif Display',serif;font-size:clamp(26px,4vw,40px);font-weight:400;line-height:1.15;margin-bottom:10px}
+.header-sub{font-size:14px;color:var(--muted);margin-bottom:18px;line-height:1.6}
+.header-tags{display:flex;gap:7px;flex-wrap:wrap}
+.htag{font-size:11px;font-family:'DM Mono',monospace;padding:3px 10px;border-radius:99px;border:1px solid var(--border2);color:var(--muted)}
+.htag.hi{border-color:var(--p1);color:var(--p1);background:var(--p1bg)}
+
+.section{margin-bottom:44px;scroll-margin-top:80px}
+.section-heading{font-family:'DM Serif Display',serif;font-size:21px;font-weight:400;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:11px}
+.section-num{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);background:var(--surface);border:1px solid var(--border);padding:2px 8px;border-radius:4px}
+.section-body{color:var(--muted);font-size:14px;line-height:1.75}
+.section-body p{margin-bottom:10px}
+.section-body p:last-child{margin-bottom:0}
+
+.sub{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:18px;margin-bottom:10px}
+.sub-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:9px;display:flex;align-items:center;gap:8px}
+.sub-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.sub p,.sub li{font-size:13px;color:var(--muted);line-height:1.65}
+.sub ul,.sub ol{padding-left:18px;display:flex;flex-direction:column;gap:5px}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:11px;margin-top:12px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:16px}
+.card-icon{font-size:18px;margin-bottom:7px}
+.card-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:5px}
+.card-body{font-size:12px;color:var(--muted);line-height:1.6}
+.card-list{padding-left:0;list-style:none;display:flex;flex-direction:column;gap:3px;margin-top:6px}
+.card-list li{font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:6px}
+.card-list li::before{content:'·';color:var(--faint);flex-shrink:0}
+
+/* Trigger table */
+.trigger-table{width:100%;border-collapse:collapse;margin-top:12px}
+.trigger-table th{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:8px 12px;text-align:left;border-bottom:1px solid var(--border2)}
+.trigger-table td{font-size:13px;padding:10px 12px;border-bottom:1px solid var(--border);color:var(--muted);vertical-align:top}
+.trigger-table tr:last-child td{border-bottom:none}
+.trigger-table tr:hover td{background:var(--surface2)}
+.trigger-badge{font-family:'DM Mono',monospace;font-size:12px;font-weight:500;padding:3px 8px;border-radius:5px;color:var(--p1);background:var(--p1bg);border:1px solid var(--p1t);display:inline-block}
+.trigger-name{color:var(--text);font-weight:500}
+
+/* Flow */
+.flow{display:flex;align-items:center;gap:0;margin:14px 0;flex-wrap:wrap}
+.flow-step{background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:7px 13px;font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;margin:3px 0}
+.flow-step.accent{border-color:var(--p1);color:var(--p1)}
+.flow-arr{font-size:13px;color:var(--faint);padding:0 5px;flex-shrink:0}
+
+/* Code */
+pre{background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:16px;overflow-x:auto;margin:12px 0}
+code{font-family:'DM Mono',monospace;font-size:12px;color:#a8d8a8;line-height:1.7}
+p code,li code,td code{background:var(--faint);padding:1px 5px;border-radius:4px;color:var(--text);font-size:12px;font-family:'DM Mono',monospace}
+
+/* Checklist */
+.checklist{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;font-size:13px}
+.check-item.ok{border-left:3px solid var(--p1)}
+.check-item.warn{border-left:3px solid var(--p3)}
+.check-icon{flex-shrink:0;font-size:13px;margin-top:1px}
+.check-text{color:var(--muted);line-height:1.5}
+.check-text strong{color:var(--text);font-weight:500}
+
+/* Highlight box */
+.highlight{background:var(--p1bg);border:1px solid var(--p1t);border-radius:11px;padding:16px 18px;margin:12px 0;font-size:13px;color:var(--muted);line-height:1.65}
+.highlight strong{color:var(--p1);font-weight:500}
+
+.divider{height:1px;background:var(--border);margin:36px 0}
+
+@media(max-width:768px){
+  .layout{flex-direction:column;padding:28px 16px 60px}
+  .toc{display:none}
+}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a class="topnav-home" href="index.html">← BMAD Lab</a>
+  <span class="topnav-sep">/</span>
+  <span class="topnav-title">Guia para Devs</span>
+  <span class="topnav-badge">bmad-agent-dev</span>
+</nav>
+
+<div class="layout">
+
+  <aside class="toc">
+    <div class="toc-sticky">
+      <div class="toc-lbl">Nesta página</div>
+      <ul class="toc-list" id="toc-list">
+        <li class="toc-sec">Fundamentos</li>
+        <li><a href="#s1">1. O Developer Agent</a></li>
+        <li><a href="#s2">2. Todos os triggers</a></li>
+        <li class="toc-sec">Caminhos de dev</li>
+        <li><a href="#s3">3. Dev Story (DS)</a></li>
+        <li><a href="#s4">4. Quick Dev (QD)</a></li>
+        <li><a href="#s5">5. Quick Dev — design</a></li>
+        <li class="toc-sec">Contexto</li>
+        <li><a href="#s6">6. project-context.md</a></li>
+        <li><a href="#s7">7. Dev Loop completo</a></li>
+        <li class="toc-sec">Referência</li>
+        <li><a href="#s8">8. Quando usar cada trigger</a></li>
+        <li><a href="#s9">9. Erros comuns</a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <main class="content">
+
+    <div class="page-header">
+      <div class="header-label">Guia prático · bmad-agent-dev</div>
+      <h1>BMAD para Devs</h1>
+      <div class="header-sub">Fluxo de desenvolvimento com o Developer Agent (Amelia) — do sprint planning ao code review, usando os triggers certos para cada situação.</div>
+      <div class="header-tags">
+        <span class="htag hi">Developer Agent</span>
+        <span class="htag">Dev Loop</span>
+        <span class="htag">Quick Dev</span>
+        <span class="htag">Brownfield</span>
+        <span class="htag">project-context.md</span>
+      </div>
+    </div>
+
+    <!-- 1 -->
+    <div class="section" id="s1">
+      <div class="section-heading"><span class="section-num">01</span>O Developer Agent (Amelia)</div>
+      <div class="section-body">
+        <p>O Developer Agent é o agente central do fluxo de execução no BMAD. Diferente dos agentes de planejamento (PM, Architect), ele opera dentro do ciclo de implementação e é o único que tem acesso direto ao código. Seu skill ID é <code>bmad-agent-dev</code>.</p>
+        <p>Um detalhe importante: na v6 do BMAD, a geração de testes E2E também é roteada através do Developer Agent — não existe um agente QA separado no módulo base BMM. O Test Architect completo (<code>TEA</code>) vive em um módulo separado.</p>
+      </div>
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">⚡</div>
+          <div class="card-title">Implementação</div>
+          <div class="card-body">Executa stories com alinhamento à arquitetura e ao contexto do projeto</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔍</div>
+          <div class="card-title">Code Review</div>
+          <div class="card-body">Revisa o próprio output contra os critérios de aceite da story</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🧪</div>
+          <div class="card-title">QA / Testes</div>
+          <div class="card-body">Gera suites de testes E2E detectando o framework usado no projeto</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">📋</div>
+          <div class="card-title">Sprint Planning</div>
+          <div class="card-body">Prioriza e organiza stories para o sprint com base no contexto técnico</div>
+        </div>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 2 -->
+    <div class="section" id="s2">
+      <div class="section-heading"><span class="section-num">02</span>Todos os triggers</div>
+      <div class="section-body"><p>O Developer Agent tem 7 triggers. Todos são <strong style="color:var(--text)">workflow triggers</strong> — você digita o código e o agente inicia o workflow estruturado, pedindo inputs em cada etapa.</p></div>
+      <div class="sub" style="margin-top:16px">
+        <table class="trigger-table">
+          <thead>
+            <tr>
+              <th>Trigger</th>
+              <th>Nome</th>
+              <th>O que faz</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="trigger-badge">DS</span></td>
+              <td><span class="trigger-name">Dev Story</span></td>
+              <td>Implementa uma story completa usando o contexto do projeto e os critérios de aceite definidos</td>
+            </tr>
+            <tr>
+              <td><span class="trigger-badge">QD</span></td>
+              <td><span class="trigger-name">Quick Dev</span></td>
+              <td>Desenvolvimento rápido com menos supervisão — comprime intenção, roteia para o menor caminho seguro e executa</td>
+            </tr>
+            <tr>
+              <td><span class="trigger-badge">QA</span></td>
+              <td><span class="trigger-name">QA Test Generation</span></td>
+              <td>Gera suite de testes E2E analisando codebase e detectando o framework (Jest, Vitest, Playwright, Cypress)</td>
+            </tr>
+            <tr>
+              <td><span class="trigger-badge">CR</span></td>
+              <td><span class="trigger-name">Code Review</span></td>
+              <td>Revisa o código implementado contra os critérios de aceite da story e os padrões do projeto</td>
+            </tr>
+            <tr>
+              <td><span class="trigger-badge">SP</span></td>
+              <td><span class="trigger-name">Sprint Planning</span></td>
+              <td>Prioriza e ordena stories do sprint com base em dependências e contexto técnico</td>
+            </tr>
+            <tr>
+              <td><span class="trigger-badge">CS</span></td>
+              <td><span class="trigger-name">Create Story</span></td>
+              <td>Cria uma story tecnicamente detalhada, com contexto de implementação e critérios testáveis</td>
+            </tr>
+            <tr>
+              <td><span class="trigger-badge">ER</span></td>
+              <td><span class="trigger-name">Epic Retrospective</span></td>
+              <td>Consolida aprendizados técnicos do epic concluído e sugere melhorias para o próximo ciclo</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 3 -->
+    <div class="section" id="s3">
+      <div class="section-heading"><span class="section-num">03</span>Dev Story (DS) — para stories já definidas</div>
+      <div class="section-body">
+        <p>É o trigger central do fluxo. Use quando você já tem uma story estruturada — gerada pelo PM via <code>CE</code>, pelo Developer via <code>CS</code>, ou escrita manualmente. O agente lê a story, carrega o <code>project-context.md</code>, alinha com a arquitetura e implementa.</p>
+      </div>
+      <div class="flow" style="margin-top:16px">
+        <div class="flow-step">Story pronta</div><div class="flow-arr">→</div>
+        <div class="flow-step accent">DS</div><div class="flow-arr">→</div>
+        <div class="flow-step">Implementação</div><div class="flow-arr">→</div>
+        <div class="flow-step accent">CR</div><div class="flow-arr">→</div>
+        <div class="flow-step accent">QA</div><div class="flow-arr">→</div>
+        <div class="flow-step">commit</div>
+      </div>
+      <div class="sub" style="margin-top:16px">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p1)"></div>O que o agente carrega automaticamente</div>
+        <ul>
+          <li>Conteúdo da story (critérios de aceite, contexto técnico)</li>
+          <li><code>project-context.md</code> — stack, convenções e regras críticas</li>
+          <li>Documentos de arquitetura relevantes</li>
+          <li>Padrões de código definidos para o projeto</li>
+        </ul>
+      </div>
+      <div class="sub">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p3)"></div>Regra importante: não pule camadas</div>
+        <p>Se durante a implementação você perceber que precisa mudar algo na arquitetura, <strong style="color:var(--text)">não peça ao Developer para fazer isso</strong>. Volte ao Architect (<code>bmad-architect</code>), atualize o documento de arquitetura, e então retome com o Developer. Pular essa etapa gera inconsistência entre código e arquitetura que se acumula ao longo do tempo.</p>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 4 -->
+    <div class="section" id="s4">
+      <div class="section-heading"><span class="section-num">04</span>Quick Dev (QD) — para tarefas sem story formal</div>
+      <div class="section-body">
+        <p>O Quick Dev existe para reduzir o atrito de supervisão humana sem abrir mão dos checkpoints de qualidade. É o caminho certo para bugs, ajustes pontuais, refatorações pequenas e tarefas que caberiam em uma página de notas.</p>
+      </div>
+      <div class="highlight">
+        <strong>Regra prática:</strong> se você ficaria desconfortável pulando PRD e documento de arquitetura, use o fluxo completo com <code>DS</code>. Se a mudança cabe em uma página de notas, use <code>QD</code>.
+      </div>
+      <div class="flow" style="margin-top:16px">
+        <div class="flow-step">Intenção bruta</div><div class="flow-arr">→</div>
+        <div class="flow-step accent">QD</div><div class="flow-arr">→</div>
+        <div class="flow-step">Clarificação</div><div class="flow-arr">→</div>
+        <div class="flow-step">Spec aprovado</div><div class="flow-arr">→</div>
+        <div class="flow-step">Implementação</div><div class="flow-arr">→</div>
+        <div class="flow-step">Revisão final</div>
+      </div>
+      <div class="section-body" style="margin-top:16px">
+        <p>A entrada pode ser qualquer coisa: frases brutas, link de bug tracker, output do plan mode, texto de um chat ou número de uma story do <code>epics.md</code>. O agente comprime essa intenção em um objetivo coerente antes de executar.</p>
+      </div>
+      <div class="cards">
+        <div class="card" style="border-left:3px solid var(--p1)">
+          <div class="card-title">✅ Bom para QD</div>
+          <div class="card-list" style="margin-top:6px">
+            <ul>
+              <li>Correção de bug específico</li>
+              <li>Ajuste de estilo ou layout</li>
+              <li>Refatoração de um arquivo</li>
+              <li>Adicionar validação a um campo</li>
+              <li>Correção de typo em texto</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card" style="border-left:3px solid var(--p4)">
+          <div class="card-title">❌ Não use QD para</div>
+          <div class="card-list" style="margin-top:6px">
+            <ul>
+              <li>Novas funcionalidades complexas</li>
+              <li>Mudanças que afetam múltiplos módulos</li>
+              <li>Alterações em banco de dados</li>
+              <li>Qualquer coisa que precise de PRD</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 5 -->
+    <div class="section" id="s5">
+      <div class="section-heading"><span class="section-num">05</span>Quick Dev — como o design funciona por dentro</div>
+      <div class="section-body"><p>O QD tem 5 princípios de design que explicam por que ele funciona bem quando bem usado:</p></div>
+      <div class="checklist">
+        <div class="check-item ok">
+          <span class="check-icon">1</span>
+          <div class="check-text"><strong>Comprimir intenção primeiro</strong> — antes de executar de forma autônoma, transforma o pedido em um objetivo coerente e sem contradições. Intervenção humana acontece aqui.</div>
+        </div>
+        <div class="check-item ok">
+          <span class="check-icon">2</span>
+          <div class="check-text"><strong>Rotear para o menor caminho seguro</strong> — mudanças de zero impacto colateral vão direto para implementação. Tudo que tem risco passa por planejamento antes.</div>
+        </div>
+        <div class="check-item ok">
+          <span class="check-icon">3</span>
+          <div class="check-text"><strong>Rodar mais tempo com menos supervisão</strong> — após o spec aprovado, o agente executa com o spec como limite, sem checkpoints constantes no meio do caminho.</div>
+        </div>
+        <div class="check-item ok">
+          <span class="check-icon">4</span>
+          <div class="check-text"><strong>Diagnosticar falha na camada certa</strong> — se o código está errado porque a intenção estava errada, consertar o código é o conserto errado. O workflow identifica a camada da falha e regenera a partir dali.</div>
+        </div>
+        <div class="check-item ok">
+          <span class="check-icon">5</span>
+          <div class="check-text"><strong>Revisão como triagem, não auditoria</strong> — achados incidentais (não causalmente ligados à mudança atual) são adiados. O sistema otimiza para qualidade de sinal, não para recall exaustivo.</div>
+        </div>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 6 -->
+    <div class="section" id="s6">
+      <div class="section-heading"><span class="section-num">06</span>project-context.md — a fundação do Dev Loop</div>
+      <div class="section-body">
+        <p>O <code>project-context.md</code> é o arquivo que garante que todos os agentes sigam as mesmas convenções em todos os workflows. É o equivalente ao <code>claude.md</code>, mas estruturado especificamente para regras de implementação.</p>
+      </div>
+      <div class="highlight">
+        Adicione ao seu <code>AGENTS.md</code>: <code>Important project context and conventions are located in _bmad-output/project-context.md</code>
+      </div>
+      <div class="sub" style="margin-top:16px">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p1)"></div>Como criar</div>
+        <p style="margin-bottom:10px">Três opções, dependendo do seu momento:</p>
+        <ul>
+          <li><strong style="color:var(--text)">Manual</strong> — quando você já sabe as regras que quer documentar</li>
+          <li><strong style="color:var(--text)">Após arquitetura</strong> — rode <code>bmad-generate-project-context</code> para capturar as decisões tomadas</li>
+          <li><strong style="color:var(--text)">Projeto existente</strong> — rode <code>bmad-generate-project-context</code> para que o workflow analise o codebase e identifique os padrões</li>
+        </ul>
+      </div>
+      <div class="sub">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p2)"></div>Estrutura recomendada</div>
+<pre><code>---
+project_name: 'MeuProjeto'
+date: '2026-05-16'
+---
+
+## Technology Stack & Versions
+- Node.js 20.x, TypeScript 5.3, React 18.2
+- State: Zustand | Testing: Vitest, Playwright
+- Styling: Tailwind CSS
+
+## Critical Implementation Rules
+**TypeScript:** Strict mode, sem `any`, use `interface` para APIs públicas
+**Code Organization:**
+  - Componentes em `/src/components/` com testes co-localizados
+  - API calls usam o singleton `apiClient` — nunca usar fetch diretamente
+
+## Do NOT do (anti-patterns)
+- Nunca mutar estado diretamente — use os setters do Zustand
+- Nunca adicionar lógica de negócio em componentes React</code></pre>
+      </div>
+      <div class="section-body" style="margin-top:12px">
+        <p>Use o <code>project-context.md</code> quando perceber que agentes tomam decisões inconsistentes entre stories — é o sinal de que o contexto está fragmentado e precisa ser consolidado neste arquivo.</p>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 7 -->
+    <div class="section" id="s7">
+      <div class="section-heading"><span class="section-num">07</span>O Dev Loop completo</div>
+      <div class="section-body"><p>O ciclo do dia a dia de um dev com BMAD, do sprint planning ao commit:</p></div>
+      <div class="sub" style="margin-top:16px">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p1)"></div>Loop padrão — com story definida</div>
+        <div class="flow" style="flex-wrap:wrap;margin-top:8px">
+          <div class="flow-step accent">SP</div><div class="flow-arr">→</div>
+          <div class="flow-step accent">CS</div><div class="flow-arr">→</div>
+          <div class="flow-step accent">DS</div><div class="flow-arr">→</div>
+          <div class="flow-step accent">CR</div><div class="flow-arr">→</div>
+          <div class="flow-step accent">QA</div><div class="flow-arr">→</div>
+          <div class="flow-step">commit</div><div class="flow-arr">→</div>
+          <div class="flow-step">próxima story</div>
+        </div>
+        <p style="margin-top:10px;font-size:12px;color:var(--muted)">CS pode ser pulado se a story já foi criada pelo PM via trigger CE</p>
+      </div>
+      <div class="sub">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p3)"></div>Loop rápido — bugs e ajustes</div>
+        <div class="flow" style="flex-wrap:wrap;margin-top:8px">
+          <div class="flow-step accent">QD</div><div class="flow-arr">→</div>
+          <div class="flow-step">spec de 1 página</div><div class="flow-arr">→</div>
+          <div class="flow-step">implementação</div><div class="flow-arr">→</div>
+          <div class="flow-step">revisão final</div><div class="flow-arr">→</div>
+          <div class="flow-step">commit</div>
+        </div>
+      </div>
+      <div class="sub">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p2)"></div>Ao final de um epic</div>
+        <div class="flow" style="flex-wrap:wrap;margin-top:8px">
+          <div class="flow-step">Todas as stories concluídas</div><div class="flow-arr">→</div>
+          <div class="flow-step accent">ER</div><div class="flow-arr">→</div>
+          <div class="flow-step">Aprendizados documentados</div><div class="flow-arr">→</div>
+          <div class="flow-step">Próximo epic</div>
+        </div>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 8 -->
+    <div class="section" id="s8">
+      <div class="section-heading"><span class="section-num">08</span>Quando usar cada trigger — referência rápida</div>
+      <div class="cards">
+        <div class="card" style="border-left:3px solid var(--p1)">
+          <div class="card-title"><code>DS</code> — Dev Story</div>
+          <div class="card-body">Tenho uma story pronta e quero implementar</div>
+        </div>
+        <div class="card" style="border-left:3px solid var(--p1)">
+          <div class="card-title"><code>QD</code> — Quick Dev</div>
+          <div class="card-body">Tenho uma tarefa rápida sem story formal</div>
+        </div>
+        <div class="card" style="border-left:3px solid var(--p1)">
+          <div class="card-title"><code>CS</code> — Create Story</div>
+          <div class="card-body">Preciso criar uma story tecnicamente detalhada antes de implementar</div>
+        </div>
+        <div class="card" style="border-left:3px solid var(--p1)">
+          <div class="card-title"><code>CR</code> — Code Review</div>
+          <div class="card-body">Quero revisar o código que acabei de implementar</div>
+        </div>
+        <div class="card" style="border-left:3px solid var(--p1)">
+          <div class="card-title"><code>QA</code> — QA Tests</div>
+          <div class="card-body">Quero gerar testes E2E para o que foi implementado</div>
+        </div>
+        <div class="card" style="border-left:3px solid var(--p1)">
+          <div class="card-title"><code>SP</code> — Sprint Planning</div>
+          <div class="card-body">Começo de sprint — preciso priorizar e ordenar stories</div>
+        </div>
+        <div class="card" style="border-left:3px solid var(--p1)">
+          <div class="card-title"><code>ER</code> — Epic Retrospective</div>
+          <div class="card-body">Terminei um epic e quero consolidar aprendizados técnicos</div>
+        </div>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 9 -->
+    <div class="section" id="s9">
+      <div class="section-heading"><span class="section-num">09</span>Erros comuns e como evitar</div>
+      <div class="checklist">
+        <div class="check-item warn">
+          <span class="check-icon">⚠</span>
+          <div class="check-text"><strong>Pedir ao Developer para mudar a arquitetura</strong> — se a implementação exige mudança arquitetural, volte ao <code>bmad-architect</code>, atualize o documento, e então retome com o Developer. Pular isso gera divergência silenciosa.</div>
+        </div>
+        <div class="check-item warn">
+          <span class="check-icon">⚠</span>
+          <div class="check-text"><strong>Rodar DS sem project-context.md</strong> — sem ele, o agente toma decisões genéricas que podem conflitar com os padrões do projeto. Crie o arquivo antes de começar o primeiro DS.</div>
+        </div>
+        <div class="check-item warn">
+          <span class="check-icon">⚠</span>
+          <div class="check-text"><strong>Usar QD para features complexas</strong> — o Quick Dev não tem contexto arquitetural suficiente para mudanças grandes. Se a tarefa toca múltiplos módulos ou banco de dados, use o fluxo completo com DS.</div>
+        </div>
+        <div class="check-item warn">
+          <span class="check-icon">⚠</span>
+          <div class="check-text"><strong>Pular o CR</strong> — o Code Review não é burocracia. É o mecanismo que impede que problemas do agente (lógica errada, critérios não cobertos) cheguem ao QA e ao commit.</div>
+        </div>
+        <div class="check-item warn">
+          <span class="check-icon">⚠</span>
+          <div class="check-text"><strong>Stories muito grandes para DS</strong> — se uma story demora mais de 4 horas para implementar, o agente vai perder contexto no meio. Use CS para quebrar a story em partes menores antes de usar DS.</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+const secs = document.querySelectorAll('.section[id]');
+const links = document.querySelectorAll('#toc-list li a');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      links.forEach(l => l.classList.remove('active'));
+      const a = document.querySelector(`#toc-list li a[href="#${e.target.id}"]`);
+      if (a) a.classList.add('active');
+    }
+  });
+}, { rootMargin: '-15% 0px -70% 0px' });
+secs.forEach(s => obs.observe(s));
+document.querySelectorAll('#toc-list li a').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    document.querySelector(a.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+</script>
+</body>
+</html>

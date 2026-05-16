@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BMAD para QAs — Guia de Qualidade</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f1117;--surface:#181c27;--surface2:#1f2535;
+  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.13);
+  --text:#e8eaf0;--muted:#7a8099;--faint:#3a3f52;
+  --p1:#3ecf8e;--p1t:#1a5c38;--p1bg:#0c3320;
+  --p2:#7c6fcd;--p2t:#2d2560;--p2bg:#1a1640;
+  --p3:#e8975a;--p3t:#5c3018;--p3bg:#2e1a08;
+  --p4:#e05c7c;--p4t:#5c1830;--p4bg:#2a0e1b;
+  --p5:#4faaee;--p5t:#1a3d60;--p5bg:#0a2038;
+  --accent:#e05c7c;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.7;min-height:100vh}
+
+.topnav{position:sticky;top:0;z-index:100;background:rgba(15,17,23,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 24px;height:52px;display:flex;align-items:center;gap:16px}
+.topnav-home{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .15s}
+.topnav-home:hover{color:var(--text)}
+.topnav-sep{color:var(--faint);font-size:12px}
+.topnav-title{font-family:'DM Mono',monospace;font-size:12px;color:var(--text)}
+.topnav-badge{margin-left:auto;font-family:'DM Mono',monospace;font-size:10px;padding:3px 9px;border-radius:99px;border:1px solid var(--p4);color:var(--p4)}
+
+.layout{display:flex;max-width:1100px;margin:0 auto;padding:48px 24px 80px;gap:44px}
+.toc{width:210px;flex-shrink:0}
+.toc-sticky{position:sticky;top:72px}
+.toc-lbl{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.toc-list{list-style:none;display:flex;flex-direction:column;gap:1px}
+.toc-list li a{font-size:12px;color:var(--muted);text-decoration:none;display:block;padding:4px 8px;border-radius:5px;transition:color .1s,background .1s}
+.toc-list li a:hover{color:var(--text);background:var(--surface)}
+.toc-list li a.active{color:var(--p4);background:var(--p4bg)}
+.toc-sec{font-family:'DM Mono',monospace;font-size:10px;color:var(--faint);letter-spacing:.1em;text-transform:uppercase;padding:8px 8px 2px;margin-top:4px}
+
+.content{flex:1;min-width:0}
+
+.page-header{margin-bottom:44px;padding-bottom:28px;border-bottom:1px solid var(--border)}
+.header-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.page-header h1{font-family:'DM Serif Display',serif;font-size:clamp(26px,4vw,40px);font-weight:400;line-height:1.15;margin-bottom:10px}
+.header-sub{font-size:14px;color:var(--muted);margin-bottom:18px;line-height:1.6}
+.header-tags{display:flex;gap:7px;flex-wrap:wrap}
+.htag{font-size:11px;font-family:'DM Mono',monospace;padding:3px 10px;border-radius:99px;border:1px solid var(--border2);color:var(--muted)}
+.htag.hi{border-color:var(--p4);color:var(--p4);background:var(--p4bg)}
+
+.section{margin-bottom:44px;scroll-margin-top:80px}
+.section-heading{font-family:'DM Serif Display',serif;font-size:21px;font-weight:400;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:11px}
+.section-num{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);background:var(--surface);border:1px solid var(--border);padding:2px 8px;border-radius:4px}
+.section-body{color:var(--muted);font-size:14px;line-height:1.75}
+.section-body p{margin-bottom:10px}
+
+.sub{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:18px;margin-bottom:10px}
+.sub-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:9px;display:flex;align-items:center;gap:8px}
+.sub-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.sub p,.sub li{font-size:13px;color:var(--muted);line-height:1.65}
+.sub ul,.sub ol{padding-left:18px;display:flex;flex-direction:column;gap:5px}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:11px;margin-top:12px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:16px}
+.card-icon{font-size:18px;margin-bottom:7px}
+.card-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:5px}
+.card-body{font-size:12px;color:var(--muted);line-height:1.6}
+.card-list{padding-left:0;list-style:none;display:flex;flex-direction:column;gap:3px;margin-top:6px}
+.card-list li{font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:6px}
+.card-list li::before{content:'·';color:var(--faint);flex-shrink:0}
+
+.trigger-table{width:100%;border-collapse:collapse;margin-top:12px}
+.trigger-table th{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:8px 12px;text-align:left;border-bottom:1px solid var(--border2)}
+.trigger-table td{font-size:13px;padding:10px 12px;border-bottom:1px solid var(--border);color:var(--muted);vertical-align:top}
+.trigger-table tr:last-child td{border-bottom:none}
+.trigger-table tr:hover td{background:var(--surface2)}
+.trigger-badge{font-family:'DM Mono',monospace;font-size:12px;font-weight:500;padding:3px 8px;border-radius:5px;display:inline-block}
+.tb-red{color:var(--p4);background:var(--p4bg);border:1px solid var(--p4t)}
+.tb-green{color:var(--p1);background:var(--p1bg);border:1px solid var(--p1t)}
+.tb-blue{color:var(--p5);background:var(--p5bg);border:1px solid var(--p5t)}
+.trigger-name{color:var(--text);font-weight:500}
+.mandatory-badge{font-size:10px;font-family:'DM Mono',monospace;padding:2px 6px;border-radius:4px;background:var(--p4bg);color:var(--p4);border:1px solid var(--p4t);margin-left:6px}
+.optional-badge{font-size:10px;font-family:'DM Mono',monospace;padding:2px 6px;border-radius:4px;background:var(--p1bg);color:var(--p1);border:1px solid var(--p1t);margin-left:6px}
+
+.flow{display:flex;align-items:center;gap:0;margin:14px 0;flex-wrap:wrap}
+.flow-step{background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:7px 13px;font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;margin:3px 0}
+.flow-step.qa{border-color:var(--p4);color:var(--p4)}
+.flow-step.ok{border-color:var(--p1);color:var(--p1)}
+.flow-arr{font-size:13px;color:var(--faint);padding:0 5px;flex-shrink:0}
+
+pre{background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:16px;overflow-x:auto;margin:12px 0}
+code{font-family:'DM Mono',monospace;font-size:12px;color:#a8d8a8;line-height:1.7}
+p code,li code,td code{background:var(--faint);padding:1px 5px;border-radius:4px;color:var(--text);font-size:12px;font-family:'DM Mono',monospace}
+
+.decision-tree{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:20px;margin-top:12px}
+.dt-row{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
+.dt-row:last-child{margin-bottom:0}
+.dt-q{font-size:13px;color:var(--text);font-weight:500;flex:1}
+.dt-yes{font-size:12px;color:var(--p4);font-family:'DM Mono',monospace;background:var(--p4bg);padding:2px 8px;border-radius:4px;white-space:nowrap}
+.dt-no{font-size:12px;color:var(--p1);font-family:'DM Mono',monospace;background:var(--p1bg);padding:2px 8px;border-radius:4px;white-space:nowrap}
+.dt-result{font-size:12px;color:var(--muted);margin-top:4px;padding-left:16px;border-left:2px solid var(--border2)}
+
+.checklist{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;font-size:13px}
+.check-item.mandatory{border-left:3px solid var(--p4)}
+.check-item.recommended{border-left:3px solid var(--p3)}
+.check-item.ok{border-left:3px solid var(--p1)}
+.check-icon{flex-shrink:0;font-size:13px;margin-top:1px}
+.check-text{color:var(--muted);line-height:1.5}
+.check-text strong{color:var(--text);font-weight:500}
+
+.highlight{background:var(--p4bg);border:1px solid var(--p4t);border-radius:11px;padding:16px 18px;margin:12px 0;font-size:13px;color:var(--muted);line-height:1.65}
+.highlight strong{color:var(--p4);font-weight:500}
+.highlight-green{background:var(--p1bg);border:1px solid var(--p1t)}
+.highlight-green strong{color:var(--p1)}
+
+.divider{height:1px;background:var(--border);margin:36px 0}
+
+@media(max-width:768px){
+  .layout{flex-direction:column;padding:28px 16px 60px}
+  .toc{display:none}
+}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a class="topnav-home" href="index.html">← BMAD Lab</a>
+  <span class="topnav-sep">/</span>
+  <span class="topnav-title">Guia para QAs</span>
+  <span class="topnav-badge">QA + TEA</span>
+</nav>
+
+<div class="layout">
+
+  <aside class="toc">
+    <div class="toc-sticky">
+      <div class="toc-lbl">Nesta página</div>
+      <ul class="toc-list" id="toc-list">
+        <li class="toc-sec">Fundamentos</li>
+        <li><a href="#s1">1. QA no BMAD v6</a></li>
+        <li><a href="#s2">2. QA via Developer Agent</a></li>
+        <li class="toc-sec">Brownfield</li>
+        <li><a href="#s3">3. Test Architect (TEA)</a></li>
+        <li><a href="#s4">4. Triggers do TEA</a></li>
+        <li><a href="#s5">5. Fluxo de QA brownfield</a></li>
+        <li><a href="#s6">6. Quality Gates</a></li>
+        <li class="toc-sec">Avançado</li>
+        <li><a href="#s7">7. Quando TEA é obrigatório</a></li>
+        <li><a href="#s8">8. Party Mode</a></li>
+        <li><a href="#s9">9. Edge Case Hunter</a></li>
+        <li><a href="#s10">10. Referência rápida</a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <main class="content">
+
+    <div class="page-header">
+      <div class="header-label">Guia prático · QA + TEA</div>
+      <h1>BMAD para QAs</h1>
+      <div class="header-sub">Como usar o BMAD para garantir qualidade em projetos greenfield e brownfield — desde a geração automática de testes até o Test Architect Enterprise para projetos de alto risco.</div>
+      <div class="header-tags">
+        <span class="htag hi">QA</span>
+        <span class="htag hi">Test Architect</span>
+        <span class="htag">Brownfield</span>
+        <span class="htag">Quality Gates</span>
+        <span class="htag">E2E Tests</span>
+        <span class="htag">Regressão</span>
+      </div>
+    </div>
+
+    <!-- 1 -->
+    <div class="section" id="s1">
+      <div class="section-heading"><span class="section-num">01</span>QA no BMAD v6 — como está estruturado</div>
+      <div class="section-body">
+        <p>No BMAD v6, o sistema de QA tem dois níveis com escopos bem diferentes. Entender qual usar é o primeiro passo para não sobre-engenheirar o processo.</p>
+      </div>
+      <div class="cards">
+        <div class="card" style="border-left:3px solid var(--p1)">
+          <div class="card-icon">⚡</div>
+          <div class="card-title">Nível 1 — BMM base</div>
+          <div class="card-body">Geração de testes E2E via Developer Agent (Amelia). Disponível em qualquer projeto sem instalação adicional. Ideal para greenfield e features novas.</div>
+        </div>
+        <div class="card" style="border-left:3px solid var(--p4)">
+          <div class="card-icon">🏗</div>
+          <div class="card-title">Nível 2 — TEA Module</div>
+          <div class="card-body">Test Architect Enterprise. Módulo separado com agente dedicado (Quinn) para projetos brownfield, código legado e sistemas de alto risco.</div>
+        </div>
+      </div>
+      <div class="section-body" style="margin-top:16px">
+        <p>A regra geral: projetos novos ou features sem código legado usam o Nível 1. Qualquer coisa que toque código existente, legado ou sistemas críticos deve usar o Nível 2.</p>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 2 -->
+    <div class="section" id="s2">
+      <div class="section-heading"><span class="section-num">02</span>QA via Developer Agent — geração automática de testes</div>
+      <div class="section-body">
+        <p>O trigger <code>QA</code> do Developer Agent (<code>bmad-agent-dev</code>) aciona o workflow <code>bmad-qa-generate-e2e-tests</code>. Ele analisa o codebase implementado e gera uma suite de testes completa automaticamente.</p>
+      </div>
+      <div class="sub" style="margin-top:16px">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p1)"></div>O que o workflow faz automaticamente</div>
+        <ul>
+          <li><strong style="color:var(--text)">Detecção de framework</strong> — escaneia o <code>package.json</code> procurando Jest, Vitest, Playwright ou Cypress. Se nenhum existir, analisa a stack e sugere um</li>
+          <li><strong style="color:var(--text)">Testes de API</strong> — cobre status codes, estrutura da resposta, happy path e casos críticos de erro</li>
+          <li><strong style="color:var(--text)">Testes E2E</strong> — foca em workflows do usuário usando locators semânticos (roles, labels, texto visível)</li>
+          <li><strong style="color:var(--text)">Checklist de validação</strong> — verifica que os testes não têm waits fixos (<code>sleep</code>), são independentes entre si e usam APIs padrão do framework</li>
+        </ul>
+      </div>
+      <div class="sub">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p3)"></div>Como usar no Dev Loop</div>
+        <div class="flow" style="margin-top:8px;flex-wrap:wrap">
+          <div class="flow-step">DS implementa</div><div class="flow-arr">→</div>
+          <div class="flow-step">CR revisa</div><div class="flow-arr">→</div>
+          <div class="flow-step qa">QA gera testes</div><div class="flow-arr">→</div>
+          <div class="flow-step">testes passam</div><div class="flow-arr">→</div>
+          <div class="flow-step ok">commit</div>
+        </div>
+        <p style="margin-top:10px;font-size:12px;color:var(--muted)">O trigger QA deve ser usado após CR (Code Review) para que a revisão já tenha corrigido problemas óbvios antes da geração dos testes.</p>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 3 -->
+    <div class="section" id="s3">
+      <div class="section-heading"><span class="section-num">03</span>Test Architect (TEA) — para brownfield e alto risco</div>
+      <div class="section-body">
+        <p>O Test Architect Enterprise é um módulo separado do BMAD que adiciona o agente <strong style="color:var(--text)">Quinn</strong> com capacidades avançadas de análise de risco, planejamento de regressão e rastreamento de requisitos. É indispensável quando o trabalho toca código existente.</p>
+      </div>
+      <div class="highlight">
+        <strong>Instale o TEA</strong> quando trabalhar em projetos brownfield: <code>npx bmad-method install --module tea</code>
+      </div>
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">🎯</div>
+          <div class="card-title">Análise de risco</div>
+          <div class="card-body">Identifica regressões potenciais, dependências legadas e breaking changes antes de qualquer implementação</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🗺</div>
+          <div class="card-title">Planejamento de testes</div>
+          <div class="card-body">Projeta a estratégia de cobertura de regressão com base no risco mapeado</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔗</div>
+          <div class="card-title">Rastreabilidade</div>
+          <div class="card-body">Mapeia cada requisito do PRD para os testes que o cobrem — evidência auditável</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">📋</div>
+          <div class="card-title">NFR validation</div>
+          <div class="card-body">Valida requisitos não funcionais: performance, segurança, acessibilidade</div>
+        </div>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 4 -->
+    <div class="section" id="s4">
+      <div class="section-heading"><span class="section-num">04</span>Triggers do Test Architect (TEA)</div>
+      <div class="section-body"><p>O TEA tem triggers específicos para cada etapa do ciclo de QA em projetos brownfield. A sequência importa — <code>*risk</code> sempre vem antes de <code>*design</code>.</p></div>
+      <div class="sub" style="margin-top:16px">
+        <table class="trigger-table">
+          <thead>
+            <tr><th>Trigger</th><th>Nome</th><th>Quando usar</th><th></th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="trigger-badge tb-red">@qa *risk</span></td>
+              <td><span class="trigger-name">Risk Assessment</span></td>
+              <td>Antes de qualquer implementação que toque código existente. Identifica regressões potenciais e dependências legadas</td>
+              <td><span class="mandatory-badge">obrigatório</span></td>
+            </tr>
+            <tr>
+              <td><span class="trigger-badge tb-red">@qa *design</span></td>
+              <td><span class="trigger-name">Test Design</span></td>
+              <td>Após o risk assessment. Projeta a estratégia de cobertura de regressão com base nos riscos mapeados</td>
+              <td><span class="mandatory-badge">obrigatório</span></td>
+            </tr>
+            <tr>
+              <td><span class="trigger-badge tb-blue">@qa *trace</span></td>
+              <td><span class="trigger-name">Requirements Trace</span></td>
+              <td>Mapeia cada requisito do PRD para os testes correspondentes. Essencial para auditoria e compliance</td>
+              <td><span class="mandatory-badge">obrigatório</span></td>
+            </tr>
+            <tr>
+              <td><span class="trigger-badge tb-blue">@qa *nfr</span></td>
+              <td><span class="trigger-name">NFR Validation</span></td>
+              <td>Valida requisitos não funcionais: performance, segurança, acessibilidade, escalabilidade</td>
+              <td><span class="mandatory-badge">obrigatório</span></td>
+            </tr>
+            <tr>
+              <td><span class="trigger-badge tb-green">@qa *review</span></td>
+              <td><span class="trigger-name">Full Review</span></td>
+              <td>Após o desenvolvimento completo da story. Análise profunda + refatoração ativa. Gera arquivo de resultado e gate</td>
+              <td><span class="mandatory-badge">obrigatório</span></td>
+            </tr>
+            <tr>
+              <td><span class="trigger-badge tb-green">@qa *gate</span></td>
+              <td><span class="trigger-name">Gate Status Update</span></td>
+              <td>Após corrigir os problemas apontados no review. Atualiza a decisão do quality gate</td>
+              <td><span class="optional-badge">pós-correção</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 5 -->
+    <div class="section" id="s5">
+      <div class="section-heading"><span class="section-num">05</span>Fluxo completo de QA brownfield</div>
+      <div class="section-body"><p>A sequência correta para mudanças em código existente, separada em fases:</p></div>
+
+      <div class="sub" style="margin-top:16px">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p4)"></div>Fase 1 — Antes de implementar (obrigatório)</div>
+        <div class="flow" style="flex-wrap:wrap;margin-top:8px">
+          <div class="flow-step qa">@qa *risk</div><div class="flow-arr">→</div>
+          <div class="flow-step qa">@qa *design</div><div class="flow-arr">→</div>
+          <div class="flow-step">Implementação (DS)</div>
+        </div>
+        <p style="margin-top:10px;font-size:12px;color:var(--muted)">Nunca inicie a implementação sem o risk assessment. O *design usa os resultados do *risk — não pule a ordem.</p>
+      </div>
+
+      <div class="sub">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p3)"></div>Fase 2 — Durante (paralelo à implementação)</div>
+        <div class="flow" style="flex-wrap:wrap;margin-top:8px">
+          <div class="flow-step qa">@qa *trace</div><div class="flow-arr">+</div>
+          <div class="flow-step qa">@qa *nfr</div>
+        </div>
+        <p style="margin-top:10px;font-size:12px;color:var(--muted)">*trace e *nfr podem rodar em paralelo com a implementação — não bloqueiam o Developer.</p>
+      </div>
+
+      <div class="sub">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p1)"></div>Fase 3 — Após o desenvolvimento completo</div>
+        <div class="flow" style="flex-wrap:wrap;margin-top:8px">
+          <div class="flow-step qa">@qa *review</div><div class="flow-arr">→</div>
+          <div class="flow-step">Correções</div><div class="flow-arr">→</div>
+          <div class="flow-step qa">@qa *gate</div><div class="flow-arr">→</div>
+          <div class="flow-step ok">Story aprovada</div>
+        </div>
+        <p style="margin-top:10px;font-size:12px;color:var(--muted)">O *review faz análise profunda e pode sugerir refatoração ativa. O *gate atualiza o status do quality gate após as correções.</p>
+      </div>
+
+      <div class="sub">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p2)"></div>Outputs gerados automaticamente</div>
+<pre><code>docs/
+└── qa/
+    └── gates/
+        └── {epic}.{story}-{slug}.yml   ← quality gate decision
+                                         ← QA Results na story file</code></pre>
+        <p style="margin-top:8px">O gate pode <strong style="color:var(--text)">waive</strong> (aceitar) issues de código legado, documentando explicitamente a aceitação de dívida técnica e rastreando o progresso de migração.</p>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 6 -->
+    <div class="section" id="s6">
+      <div class="section-heading"><span class="section-num">06</span>Quality Gates — o que são e como funcionam</div>
+      <div class="section-body">
+        <p>Quality gates são checkpoints de transição entre fases do workflow. Cada gate verifica que os artefatos da fase anterior atendem critérios definidos antes de avançar. Eles não são burocracia — são o mecanismo que impede que problemas do agente se acumulem entre sprints.</p>
+      </div>
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">📐</div>
+          <div class="card-title">Architect → Developer</div>
+          <div class="card-body">O documento de arquitetura precisa satisfazer critérios específicos antes do Developer começar a implementação</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">✅</div>
+          <div class="card-title">Developer → QA</div>
+          <div class="card-body">Cobertura de testes e critérios de aceite precisam estar atendidos antes do QA aprovar a story</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🚀</div>
+          <div class="card-title">QA → Merge</div>
+          <div class="card-body">O quality gate file em <code>docs/qa/gates/</code> precisa estar aprovado ou com waive documentado</div>
+        </div>
+      </div>
+      <div class="highlight-green highlight" style="margin-top:16px">
+        <strong>Princípio central:</strong> cada agente no BMAD produz um artefato verificável, não apenas uma resposta de chat. PRDs, arquiteturas, planos de teste e stories são documentos persistentes que podem ser revisados, versionados e auditados — exatamente como artefatos de software reais.
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 7 -->
+    <div class="section" id="s7">
+      <div class="section-heading"><span class="section-num">07</span>Quando o TEA é obrigatório vs recomendado</div>
+      <div class="section-body"><p>Use esta árvore de decisão para definir o nível de QA necessário:</p></div>
+      <div class="decision-tree">
+        <div class="dt-row">
+          <div>
+            <div class="dt-q">O código toca código legado ou sistemas existentes?</div>
+            <div class="dt-result">
+              <span class="mandatory-badge">SIM →</span> TEA é <strong style="color:var(--p4)">obrigatório</strong> — rode <code>*risk</code>, <code>*design</code> e <code>*review</code> no mínimo
+            </div>
+            <div class="dt-result" style="margin-top:6px">
+              <span class="optional-badge">NÃO →</span> Continue para a próxima pergunta
+            </div>
+          </div>
+        </div>
+        <div class="dt-row">
+          <div>
+            <div class="dt-q">O enhancement afeta múltiplos sistemas ou é uma mudança maior?</div>
+            <div class="dt-result">
+              <span class="mandatory-badge">SIM →</span> TEA é <strong style="color:var(--p4)">obrigatório</strong> — rode TEA <em>antes</em> de qualquer implementação
+            </div>
+            <div class="dt-result" style="margin-top:6px">
+              <span class="optional-badge">NÃO →</span> Continue para a próxima pergunta
+            </div>
+          </div>
+        </div>
+        <div class="dt-row">
+          <div>
+            <div class="dt-q">É mais do que um bug fix simples (uma feature pequena)?</div>
+            <div class="dt-result">
+              <span class="mandatory-badge">SIM →</span> TEA é <strong style="color:var(--p3)">recomendado</strong> — rode pelo menos <code>*risk</code> nos pontos de integração
+            </div>
+            <div class="dt-result" style="margin-top:6px">
+              <span class="optional-badge">NÃO →</span> TEA é <strong style="color:var(--p1)">opcional</strong> — mas rode <code>*risk</code> se tocar caminhos críticos
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="checklist" style="margin-top:16px">
+        <div class="check-item mandatory">
+          <span class="check-icon">🔴</span>
+          <div class="check-text"><strong>Obrigatório</strong> — toca código legado, mudança maior, múltiplos sistemas. Rode: <code>*risk</code> + <code>*design</code> + <code>*review</code> + <code>*gate</code></div>
+        </div>
+        <div class="check-item recommended">
+          <span class="check-icon">🟡</span>
+          <div class="check-text"><strong>Recomendado</strong> — feature pequena sem código legado. Rode pelo menos: <code>*risk</code> + <code>*review</code></div>
+        </div>
+        <div class="check-item ok">
+          <span class="check-icon">🟢</span>
+          <div class="check-text"><strong>Opcional</strong> — bug fix simples sem caminhos críticos. QA via Developer Agent (<code>QA</code> trigger) é suficiente</div>
+        </div>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 8 -->
+    <div class="section" id="s8">
+      <div class="section-heading"><span class="section-num">08</span>Party Mode — múltiplos agentes revisando juntos</div>
+      <div class="section-body">
+        <p>O BMAD tem o skill <code>bmad-party-mode</code> que orquestra discussões entre múltiplos agentes especializados numa mesma sessão. Para QA, o caso mais útil é colocar Winston (Architect) e Amelia (Developer) para debater uma implementação antes do QA formal.</p>
+        <p>O detalhe técnico importante: cada agente é iniciado como um <strong style="color:var(--text)">subagente separado</strong>, evitando a "convergência de opinião" que acontece quando um único LLM simula múltiplos personagens. Isso garante perspectivas genuinamente independentes.</p>
+      </div>
+      <div class="sub" style="margin-top:16px">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p2)"></div>Quando usar Party Mode no ciclo de QA</div>
+        <ul>
+          <li>Antes de uma story complexa — Architect e Developer alinham expectativas antes da implementação</li>
+          <li>Durante code review de mudanças arquiteturais — Architect valida se o código respeita as decisões de design</li>
+          <li>Em postmortems de bugs — múltiplos agentes analisam causas raiz de perspectivas diferentes</li>
+          <li>Para validar strategy de testes — QA e Architect discutem cobertura necessária</li>
+        </ul>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 9 -->
+    <div class="section" id="s9">
+      <div class="section-heading"><span class="section-num">09</span>Edge Case Hunter — encontrando o que você não pensou</div>
+      <div class="section-body">
+        <p>O <code>bmad-review-edge-case-hunter</code> é uma task especializada que realiza rastreamento metódico de caminhos para encontrar condições não tratadas, erros de boundary e race conditions. É diferente do QA normal — ele busca ativamente o que pode dar errado, não apenas valida o que deveria funcionar.</p>
+      </div>
+      <div class="cards">
+        <div class="card" style="border-left:3px solid var(--p4)">
+          <div class="card-icon">🎯</div>
+          <div class="card-title">Casos de boundary</div>
+          <div class="card-body">Valores no limite de ranges, strings vazias, arrays com zero elementos, números máximos de tipo</div>
+        </div>
+        <div class="card" style="border-left:3px solid var(--p4)">
+          <div class="card-icon">⚡</div>
+          <div class="card-title">Race conditions</div>
+          <div class="card-body">Operações concorrentes, estado compartilhado, timeouts e retries em operações assíncronas</div>
+        </div>
+        <div class="card" style="border-left:3px solid var(--p4)">
+          <div class="card-icon">🔍</div>
+          <div class="card-title">Caminhos não tratados</div>
+          <div class="card-body">Combinações de inputs válidos que chegam em estado inválido, fluxos alternativos não documentados</div>
+        </div>
+      </div>
+      <div class="section-body" style="margin-top:16px">
+        <p>Use o Edge Case Hunter antes do <code>*review</code> formal em stories críticas — especialmente em funcionalidades financeiras, autenticação, processamento de dados ou qualquer fluxo onde um edge case pode ter impacto de produção.</p>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 10 -->
+    <div class="section" id="s10">
+      <div class="section-heading"><span class="section-num">10</span>Referência rápida</div>
+      <div class="sub">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p1)"></div>Greenfield / feature nova</div>
+        <div class="flow" style="flex-wrap:wrap;margin-top:8px">
+          <div class="flow-step">DS implementa</div><div class="flow-arr">→</div>
+          <div class="flow-step">CR revisa</div><div class="flow-arr">→</div>
+          <div class="flow-step qa">QA (trigger)</div><div class="flow-arr">→</div>
+          <div class="flow-step ok">commit</div>
+        </div>
+      </div>
+      <div class="sub">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p4)"></div>Brownfield / código legado</div>
+        <div class="flow" style="flex-wrap:wrap;margin-top:8px">
+          <div class="flow-step qa">@qa *risk</div><div class="flow-arr">→</div>
+          <div class="flow-step qa">@qa *design</div><div class="flow-arr">→</div>
+          <div class="flow-step">DS implementa</div><div class="flow-arr">→</div>
+          <div class="flow-step qa">@qa *review</div><div class="flow-arr">→</div>
+          <div class="flow-step qa">@qa *gate</div><div class="flow-arr">→</div>
+          <div class="flow-step ok">merge</div>
+        </div>
+      </div>
+      <div class="sub">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p2)"></div>Tabela resumo de triggers</div>
+        <table class="trigger-table" style="margin-top:8px">
+          <thead><tr><th>Trigger</th><th>Quando</th><th>Output</th></tr></thead>
+          <tbody>
+            <tr><td><code>QA</code> (Developer)</td><td>Após implementação greenfield</td><td>Suite de testes E2E gerada</td></tr>
+            <tr><td><code>@qa *risk</code></td><td>Antes de tocar código legado</td><td>Mapa de riscos de regressão</td></tr>
+            <tr><td><code>@qa *design</code></td><td>Após *risk</td><td>Estratégia de cobertura de regressão</td></tr>
+            <tr><td><code>@qa *trace</code></td><td>Durante implementação</td><td>Matriz de rastreabilidade PRD → testes</td></tr>
+            <tr><td><code>@qa *nfr</code></td><td>Durante implementação</td><td>Validação de requisitos não funcionais</td></tr>
+            <tr><td><code>@qa *review</code></td><td>Após desenvolvimento completo</td><td>QA Results + gate file</td></tr>
+            <tr><td><code>@qa *gate</code></td><td>Após correções do *review</td><td>Gate status atualizado</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+const secs = document.querySelectorAll('.section[id]');
+const links = document.querySelectorAll('#toc-list li a');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      links.forEach(l => l.classList.remove('active'));
+      const a = document.querySelector(`#toc-list li a[href="#${e.target.id}"]`);
+      if (a) a.classList.add('active');
+    }
+  });
+}, { rootMargin: '-15% 0px -70% 0px' });
+secs.forEach(s => obs.observe(s));
+document.querySelectorAll('#toc-list li a').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    document.querySelector(a.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+</script>
+</body>
+</html>
