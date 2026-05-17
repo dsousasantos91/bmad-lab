@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BMAD para Analyst & PM — Guia de Análise e Produto</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f1117;--surface:#181c27;--surface2:#1f2535;
+  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.13);
+  --text:#e8eaf0;--muted:#7a8099;--faint:#3a3f52;
+  --p1:#3ecf8e;--p1t:#1a5c38;--p1bg:#0c3320;
+  --p2:#7c6fcd;--p2t:#2d2560;--p2bg:#1a1640;
+  --p3:#e8975a;--p3t:#5c3018;--p3bg:#2e1a08;
+  --p4:#e05c7c;--p4t:#5c1830;--p4bg:#2a0e1b;
+  --p5:#4faaee;--p5t:#1a3d60;--p5bg:#0a2038;
+  --accent:#7c6fcd;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.7;min-height:100vh}
+
+.topnav{position:sticky;top:0;z-index:100;background:rgba(15,17,23,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 24px;height:52px;display:flex;align-items:center;gap:16px}
+.topnav-home{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .15s}
+.topnav-home:hover{color:var(--text)}
+.topnav-sep{color:var(--faint);font-size:12px}
+.topnav-title{font-family:'DM Mono',monospace;font-size:12px;color:var(--text)}
+.topnav-badge{margin-left:auto;font-family:'DM Mono',monospace;font-size:10px;padding:3px 9px;border-radius:99px;border:1px solid var(--p2);color:var(--p2)}
+
+.layout{display:flex;max-width:1100px;margin:0 auto;padding:48px 24px 80px;gap:44px}
+.toc{width:210px;flex-shrink:0}
+.toc-sticky{position:sticky;top:72px}
+.toc-lbl{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.toc-list{list-style:none;display:flex;flex-direction:column;gap:1px}
+.toc-list li a{font-size:12px;color:var(--muted);text-decoration:none;display:block;padding:4px 8px;border-radius:5px;transition:color .1s,background .1s}
+.toc-list li a:hover{color:var(--text);background:var(--surface)}
+.toc-list li a.active{color:var(--p2);background:var(--p2bg)}
+.toc-sec{font-family:'DM Mono',monospace;font-size:10px;color:var(--faint);letter-spacing:.1em;text-transform:uppercase;padding:8px 8px 2px;margin-top:4px}
+
+.content{flex:1;min-width:0}
+.page-header{margin-bottom:44px;padding-bottom:28px;border-bottom:1px solid var(--border)}
+.header-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.page-header h1{font-family:'DM Serif Display',serif;font-size:clamp(26px,4vw,40px);font-weight:400;line-height:1.15;margin-bottom:10px}
+.header-sub{font-size:14px;color:var(--muted);margin-bottom:18px;line-height:1.6}
+.header-tags{display:flex;gap:7px;flex-wrap:wrap}
+.htag{font-size:11px;font-family:'DM Mono',monospace;padding:3px 10px;border-radius:99px;border:1px solid var(--border2);color:var(--muted)}
+.htag.hi{border-color:var(--p2);color:var(--p2);background:var(--p2bg)}
+
+.section{margin-bottom:44px;scroll-margin-top:80px}
+.section-heading{font-family:'DM Serif Display',serif;font-size:21px;font-weight:400;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:11px}
+.section-num{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);background:var(--surface);border:1px solid var(--border);padding:2px 8px;border-radius:4px}
+.section-body{color:var(--muted);font-size:14px;line-height:1.75}
+.section-body p{margin-bottom:10px}
+.section-body p:last-child{margin-bottom:0}
+
+.sub{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:18px;margin-bottom:10px}
+.sub-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:9px;display:flex;align-items:center;gap:8px}
+.sub-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.sub p,.sub li{font-size:13px;color:var(--muted);line-height:1.65}
+.sub ul,.sub ol{padding-left:18px;display:flex;flex-direction:column;gap:6px}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:11px;margin-top:12px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:16px}
+.card-icon{font-size:18px;margin-bottom:7px}
+.card-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:5px}
+.card-body{font-size:12px;color:var(--muted);line-height:1.6}
+
+.trigger-table{width:100%;border-collapse:collapse;margin-top:12px}
+.trigger-table th{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:8px 12px;text-align:left;border-bottom:1px solid var(--border2)}
+.trigger-table td{font-size:13px;padding:10px 12px;border-bottom:1px solid var(--border);color:var(--muted);vertical-align:top}
+.trigger-table tr:last-child td{border-bottom:none}
+.trigger-table tr:hover td{background:var(--surface2)}
+.tb{font-family:'DM Mono',monospace;font-size:12px;font-weight:500;padding:3px 8px;border-radius:5px;display:inline-block}
+.tb-analyst{color:var(--p1);background:var(--p1bg);border:1px solid var(--p1t)}
+.tb-pm{color:var(--p2);background:var(--p2bg);border:1px solid var(--p2t)}
+.trigger-name{color:var(--text);font-weight:500}
+
+.flow{display:flex;align-items:center;gap:0;margin:14px 0;flex-wrap:wrap}
+.flow-step{background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:7px 13px;font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;margin:3px 0}
+.flow-step.analyst{border-color:var(--p1);color:var(--p1)}
+.flow-step.pm{border-color:var(--p2);color:var(--p2)}
+.flow-step.arch{border-color:var(--p3);color:var(--p3)}
+.flow-arr{font-size:13px;color:var(--faint);padding:0 5px;flex-shrink:0}
+
+pre{background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:16px;overflow-x:auto;margin:12px 0}
+code{font-family:'DM Mono',monospace;font-size:12px;color:#a8d8a8;line-height:1.7}
+p code,li code,td code{background:var(--faint);padding:1px 5px;border-radius:4px;color:var(--text);font-size:12px;font-family:'DM Mono',monospace}
+
+.tip{background:var(--p2bg);border:1px solid var(--p2t);border-radius:11px;padding:16px 18px;margin:12px 0;font-size:13px;color:var(--muted);line-height:1.65}
+.tip strong{color:var(--p2);font-weight:500}
+.tip-green{background:var(--p1bg);border-color:var(--p1t)}
+.tip-green strong{color:var(--p1)}
+.tip-orange{background:var(--p3bg);border-color:var(--p3t)}
+.tip-orange strong{color:var(--p3)}
+
+.checklist{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;font-size:13px}
+.check-item.ok{border-left:3px solid var(--p1)}
+.check-item.warn{border-left:3px solid var(--p3)}
+.check-item.bad{border-left:3px solid var(--p4)}
+.check-icon{flex-shrink:0;font-size:13px;margin-top:1px}
+.check-text{color:var(--muted);line-height:1.5}
+.check-text strong{color:var(--text);font-weight:500}
+
+.agent-hero{display:flex;gap:16px;align-items:flex-start;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:10px}
+.agent-avatar{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.agent-info{flex:1}
+.agent-name{font-size:15px;font-weight:600;color:var(--text);margin-bottom:3px}
+.agent-id{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);margin-bottom:6px}
+.agent-desc{font-size:13px;color:var(--muted);line-height:1.6}
+
+.divider{height:1px;background:var(--border);margin:36px 0}
+
+@media(max-width:768px){
+  .layout{flex-direction:column;padding:28px 16px 60px}
+  .toc{display:none}
+}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a class="topnav-home" href="index.html">← BMAD Lab</a>
+  <span class="topnav-sep">/</span>
+  <span class="topnav-title">Guia para Analyst & PM</span>
+  <span class="topnav-badge">bmad-analyst · bmad-pm</span>
+</nav>
+
+<div class="layout">
+  <aside class="toc">
+    <div class="toc-sticky">
+      <div class="toc-lbl">Nesta página</div>
+      <ul class="toc-list" id="toc-list">
+        <li class="toc-sec">Fundamentos</li>
+        <li><a href="#s1">1. O papel humano aqui</a></li>
+        <li><a href="#s2">2. Os dois agentes</a></li>
+        <li class="toc-sec">Analyst (Mary)</li>
+        <li><a href="#s3">3. Triggers do Analyst</a></li>
+        <li><a href="#s4">4. Brainstorming eficaz</a></li>
+        <li><a href="#s5">5. Criando o Project Brief</a></li>
+        <li class="toc-sec">PM (John)</li>
+        <li><a href="#s6">6. Triggers do PM</a></li>
+        <li><a href="#s7">7. Criando o PRD</a></li>
+        <li><a href="#s8">8. Epics e Stories (CE)</a></li>
+        <li><a href="#s9">9. Validação e correção</a></li>
+        <li class="toc-sec">Fluxo completo</li>
+        <li><a href="#s10">10. Analyst → PM → Arch</a></li>
+        <li><a href="#s11">11. PRD que funciona</a></li>
+        <li><a href="#s12">12. Erros comuns</a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <main class="content">
+    <div class="page-header">
+      <div class="header-label">Guia prático · Análise e Produto</div>
+      <h1>BMAD para<br>Analyst & PM</h1>
+      <div class="header-sub">Como operar os agentes Analyst (Mary) e PM (John) para extrair o melhor do BMAD — do brainstorming ao PRD aprovado, pronto para o Architect.</div>
+      <div class="header-tags">
+        <span class="htag hi">bmad-analyst</span>
+        <span class="htag hi">bmad-pm</span>
+        <span class="htag">Project Brief</span>
+        <span class="htag">PRD</span>
+        <span class="htag">Epics & Stories</span>
+      </div>
+    </div>
+
+    <!-- 1 -->
+    <div class="section" id="s1">
+      <div class="section-heading"><span class="section-num">01</span>O papel humano nesta fase</div>
+      <div class="section-body">
+        <p>Na fase de análise e produto, o humano é o mais importante da equação — não a IA. Os agentes Analyst e PM são amplificadores do seu pensamento, não substitutos. Eles fazem as perguntas certas, estruturam o que você já sabe e transformam intenção vaga em documentos precisos.</p>
+        <p>O risco mais comum desta fase é o inverso: deixar o agente "decidir" por você. Um PRD gerado sem fricção humana real é um PRD que parece bom mas não reflete o que o produto precisa de verdade.</p>
+      </div>
+      <div class="tip">
+        <strong>Princípio central:</strong> humanos definem estratégia, domínio e validação. IA acelera a estruturação e documentação. Se o agente está respondendo perguntas que você deveria estar fazendo, algo está errado na direção da sessão.
+      </div>
+      <div class="cards">
+        <div class="card" style="border-left:3px solid var(--p2)">
+          <div class="card-icon">🧠</div>
+          <div class="card-title">Você traz</div>
+          <div class="card-body">Conhecimento do domínio, visão de produto, restrições reais, feedback de usuários, contexto de negócio</div>
+        </div>
+        <div class="card" style="border-left:3px solid var(--p1)">
+          <div class="card-icon">⚡</div>
+          <div class="card-title">O agente traz</div>
+          <div class="card-body">Estrutura, perguntas que você não pensou, templates, consistência entre documentos, velocidade de escrita</div>
+        </div>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 2 -->
+    <div class="section" id="s2">
+      <div class="section-heading"><span class="section-num">02</span>Os dois agentes e suas responsabilidades</div>
+      <div class="agent-hero">
+        <div class="agent-avatar" style="background:var(--p1bg)">🔍</div>
+        <div class="agent-info">
+          <div class="agent-name">Mary — Analyst</div>
+          <div class="agent-id">bmad-analyst</div>
+          <div class="agent-desc">Responsável pela fase de descoberta. Explora o espaço do problema, faz pesquisa de mercado, levanta restrições e produz o Project Brief. É o agente que "faz as perguntas difíceis" antes de qualquer compromisso com solução.</div>
+        </div>
+      </div>
+      <div class="agent-hero">
+        <div class="agent-avatar" style="background:var(--p2bg)">📋</div>
+        <div class="agent-info">
+          <div class="agent-name">John — Product Manager</div>
+          <div class="agent-id">bmad-pm</div>
+          <div class="agent-desc">Responsável pela fase de planejamento. Transforma o Brief em PRD estruturado, define epics e stories com critérios de aceite testáveis, valida consistência dos documentos e prepara tudo para o Architect.</div>
+        </div>
+      </div>
+      <div class="section-body">
+        <p>Os dois agentes são sequenciais: o Analyst alimenta o PM. Nunca pule diretamente para o PM sem passar pelo Analyst — o Brief é o contexto que dá qualidade ao PRD.</p>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 3 -->
+    <div class="section" id="s3">
+      <div class="section-heading"><span class="section-num">03</span>Triggers do Analyst (Mary)</div>
+      <div class="section-body"><p>O Analyst tem 7 triggers cobrindo desde brainstorming inicial até documentação de projetos existentes.</p></div>
+      <div class="sub" style="margin-top:12px">
+        <table class="trigger-table">
+          <thead><tr><th>Trigger</th><th>Nome</th><th>Quando usar</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="tb tb-analyst">BP</span></td>
+              <td><span class="trigger-name">Brainstorm</span></td>
+              <td>Ponto de partida. Use quando a ideia ainda está vaga. O agente conduz uma sessão estruturada de exploração do problema e do espaço de solução</td>
+            </tr>
+            <tr>
+              <td><span class="tb tb-analyst">MR</span></td>
+              <td><span class="trigger-name">Market Research</span></td>
+              <td>Análise de mercado, concorrentes e oportunidades. Use após o brainstorming para validar se a ideia tem contexto de mercado</td>
+            </tr>
+            <tr>
+              <td><span class="tb tb-analyst">DR</span></td>
+              <td><span class="trigger-name">Domain Research</span></td>
+              <td>Pesquisa de domínio específico. Use quando o produto envolve regulações, padrões técnicos ou conhecimento de área (saúde, finanças, etc.)</td>
+            </tr>
+            <tr>
+              <td><span class="tb tb-analyst">TR</span></td>
+              <td><span class="trigger-name">Technical Research</span></td>
+              <td>Pesquisa técnica de viabilidade. Use antes de comprometer com uma stack ou abordagem técnica</td>
+            </tr>
+            <tr>
+              <td><span class="tb tb-analyst">CB</span></td>
+              <td><span class="trigger-name">Create Brief</span></td>
+              <td>Gera o Project Brief formal. Use após exploração suficiente — brainstorming e pesquisas concluídas</td>
+            </tr>
+            <tr>
+              <td><span class="tb tb-analyst">WB</span></td>
+              <td><span class="trigger-name">PRFAQ Challenge</span></td>
+              <td>Desafio estilo Amazon Working Backwards. O agente questiona ativamente as premissas do produto para revelar fraquezas antes de comprometer com o Brief</td>
+            </tr>
+            <tr>
+              <td><span class="tb tb-analyst">DP</span></td>
+              <td><span class="trigger-name">Document Project</span></td>
+              <td>Documenta um projeto existente (brownfield). Gera a estrutura de docs necessária para que outros agentes entendam o codebase atual</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 4 -->
+    <div class="section" id="s4">
+      <div class="section-heading"><span class="section-num">04</span>Conduzindo um brainstorming eficaz</div>
+      <div class="section-body">
+        <p>O trigger <code>BP</code> inicia uma sessão estruturada de brainstorming. O agente vai fazer perguntas — e a qualidade das suas respostas determina a qualidade do Brief que vai sair.</p>
+      </div>
+      <div class="sub" style="margin-top:16px">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p1)"></div>O que o Analyst vai explorar com você</div>
+        <ul>
+          <li><strong style="color:var(--text)">Problema</strong> — qual dor real existe? Para quem? Em que contexto?</li>
+          <li><strong style="color:var(--text)">Público-alvo</strong> — quem são os usuários primários e secundários? O que eles já fazem hoje?</li>
+          <li><strong style="color:var(--text)">Solução proposta</strong> — o que você tem em mente? Por que essa abordagem?</li>
+          <li><strong style="color:var(--text)">Restrições</strong> — técnicas, de prazo, de orçamento, regulatórias</li>
+          <li><strong style="color:var(--text)">Sucesso</strong> — o que significa "funcionou"? Quais métricas?</li>
+          <li><strong style="color:var(--text)">Riscos</strong> — o que pode dar errado? O que você ainda não sabe?</li>
+        </ul>
+      </div>
+      <div class="tip tip-orange">
+        <strong>Dica de operação:</strong> não responda as perguntas do Analyst de forma curta. Quanto mais contexto você der, melhor o Brief. Se o agente fizer uma pergunta que você não sabe responder, diga isso explicitamente — é informação valiosa sobre o que precisa ser pesquisado antes de seguir.
+      </div>
+      <div class="sub">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p3)"></div>PRFAQ Challenge (WB) — use antes do Brief</div>
+        <p>O trigger <code>WB</code> coloca o agente no modo adversarial: ele vai questionar ativamente as premissas do produto, como se fosse um stakeholder cético. Use isso <em>antes</em> de gerar o Brief formal para revelar pontos cegos. Se o produto não sobrevive ao WB, o Brief vai documentar problemas que você não viu.</p>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 5 -->
+    <div class="section" id="s5">
+      <div class="section-heading"><span class="section-num">05</span>Criando o Project Brief</div>
+      <div class="section-body">
+        <p>O Project Brief é o artefato de saída do Analyst. Use o trigger <code>CB</code> após sessões suficientes de exploração. O Brief serve como input único para o PM — tudo que o PM vai precisar para criar o PRD deve estar aqui.</p>
+      </div>
+      <div class="sub" style="margin-top:16px">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p1)"></div>O que um bom Brief contém</div>
+        <ul>
+          <li>Declaração clara do problema (não da solução)</li>
+          <li>Perfil detalhado do público-alvo com contexto de uso</li>
+          <li>Proposta de valor diferenciada — por que este produto, agora</li>
+          <li>Restrições técnicas, de negócio e regulatórias</li>
+          <li>Critérios de sucesso mensuráveis</li>
+          <li>Riscos identificados e hipóteses não validadas</li>
+          <li>Escopo inicial e o que está explicitamente fora do escopo</li>
+        </ul>
+      </div>
+      <div class="sub">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p3)"></div>Revisando o Brief antes de passar para o PM</div>
+        <p>Antes de usar o Brief como input para o PM, leia-o criticamente. Perguntas que você deve conseguir responder depois de ler:</p>
+        <ul>
+          <li>Um stakeholder que não participou do brainstorming entenderia o problema?</li>
+          <li>As restrições estão todas documentadas?</li>
+          <li>O que está fora do escopo está explícito?</li>
+          <li>As hipóteses não validadas estão marcadas como tal?</li>
+        </ul>
+      </div>
+      <p style="font-size:13px;color:var(--muted);margin-top:12px">Salve o Brief em <code>docs/project-brief.md</code> e faça commit antes de avançar.</p>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 6 -->
+    <div class="section" id="s6">
+      <div class="section-heading"><span class="section-num">06</span>Triggers do PM (John)</div>
+      <div class="section-body"><p>O PM tem 6 triggers cobrindo criação, validação, edição e gestão de mudança do PRD, além da criação de epics e stories.</p></div>
+      <div class="sub" style="margin-top:12px">
+        <table class="trigger-table">
+          <thead><tr><th>Trigger</th><th>Nome</th><th>Quando usar</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="tb tb-pm">CP</span></td>
+              <td><span class="trigger-name">Create PRD</span></td>
+              <td>Cria o PRD a partir do Project Brief. Use com o Brief como contexto na sessão</td>
+            </tr>
+            <tr>
+              <td><span class="tb tb-pm">VP</span></td>
+              <td><span class="trigger-name">Validate PRD</span></td>
+              <td>Valida o PRD gerado — verifica consistência interna, critérios de aceite testáveis e completude</td>
+            </tr>
+            <tr>
+              <td><span class="tb tb-pm">EP</span></td>
+              <td><span class="trigger-name">Edit PRD</span></td>
+              <td>Edita seções específicas do PRD com base em feedback ou mudanças de escopo</td>
+            </tr>
+            <tr>
+              <td><span class="tb tb-pm">CE</span></td>
+              <td><span class="trigger-name">Create Epics & Stories</span></td>
+              <td>Quebra o PRD em epics e stories com critérios de aceite. Use após o PRD validado e aprovado</td>
+            </tr>
+            <tr>
+              <td><span class="tb tb-pm">IR</span></td>
+              <td><span class="trigger-name">Implementation Readiness</span></td>
+              <td>Verifica se todos os documentos estão prontos para o time de desenvolvimento começar. Checklist formal antes de passar para o Architect</td>
+            </tr>
+            <tr>
+              <td><span class="tb tb-pm">CC</span></td>
+              <td><span class="trigger-name">Correct Course</span></td>
+              <td>Gestão de mudança de escopo em projetos em andamento. Use quando requisitos mudam após o desenvolvimento ter começado</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 7 -->
+    <div class="section" id="s7">
+      <div class="section-heading"><span class="section-num">07</span>Criando e refinando o PRD</div>
+      <div class="section-body">
+        <p>O PRD é o documento mais importante do ciclo. Tudo que vem depois — arquitetura, stories, código — deriva dele. Um PRD vago gera arquitetura vaga que gera stories vagas que geram código errado.</p>
+      </div>
+      <div class="sub" style="margin-top:16px">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p2)"></div>Estrutura que o PM gera</div>
+        <ul>
+          <li><strong style="color:var(--text)">Objetivo</strong> — o que o produto resolve e para quem</li>
+          <li><strong style="color:var(--text)">Problema</strong> — descrição detalhada do problema do usuário</li>
+          <li><strong style="color:var(--text)">Escopo</strong> — o que está dentro e o que está explicitamente fora</li>
+          <li><strong style="color:var(--text)">Regras de negócio</strong> — lógica que não muda independente da implementação</li>
+          <li><strong style="color:var(--text)">Fluxos</strong> — jornadas principais do usuário</li>
+          <li><strong style="color:var(--text)">Critérios de aceite</strong> — condições verificáveis de "pronto"</li>
+          <li><strong style="color:var(--text)">Requisitos funcionais</strong> — o que o sistema faz</li>
+          <li><strong style="color:var(--text)">Requisitos não funcionais</strong> — performance, segurança, acessibilidade</li>
+        </ul>
+      </div>
+      <div class="tip tip-orange">
+        <strong>Como revisar o PRD gerado:</strong> após o <code>CP</code>, use <code>VP</code> para validação automática e depois leia você mesmo. Para cada user story, pergunte: "Eu conseguiria testar se isso foi implementado corretamente?" Se a resposta for "talvez", o critério de aceite está vago demais. Use <code>EP</code> para refinar.
+      </div>
+      <div class="sub">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p3)"></div>Non-goals — o que você deve adicionar manualmente</div>
+        <p>O PM não sabe o que está fora do escopo a menos que você diga. Adicione explicitamente uma seção de <strong style="color:var(--text)">non-goals</strong> (o que este produto NÃO vai fazer). Isso previne scope creep durante o desenvolvimento e dá clareza ao time.</p>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 8 -->
+    <div class="section" id="s8">
+      <div class="section-heading"><span class="section-num">08</span>Epics e Stories — trigger CE</div>
+      <div class="section-body">
+        <p>Após o PRD validado, use <code>CE</code> para quebrar o produto em epics e stories implementáveis. O PM gera epics organizados por funcionalidade e stories dentro de cada epic com critérios de aceite detalhados.</p>
+      </div>
+      <div class="sub" style="margin-top:16px">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p2)"></div>O que caracteriza uma boa story (INVEST)</div>
+        <ul>
+          <li><strong style="color:var(--text)">Independente</strong> — pode ser implementada sem depender de outra story incompleta</li>
+          <li><strong style="color:var(--text)">Negociável</strong> — não é um contrato rígido, pode ser ajustada com o time</li>
+          <li><strong style="color:var(--text)">Valiosa</strong> — entrega valor ao usuário ou ao negócio por si só</li>
+          <li><strong style="color:var(--text)">Estimável</strong> — o Developer consegue avaliar o esforço</li>
+          <li><strong style="color:var(--text)">Small</strong> — implementável em no máximo 4 horas de desenvolvimento</li>
+          <li><strong style="color:var(--text)">Testável</strong> — os critérios de aceite são verificáveis objetivamente</li>
+        </ul>
+      </div>
+      <div class="tip">
+        <strong>Dica:</strong> após o CE, peça ao Developer Agent (<code>bmad-agent-dev</code>) para usar o trigger <code>SP</code> (Sprint Planning) para priorizar e adicionar detalhamento técnico às stories geradas pelo PM. O Developer vê as stories de um ângulo diferente e frequentemente identifica dependências técnicas que o PM não viu.
+      </div>
+      <div class="sub">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p3)"></div>Quando uma story está grande demais</div>
+        <p>Se você olhar para uma story e não conseguir imaginar o Developer implementando em menos de 4 horas, é grande demais. Use <code>EP</code> para voltar ao PM e pedir que ele quebre a story. Alternativamente, o Developer pode usar o trigger <code>CS</code> para criar stories mais granulares a partir de uma story grande.</p>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 9 -->
+    <div class="section" id="s9">
+      <div class="section-heading"><span class="section-num">09</span>Validação, readiness e correção de curso</div>
+      <div class="section-body"><p>Três triggers do PM que existem para momentos específicos do ciclo de vida do produto:</p></div>
+      <div class="sub" style="margin-top:12px">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p2)"></div>IR — Implementation Readiness</div>
+        <p>Use o <code>IR</code> antes de passar o PRD para o Architect. Ele verifica se todos os documentos necessários estão presentes, consistentes e completos o suficiente para o time técnico começar. É uma checklist formal que previne que o Architect comece a trabalhar com informações incompletas.</p>
+      </div>
+      <div class="sub">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p3)"></div>CC — Correct Course</div>
+        <p>Use o <code>CC</code> quando requisitos mudam depois que o desenvolvimento já começou. Ele ajuda a avaliar o impacto da mudança nos artefatos existentes (PRD, arquitetura, stories em andamento) e propõe um caminho de atualização que minimize retrabalho. <strong style="color:var(--text)">Nunca mude o escopo diretamente no código</strong> sem antes atualizar o PRD via CC.</p>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 10 -->
+    <div class="section" id="s10">
+      <div class="section-heading"><span class="section-num">10</span>Fluxo completo: Analyst → PM → Architect</div>
+      <div class="section-body"><p>O fluxo ideal da fase de análise e produto, do zero até a entrega para o Architect:</p></div>
+      <div class="sub" style="margin-top:16px">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p1)"></div>Fase 1 — Descoberta (Analyst)</div>
+        <div class="flow" style="flex-wrap:wrap;margin-top:8px">
+          <div class="flow-step analyst">BP</div><div class="flow-arr">→</div>
+          <div class="flow-step analyst">MR / DR / TR</div><div class="flow-arr">→</div>
+          <div class="flow-step analyst">WB</div><div class="flow-arr">→</div>
+          <div class="flow-step analyst">CB</div><div class="flow-arr">→</div>
+          <div class="flow-step">Brief salvo</div>
+        </div>
+        <p style="font-size:12px;color:var(--muted);margin-top:8px">MR, DR e TR são opcionais dependendo do produto. WB é recomendado antes do CB para validar premissas.</p>
+      </div>
+      <div class="sub">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p2)"></div>Fase 2 — Planejamento (PM)</div>
+        <div class="flow" style="flex-wrap:wrap;margin-top:8px">
+          <div class="flow-step pm">CP</div><div class="flow-arr">→</div>
+          <div class="flow-step pm">VP</div><div class="flow-arr">→</div>
+          <div class="flow-step pm">EP</div><div class="flow-arr">→</div>
+          <div class="flow-step pm">CE</div><div class="flow-arr">→</div>
+          <div class="flow-step pm">IR</div><div class="flow-arr">→</div>
+          <div class="flow-step">PRD aprovado</div>
+        </div>
+        <p style="font-size:12px;color:var(--muted);margin-top:8px">VP e EP podem iterar múltiplas vezes antes de CE. IR é o gate final antes de passar para o Architect.</p>
+      </div>
+      <div class="sub">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p3)"></div>Handoff para o Architect</div>
+        <div class="flow" style="flex-wrap:wrap;margin-top:8px">
+          <div class="flow-step">PRD aprovado</div><div class="flow-arr">→</div>
+          <div class="flow-step arch">bmad-architect → CA</div>
+        </div>
+        <p style="font-size:12px;color:var(--muted);margin-top:8px">O Architect recebe o PRD completo como input. Quanto mais claro e completo o PRD, melhor a arquitetura gerada.</p>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 11 -->
+    <div class="section" id="s11">
+      <div class="section-heading"><span class="section-num">11</span>Características de um PRD que funciona</div>
+      <div class="checklist">
+        <div class="check-item ok">
+          <span class="check-icon">✅</span>
+          <div class="check-text"><strong>Critérios de aceite são verificáveis</strong> — "O usuário deve conseguir completar o checkout em menos de 3 etapas" é verificável. "A experiência deve ser boa" não é.</div>
+        </div>
+        <div class="check-item ok">
+          <span class="check-icon">✅</span>
+          <div class="check-text"><strong>Non-goals estão explícitos</strong> — o que o produto NÃO vai fazer está documentado, não apenas implícito.</div>
+        </div>
+        <div class="check-item ok">
+          <span class="check-icon">✅</span>
+          <div class="check-text"><strong>Regras de negócio estão separadas de UX</strong> — "O desconto só se aplica para compras acima de R$100" é regra de negócio. Como mostrar isso na tela é UX — e pertencem a seções diferentes.</div>
+        </div>
+        <div class="check-item ok">
+          <span class="check-icon">✅</span>
+          <div class="check-text"><strong>Hipóteses não validadas estão marcadas</strong> — se você não sabe se os usuários vão usar uma feature, documente isso como hipótese, não como requisito certo.</div>
+        </div>
+        <div class="check-item ok">
+          <span class="check-icon">✅</span>
+          <div class="check-text"><strong>NFRs estão quantificados</strong> — "rápido" não é um NFR. "Tempo de resposta abaixo de 200ms para 95% das requisições" é.</div>
+        </div>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 12 -->
+    <div class="section" id="s12">
+      <div class="section-heading"><span class="section-num">12</span>Erros comuns e como evitar</div>
+      <div class="checklist">
+        <div class="check-item bad">
+          <span class="check-icon">❌</span>
+          <div class="check-text"><strong>Pular o Analyst e ir direto ao PM</strong> — sem o Brief, o PM inventa contexto. O PRD resultante parece completo mas não reflete o problema real.</div>
+        </div>
+        <div class="check-item bad">
+          <span class="check-icon">❌</span>
+          <div class="check-text"><strong>Aceitar o PRD gerado sem revisão humana</strong> — o PM estrutura bem, mas não tem como saber o que você sabe sobre o negócio. Sempre leia o PRD inteiro antes de aprovar.</div>
+        </div>
+        <div class="check-item bad">
+          <span class="check-icon">❌</span>
+          <div class="check-text"><strong>Mudar o escopo sem usar CC</strong> — mudanças no código sem atualizar o PRD criam divergência entre documentação e implementação que se acumula silenciosamente.</div>
+        </div>
+        <div class="check-item warn">
+          <span class="check-icon">⚠</span>
+          <div class="check-text"><strong>PRD muito longo antes de CE</strong> — se o PRD tem mais de 30 páginas, considere shardear antes de gerar as stories. Documentos muito grandes perdem contexto no meio do workflow.</div>
+        </div>
+        <div class="check-item warn">
+          <span class="check-icon">⚠</span>
+          <div class="check-text"><strong>Stories sem critérios de aceite técnicos</strong> — após o CE, peça ao Developer Agent (trigger SP) para enriquecer as stories com detalhes de implementação. O PM vê o produto; o Developer vê o código.</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+const secs = document.querySelectorAll('.section[id]');
+const links = document.querySelectorAll('#toc-list li a');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      links.forEach(l => l.classList.remove('active'));
+      const a = document.querySelector(`#toc-list li a[href="#${e.target.id}"]`);
+      if (a) a.classList.add('active');
+    }
+  });
+}, { rootMargin: '-15% 0px -70% 0px' });
+secs.forEach(s => obs.observe(s));
+document.querySelectorAll('#toc-list li a').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    document.querySelector(a.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+</script>
+</body>
+</html>

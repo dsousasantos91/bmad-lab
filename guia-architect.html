@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BMAD para Architect — Guia de Arquitetura</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f1117;--surface:#181c27;--surface2:#1f2535;
+  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.13);
+  --text:#e8eaf0;--muted:#7a8099;--faint:#3a3f52;
+  --p1:#3ecf8e;--p1t:#1a5c38;--p1bg:#0c3320;
+  --p2:#7c6fcd;--p2t:#2d2560;--p2bg:#1a1640;
+  --p3:#e8975a;--p3t:#5c3018;--p3bg:#2e1a08;
+  --p4:#e05c7c;--p4t:#5c1830;--p4bg:#2a0e1b;
+  --p5:#4faaee;--p5t:#1a3d60;--p5bg:#0a2038;
+  --accent:#e8975a;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.7;min-height:100vh}
+
+.topnav{position:sticky;top:0;z-index:100;background:rgba(15,17,23,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 24px;height:52px;display:flex;align-items:center;gap:16px}
+.topnav-home{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .15s}
+.topnav-home:hover{color:var(--text)}
+.topnav-sep{color:var(--faint);font-size:12px}
+.topnav-title{font-family:'DM Mono',monospace;font-size:12px;color:var(--text)}
+.topnav-badge{margin-left:auto;font-family:'DM Mono',monospace;font-size:10px;padding:3px 9px;border-radius:99px;border:1px solid var(--p3);color:var(--p3)}
+
+.layout{display:flex;max-width:1100px;margin:0 auto;padding:48px 24px 80px;gap:44px}
+.toc{width:210px;flex-shrink:0}
+.toc-sticky{position:sticky;top:72px}
+.toc-lbl{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.toc-list{list-style:none;display:flex;flex-direction:column;gap:1px}
+.toc-list li a{font-size:12px;color:var(--muted);text-decoration:none;display:block;padding:4px 8px;border-radius:5px;transition:color .1s,background .1s}
+.toc-list li a:hover{color:var(--text);background:var(--surface)}
+.toc-list li a.active{color:var(--p3);background:var(--p3bg)}
+.toc-sec{font-family:'DM Mono',monospace;font-size:10px;color:var(--faint);letter-spacing:.1em;text-transform:uppercase;padding:8px 8px 2px;margin-top:4px}
+
+.content{flex:1;min-width:0}
+.page-header{margin-bottom:44px;padding-bottom:28px;border-bottom:1px solid var(--border)}
+.header-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.page-header h1{font-family:'DM Serif Display',serif;font-size:clamp(26px,4vw,40px);font-weight:400;line-height:1.15;margin-bottom:10px}
+.header-sub{font-size:14px;color:var(--muted);margin-bottom:18px;line-height:1.6}
+.header-tags{display:flex;gap:7px;flex-wrap:wrap}
+.htag{font-size:11px;font-family:'DM Mono',monospace;padding:3px 10px;border-radius:99px;border:1px solid var(--border2);color:var(--muted)}
+.htag.hi{border-color:var(--p3);color:var(--p3);background:var(--p3bg)}
+
+.section{margin-bottom:44px;scroll-margin-top:80px}
+.section-heading{font-family:'DM Serif Display',serif;font-size:21px;font-weight:400;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:11px}
+.section-num{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);background:var(--surface);border:1px solid var(--border);padding:2px 8px;border-radius:4px}
+.section-body{color:var(--muted);font-size:14px;line-height:1.75}
+.section-body p{margin-bottom:10px}
+.section-body p:last-child{margin-bottom:0}
+
+.sub{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:18px;margin-bottom:10px}
+.sub-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:9px;display:flex;align-items:center;gap:8px}
+.sub-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.sub p,.sub li{font-size:13px;color:var(--muted);line-height:1.65}
+.sub ul,.sub ol{padding-left:18px;display:flex;flex-direction:column;gap:6px}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:11px;margin-top:12px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:16px}
+.card-icon{font-size:18px;margin-bottom:7px}
+.card-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:5px}
+.card-body{font-size:12px;color:var(--muted);line-height:1.6}
+
+.trigger-table{width:100%;border-collapse:collapse;margin-top:12px}
+.trigger-table th{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:8px 12px;text-align:left;border-bottom:1px solid var(--border2)}
+.trigger-table td{font-size:13px;padding:10px 12px;border-bottom:1px solid var(--border);color:var(--muted);vertical-align:top}
+.trigger-table tr:last-child td{border-bottom:none}
+.trigger-table tr:hover td{background:var(--surface2)}
+.tb{font-family:'DM Mono',monospace;font-size:12px;font-weight:500;padding:3px 8px;border-radius:5px;display:inline-block;color:var(--p3);background:var(--p3bg);border:1px solid var(--p3t)}
+.trigger-name{color:var(--text);font-weight:500}
+
+.flow{display:flex;align-items:center;gap:0;margin:14px 0;flex-wrap:wrap}
+.flow-step{background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:7px 13px;font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;margin:3px 0}
+.flow-step.arch{border-color:var(--p3);color:var(--p3)}
+.flow-step.pm{border-color:var(--p2);color:var(--p2)}
+.flow-step.dev{border-color:var(--p1);color:var(--p1)}
+.flow-arr{font-size:13px;color:var(--faint);padding:0 5px;flex-shrink:0}
+
+pre{background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:16px;overflow-x:auto;margin:12px 0}
+code{font-family:'DM Mono',monospace;font-size:12px;color:#a8d8a8;line-height:1.7}
+p code,li code,td code{background:var(--faint);padding:1px 5px;border-radius:4px;color:var(--text);font-size:12px;font-family:'DM Mono',monospace}
+
+.tip{border-radius:11px;padding:16px 18px;margin:12px 0;font-size:13px;color:var(--muted);line-height:1.65}
+.tip-orange{background:var(--p3bg);border:1px solid var(--p3t)}
+.tip-orange strong{color:var(--p3);font-weight:500}
+.tip-blue{background:var(--p5bg);border:1px solid var(--p5t)}
+.tip-blue strong{color:var(--p5);font-weight:500}
+.tip-green{background:var(--p1bg);border:1px solid var(--p1t)}
+.tip-green strong{color:var(--p1);font-weight:500}
+
+.checklist{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;font-size:13px}
+.check-item.ok{border-left:3px solid var(--p1)}
+.check-item.warn{border-left:3px solid var(--p3)}
+.check-item.bad{border-left:3px solid var(--p4)}
+.check-icon{flex-shrink:0;font-size:13px;margin-top:1px}
+.check-text{color:var(--muted);line-height:1.5}
+.check-text strong{color:var(--text);font-weight:500}
+
+/* ADR */
+.adr{background:var(--surface2);border:1px solid var(--border2);border-left:3px solid var(--p3);border-radius:0 9px 9px 0;padding:16px;margin:12px 0;font-size:13px}
+.adr-title{font-weight:600;color:var(--text);margin-bottom:8px;font-size:12px;font-family:'DM Mono',monospace;letter-spacing:.05em}
+.adr-field{color:var(--muted);margin-bottom:5px;line-height:1.6}
+.adr-field strong{color:var(--p3);font-weight:500;min-width:120px;display:inline-block}
+
+.divider{height:1px;background:var(--border);margin:36px 0}
+
+@media(max-width:768px){
+  .layout{flex-direction:column;padding:28px 16px 60px}
+  .toc{display:none}
+}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a class="topnav-home" href="index.html">← BMAD Lab</a>
+  <span class="topnav-sep">/</span>
+  <span class="topnav-title">Guia para Architect</span>
+  <span class="topnav-badge">bmad-architect</span>
+</nav>
+
+<div class="layout">
+  <aside class="toc">
+    <div class="toc-sticky">
+      <div class="toc-lbl">Nesta página</div>
+      <ul class="toc-list" id="toc-list">
+        <li class="toc-sec">Fundamentos</li>
+        <li><a href="#s1">1. O papel do Architect</a></li>
+        <li><a href="#s2">2. Winston — triggers</a></li>
+        <li class="toc-sec">Greenfield</li>
+        <li><a href="#s3">3. Criando a arquitetura (CA)</a></li>
+        <li><a href="#s4">4. O documento de arquitetura</a></li>
+        <li><a href="#s5">5. ADRs — decisões versionadas</a></li>
+        <li><a href="#s6">6. Implementation Readiness</a></li>
+        <li class="toc-sec">Brownfield</li>
+        <li><a href="#s7">7. Document Project (DP)</a></li>
+        <li><a href="#s8">8. Arquitetura brownfield</a></li>
+        <li class="toc-sec">Qualidade</li>
+        <li><a href="#s9">9. Arquitetura que alimenta bem o Dev</a></li>
+        <li><a href="#s10">10. Party Mode com o Dev</a></li>
+        <li><a href="#s11">11. Erros comuns</a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <main class="content">
+    <div class="page-header">
+      <div class="header-label">Guia prático · bmad-architect</div>
+      <h1>BMAD para<br>Architect</h1>
+      <div class="header-sub">Como operar o Architect Agent (Winston) para definir arquiteturas que o Developer consegue implementar com consistência — em projetos novos e em codebases existentes.</div>
+      <div class="header-tags">
+        <span class="htag hi">bmad-architect</span>
+        <span class="htag">CA · IR</span>
+        <span class="htag">ADR</span>
+        <span class="htag">Brownfield</span>
+        <span class="htag">project-context.md</span>
+      </div>
+    </div>
+
+    <!-- 1 -->
+    <div class="section" id="s1">
+      <div class="section-heading"><span class="section-num">01</span>O papel do humano na fase de arquitetura</div>
+      <div class="section-body">
+        <p>A fase de arquitetura é onde as decisões técnicas de longo prazo são tomadas. O Architect Agent (Winston) estrutura e documenta essas decisões, mas as escolhas fundamentais são humanas — não deixe o agente escolher a stack, o modelo de dados ou os contratos de API sem sua aprovação explícita.</p>
+        <p>Winston é excelente em: identificar implicações de uma decisão, documentar tradeoffs, gerar estruturas de pastas e contratos de API, e manter consistência entre partes da arquitetura. Ele não é excelente em: saber as restrições não documentadas do seu ambiente, entender dívida técnica histórica ou tomar decisões políticas sobre tecnologia.</p>
+      </div>
+      <div class="cards">
+        <div class="card" style="border-left:3px solid var(--p3)">
+          <div class="card-icon">🏗</div>
+          <div class="card-title">Você decide</div>
+          <div class="card-body">Stack tecnológica, padrões de design, limites de serviço, contratos públicos, estratégia de migração</div>
+        </div>
+        <div class="card" style="border-left:3px solid var(--p1)">
+          <div class="card-icon">⚡</div>
+          <div class="card-title">Winston estrutura</div>
+          <div class="card-body">Documentação das decisões, tradeoffs explicitados, diagrama de componentes, estrutura de pastas, contratos de API</div>
+        </div>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 2 -->
+    <div class="section" id="s2">
+      <div class="section-heading"><span class="section-num">02</span>Winston — triggers disponíveis</div>
+      <div class="section-body"><p>O Architect tem 2 triggers principais no módulo BMM base. A simplicidade é intencional — o trabalho de arquitetura é profundo, não amplo.</p></div>
+      <div class="sub" style="margin-top:12px">
+        <table class="trigger-table">
+          <thead><tr><th>Trigger</th><th>Nome</th><th>Quando usar</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="tb">CA</span></td>
+              <td><span class="trigger-name">Create Architecture</span></td>
+              <td>Cria o documento de arquitetura a partir do PRD aprovado. Input principal: o PRD completo como contexto na sessão. Para brownfield, use o template de arquitetura brownfield</td>
+            </tr>
+            <tr>
+              <td><span class="tb">IR</span></td>
+              <td><span class="trigger-name">Implementation Readiness</span></td>
+              <td>Checklist formal que verifica se a arquitetura está completa e consistente o suficiente para o Developer começar. Use antes de gerar as stories. Compartilhado com o PM</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tip tip-blue">
+        <strong>Nota sobre brownfield:</strong> para projetos existentes, o Architect também usa o trigger <code>DP</code> (Document Project) junto com o Analyst para documentar o codebase antes de propor mudanças. E usa o template <code>brownfield-architecture-tmpl</code> no lugar do template padrão no trigger <code>CA</code>.
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 3 -->
+    <div class="section" id="s3">
+      <div class="section-heading"><span class="section-num">03</span>Criando a arquitetura (CA) — como conduzir bem</div>
+      <div class="section-body">
+        <p>O trigger <code>CA</code> inicia um workflow estruturado. Winston vai explorar o PRD e propor decisões arquiteturais em sequência. Sua responsabilidade é aprovar, ajustar ou rejeitar cada proposta com justificativa.</p>
+      </div>
+      <div class="sub" style="margin-top:16px">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p3)"></div>O que Winston vai propor e você deve validar</div>
+        <ul>
+          <li><strong style="color:var(--text)">Stack tecnológica</strong> — linguagem, framework, banco de dados, infra. Valide contra as restrições reais do seu ambiente</li>
+          <li><strong style="color:var(--text)">Estrutura de componentes</strong> — como os módulos se relacionam, quais são os limites de cada serviço</li>
+          <li><strong style="color:var(--text)">Contratos de API</strong> — endpoints, payloads, autenticação. Aprove explicitamente antes de continuar</li>
+          <li><strong style="color:var(--text)">Modelo de dados</strong> — entidades, relacionamentos, estratégia de persistência</li>
+          <li><strong style="color:var(--text)">Decisões de segurança</strong> — autenticação, autorização, criptografia</li>
+          <li><strong style="color:var(--text)">Estratégia de deploy</strong> — como o sistema vai para produção e como escala</li>
+        </ul>
+      </div>
+      <div class="tip tip-orange">
+        <strong>Dica de operação:</strong> quando Winston propuser algo que você não concorda, não apenas diga "não". Explique a restrição ou contexto que ele não sabe — isso melhora a próxima proposta. Ex: "Não podemos usar PostgreSQL porque o ambiente corporativo só permite Oracle. Proponha alternativa."
+      </div>
+      <div class="sub">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p5)"></div>Perguntas que você deve fazer ao Winston durante CA</div>
+        <ul>
+          <li>"Quais são os principais riscos desta decisão arquitetural?"</li>
+          <li>"Que alternativas você considerou para X? Por que descartou?"</li>
+          <li>"Como esta arquitetura escala se o volume triplicar em 6 meses?"</li>
+          <li>"Quais pontos desta arquitetura criam acoplamento forte entre módulos?"</li>
+          <li>"O que nesta arquitetura vai ser mais difícil de mudar depois?"</li>
+        </ul>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 4 -->
+    <div class="section" id="s4">
+      <div class="section-heading"><span class="section-num">04</span>O documento de arquitetura — o que deve conter</div>
+      <div class="section-body"><p>O documento de arquitetura é o artefato central que alimenta o Developer. Quanto mais claro e completo, menos ambiguidade nas stories e menos retrabalho no código.</p></div>
+      <div class="sub" style="margin-top:16px">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p3)"></div>Estrutura mínima</div>
+<pre><code>docs/architecture.md
+
+## Visão geral
+Descrição em 1 parágrafo do sistema e seus objetivos técnicos
+
+## Stack tecnológica
+Linguagem, framework, banco, infra — com versões e justificativas
+
+## Diagrama de componentes
+Relação entre módulos, serviços e dependências externas
+
+## Contratos de API
+Endpoints, métodos, payloads, códigos de resposta e autenticação
+
+## Modelo de dados
+Entidades principais, relacionamentos e estratégia de persistência
+
+## Decisões arquiteturais (ADRs)
+Lista com links ou inline das decisões e seus tradeoffs
+
+## Estrutura de pastas
+Organização do código com convenções de nomenclatura
+
+## Considerações de segurança
+Autenticação, autorização, dados sensíveis, pontos de atenção
+
+## Estratégia de deploy e escala
+Como o sistema vai a produção e como responde ao crescimento</code></pre>
+      </div>
+      <div class="section-body" style="margin-top:12px">
+        <p>Salve como <code>docs/architecture.md</code> e faça commit. Este arquivo é o input para todas as stories geradas pelo PM via <code>CE</code> e pelo Developer via <code>CS</code>.</p>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 5 -->
+    <div class="section" id="s5">
+      <div class="section-heading"><span class="section-num">05</span>ADRs — Architecture Decision Records</div>
+      <div class="section-body">
+        <p>ADRs são a memória viva da arquitetura. Cada decisão significativa — especialmente as não óbvias — deve ter um ADR. Eles respondem a pergunta mais comum em projetos: "por que fizemos dessa forma?"</p>
+      </div>
+      <div class="adr">
+        <div class="adr-title">ADR-001 — Exemplo de estrutura</div>
+        <div class="adr-field"><strong>Título:</strong> Usar PostgreSQL como banco principal</div>
+        <div class="adr-field"><strong>Status:</strong> accepted</div>
+        <div class="adr-field"><strong>Contexto:</strong> O produto precisa de transações ACID para operações financeiras e suporte nativo a JSON para dados de configuração variável por cliente.</div>
+        <div class="adr-field"><strong>Decisão:</strong> PostgreSQL 15 com pgvector para buscas semânticas futuras.</div>
+        <div class="adr-field"><strong>Consequências:</strong> Operações de leitura intensiva precisarão de índices bem planejados. Time precisa de familiaridade com SQL avançado.</div>
+        <div class="adr-field"><strong>Alternativas consideradas:</strong> MongoDB (descartado por falta de ACID nativo), MySQL (descartado por suporte inferior a JSON).</div>
+      </div>
+      <div class="sub" style="margin-top:16px">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p3)"></div>Quando criar um ADR</div>
+        <ul>
+          <li>Toda escolha de stack (linguagem, framework, banco, infra)</li>
+          <li>Qualquer decisão que envolva tradeoff significativo</li>
+          <li>Padrões de design que o time deve seguir consistentemente</li>
+          <li>Decisões que foram difíceis ou tiveram debate interno</li>
+          <li>Qualquer coisa que, se mudada no futuro, terá impacto amplo</li>
+        </ul>
+      </div>
+      <div class="tip tip-green">
+        <strong>Como pedir ao Winston para gerar ADRs:</strong> durante ou após o <code>CA</code>, diga "Gere um ADR para a decisão de [X] seguindo a estrutura padrão". Salve em <code>docs/adr/ADR-NNN-titulo.md</code> com numeração sequencial.
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 6 -->
+    <div class="section" id="s6">
+      <div class="section-heading"><span class="section-num">06</span>Implementation Readiness (IR)</div>
+      <div class="section-body">
+        <p>O trigger <code>IR</code> é o gate formal antes de passar a arquitetura para o Developer. Ele verifica que todos os artefatos necessários estão presentes e consistentes entre si.</p>
+      </div>
+      <div class="sub" style="margin-top:16px">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p3)"></div>O que o IR verifica</div>
+        <ul>
+          <li>PRD e arquitetura estão consistentes — sem contradições entre requisitos e decisões técnicas</li>
+          <li>Todos os requisitos funcionais têm correspondência na arquitetura</li>
+          <li>NFRs (performance, segurança) têm estratégia técnica definida</li>
+          <li>Contratos de API estão completos o suficiente para frontend e backend trabalharem em paralelo</li>
+          <li>Estrutura de pastas e convenções de código estão documentadas</li>
+          <li>Dependências externas e integrações estão mapeadas</li>
+        </ul>
+      </div>
+      <div class="tip tip-orange">
+        <strong>Importante:</strong> o IR é compartilhado entre PM e Architect. Se o IR revelar lacunas no PRD, volte ao PM antes de prosseguir. Se revelar lacunas na arquitetura, corrija a arquitetura. Não prossiga com o Developer se o IR tiver falhas críticas.
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 7 -->
+    <div class="section" id="s7">
+      <div class="section-heading"><span class="section-num">07</span>Brownfield — Document Project (DP)</div>
+      <div class="section-body">
+        <p>Em projetos existentes, o primeiro passo do Architect é entender o sistema antes de propor mudanças. O trigger <code>DP</code> (compartilhado com o Analyst) analisa o codebase e gera documentação estruturada que serve de input para a arquitetura brownfield.</p>
+      </div>
+      <div class="sub" style="margin-top:16px">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p3)"></div>O que o DP gera em docs/</div>
+<pre><code>docs/
+├── index.md              ← ponto de entrada obrigatório
+├── project-overview.md   ← resumo executivo e stack atual
+├── architecture.md       ← arquitetura existente documentada
+├── source-tree-analysis.md
+├── api-contracts.md      ← endpoints existentes
+└── data-models.md        ← schemas e modelos atuais</code></pre>
+      </div>
+      <div class="sub">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p5)"></div>O que você deve revisar e complementar</div>
+        <ul>
+          <li>Dívida técnica que o agente não conseguiu inferir do código</li>
+          <li>Decisões históricas que não estão documentadas mas importam</li>
+          <li>Integrações externas não óbvias no código</li>
+          <li>Restrições de ambiente (cloud provider, versões fixas, licenças)</li>
+          <li>Convenções não escritas que o time segue na prática</li>
+        </ul>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 8 -->
+    <div class="section" id="s8">
+      <div class="section-heading"><span class="section-num">08</span>Arquitetura brownfield — foco em integração</div>
+      <div class="section-body">
+        <p>Em projetos existentes, a arquitetura não começa do zero — ela adapta o sistema existente para suportar a nova funcionalidade sem quebrar o que já funciona. A mentalidade muda de "como projetar" para "como encaixar".</p>
+      </div>
+      <div class="sub" style="margin-top:16px">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p3)"></div>Use o template brownfield no CA</div>
+        <p>Ao acionar o <code>CA</code> em um projeto brownfield, informe explicitamente ao Winston: <em>"Este é um projeto brownfield. Use o template de arquitetura brownfield e foque nos pontos de integração com o sistema existente."</em></p>
+        <p style="margin-top:8px">O template brownfield inclui seções adicionais:</p>
+        <ul>
+          <li><strong style="color:var(--text)">Pontos de integração</strong> — onde o novo código se conecta ao existente</li>
+          <li><strong style="color:var(--text)">Estratégia de migração</strong> — como dados e funcionalidades existentes são preservados</li>
+          <li><strong style="color:var(--text)">Riscos de regressão</strong> — o que pode quebrar e como mitigar</li>
+          <li><strong style="color:var(--text)">Dívida técnica reconhecida</strong> — o que não vai ser resolvido agora mas foi documentado</li>
+        </ul>
+      </div>
+      <div class="sub">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p4)"></div>Regra de ouro no brownfield</div>
+        <p>Nunca proponha uma arquitetura que exija mudanças em partes do sistema que não estão no escopo da feature. Se a feature nova requer mudança arquitetural ampla, isso deve ser um epic separado — não um efeito colateral silencioso da implementação.</p>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 9 -->
+    <div class="section" id="s9">
+      <div class="section-heading"><span class="section-num">09</span>Arquitetura que alimenta bem o Developer</div>
+      <div class="section-body"><p>A qualidade do trabalho do Developer depende diretamente da clareza da arquitetura. Estes são os elementos que mais impactam o Dev Loop:</p></div>
+      <div class="checklist">
+        <div class="check-item ok">
+          <span class="check-icon">✅</span>
+          <div class="check-text"><strong>Contratos de API completos antes do código</strong> — com endpoints, payloads de request e response, códigos de erro e exemplos. Permite que frontend e backend trabalhem em paralelo sem bloqueio.</div>
+        </div>
+        <div class="check-item ok">
+          <span class="check-icon">✅</span>
+          <div class="check-text"><strong>Estrutura de pastas com convenções explícitas</strong> — onde cada tipo de arquivo vai, como nomear classes, interfaces e módulos. O Developer usa isso como referência em cada story.</div>
+        </div>
+        <div class="check-item ok">
+          <span class="check-icon">✅</span>
+          <div class="check-text"><strong>Limites entre módulos claramente definidos</strong> — o Developer precisa saber o que pertence a cada módulo e o que é compartilhado. Fronteiras ambíguas geram código acoplado.</div>
+        </div>
+        <div class="check-item ok">
+          <span class="check-icon">✅</span>
+          <div class="check-text"><strong>Decisões de tecnologia com versão fixada</strong> — Node 20.x, não "Node recente". TypeScript 5.3, não "TypeScript". Versões ambíguas geram ambientes inconsistentes.</div>
+        </div>
+        <div class="check-item warn">
+          <span class="check-icon">⚠</span>
+          <div class="check-text"><strong>Padrões de tratamento de erro documentados</strong> — como erros são propagados, logados e retornados ao cliente. Sem isso, cada Developer vai implementar diferente.</div>
+        </div>
+      </div>
+      <div class="tip tip-green" style="margin-top:16px">
+        <strong>Gere o project-context.md após a arquitetura:</strong> rode <code>bmad-generate-project-context</code> após o <code>CA</code> para capturar automaticamente as decisões técnicas em formato que o Developer Agent carrega em cada sessão. É o complemento prático do documento de arquitetura.
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 10 -->
+    <div class="section" id="s10">
+      <div class="section-heading"><span class="section-num">10</span>Party Mode com o Developer</div>
+      <div class="section-body">
+        <p>O BMAD tem o skill <code>bmad-party-mode</code> que coloca Winston (Architect) e Amelia (Developer) para debater em conjunto. Para o Architect, os momentos mais valiosos de usar isso são:</p>
+      </div>
+      <div class="cards">
+        <div class="card" style="border-left:3px solid var(--p3)">
+          <div class="card-icon">🔍</div>
+          <div class="card-title">Antes da implementação</div>
+          <div class="card-body">Winston e Amelia alinham expectativas antes do DS. Frequentemente revela ambiguidades que o Architect não viu do lado da implementação</div>
+        </div>
+        <div class="card" style="border-left:3px solid var(--p3)">
+          <div class="card-icon">⚡</div>
+          <div class="card-title">Code review arquitetural</div>
+          <div class="card-body">Winston valida se o código da story respeita os limites e contratos definidos na arquitetura. Mais eficaz que um review manual</div>
+        </div>
+        <div class="card" style="border-left:3px solid var(--p3)">
+          <div class="card-icon">🏗</div>
+          <div class="card-title">Decisões de refatoração</div>
+          <div class="card-body">Quando o Developer encontra dívida técnica durante implementação, Party Mode ajuda a decidir se refatora agora ou documenta como ADR de dívida</div>
+        </div>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 11 -->
+    <div class="section" id="s11">
+      <div class="section-heading"><span class="section-num">11</span>Erros comuns e como evitar</div>
+      <div class="checklist">
+        <div class="check-item bad">
+          <span class="check-icon">❌</span>
+          <div class="check-text"><strong>Aprovar a arquitetura sem ler os ADRs</strong> — os ADRs contêm os tradeoffs que você vai viver com no futuro. Não aprovar sem entender o que está sendo decidido e por quê.</div>
+        </div>
+        <div class="check-item bad">
+          <span class="check-icon">❌</span>
+          <div class="check-text"><strong>Deixar contratos de API vagos</strong> — "campo de filtro opcional" não é um contrato. O Developer vai inventar o formato e o frontend vai inventar outro. Defina payload completo com exemplos.</div>
+        </div>
+        <div class="check-item bad">
+          <span class="check-icon">❌</span>
+          <div class="check-text"><strong>Não atualizar a arquitetura quando o PRD muda</strong> — se o PM usa CC para mudar escopo, a arquitetura precisa ser revisada. Nunca deixe PRD e arquitetura desalinhados — o Developer vai seguir a arquitetura, não o PRD.</div>
+        </div>
+        <div class="check-item warn">
+          <span class="check-icon">⚠</span>
+          <div class="check-text"><strong>Arquitetura excessivamente detalhada antes de validar premissas</strong> — se ainda há hipóteses não validadas no produto, não invista em arquitetura profunda de módulos que podem nem existir. Arquitete o suficiente para começar e itere.</div>
+        </div>
+        <div class="check-item warn">
+          <span class="check-icon">⚠</span>
+          <div class="check-text"><strong>Não gerar o project-context.md</strong> — o documento de arquitetura é rico mas longo demais para carregar em cada sessão do Developer. O project-context.md é o resumo executivo operacional — gere-o.</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+const secs = document.querySelectorAll('.section[id]');
+const links = document.querySelectorAll('#toc-list li a');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      links.forEach(l => l.classList.remove('active'));
+      const a = document.querySelector(`#toc-list li a[href="#${e.target.id}"]`);
+      if (a) a.classList.add('active');
+    }
+  });
+}, { rootMargin: '-15% 0px -70% 0px' });
+secs.forEach(s => obs.observe(s));
+document.querySelectorAll('#toc-list li a').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    document.querySelector(a.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+</script>
+</body>
+</html>
