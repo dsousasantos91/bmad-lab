@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BMAD para UX Designer — Guia de Design</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f1117;--surface:#181c27;--surface2:#1f2535;
+  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.13);
+  --text:#e8eaf0;--muted:#7a8099;--faint:#3a3f52;
+  --p1:#3ecf8e;--p1t:#1a5c38;--p1bg:#0c3320;
+  --p2:#7c6fcd;--p2t:#2d2560;--p2bg:#1a1640;
+  --p3:#e8975a;--p3t:#5c3018;--p3bg:#2e1a08;
+  --p4:#e05c7c;--p4t:#5c1830;--p4bg:#2a0e1b;
+  --p5:#4faaee;--p5t:#1a3d60;--p5bg:#0a2038;
+  --ux:#f472b6;--uxt:#7c1d46;--uxbg:#2d0a1e;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.7;min-height:100vh}
+
+.topnav{position:sticky;top:0;z-index:100;background:rgba(15,17,23,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 24px;height:52px;display:flex;align-items:center;gap:16px}
+.topnav-home{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .15s}
+.topnav-home:hover{color:var(--text)}
+.topnav-sep{color:var(--faint);font-size:12px}
+.topnav-title{font-family:'DM Mono',monospace;font-size:12px;color:var(--text)}
+.topnav-badge{margin-left:auto;font-family:'DM Mono',monospace;font-size:10px;padding:3px 9px;border-radius:99px;border:1px solid var(--ux);color:var(--ux)}
+
+.layout{display:flex;max-width:1100px;margin:0 auto;padding:48px 24px 80px;gap:44px}
+.toc{width:210px;flex-shrink:0}
+.toc-sticky{position:sticky;top:72px}
+.toc-lbl{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.toc-list{list-style:none;display:flex;flex-direction:column;gap:1px}
+.toc-list li a{font-size:12px;color:var(--muted);text-decoration:none;display:block;padding:4px 8px;border-radius:5px;transition:color .1s,background .1s}
+.toc-list li a:hover{color:var(--text);background:var(--surface)}
+.toc-list li a.active{color:var(--ux);background:var(--uxbg)}
+.toc-sec{font-family:'DM Mono',monospace;font-size:10px;color:var(--faint);letter-spacing:.1em;text-transform:uppercase;padding:8px 8px 2px;margin-top:4px}
+
+.content{flex:1;min-width:0}
+.page-header{margin-bottom:44px;padding-bottom:28px;border-bottom:1px solid var(--border)}
+.header-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.page-header h1{font-family:'DM Serif Display',serif;font-size:clamp(26px,4vw,40px);font-weight:400;line-height:1.15;margin-bottom:10px}
+.header-sub{font-size:14px;color:var(--muted);margin-bottom:18px;line-height:1.6}
+.header-tags{display:flex;gap:7px;flex-wrap:wrap}
+.htag{font-size:11px;font-family:'DM Mono',monospace;padding:3px 10px;border-radius:99px;border:1px solid var(--border2);color:var(--muted)}
+.htag.hi{border-color:var(--ux);color:var(--ux);background:var(--uxbg)}
+
+.section{margin-bottom:44px;scroll-margin-top:80px}
+.section-heading{font-family:'DM Serif Display',serif;font-size:21px;font-weight:400;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:11px}
+.section-num{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);background:var(--surface);border:1px solid var(--border);padding:2px 8px;border-radius:4px}
+.section-body{color:var(--muted);font-size:14px;line-height:1.75}
+.section-body p{margin-bottom:10px}
+.section-body p:last-child{margin-bottom:0}
+
+.sub{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:18px;margin-bottom:10px}
+.sub-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:9px;display:flex;align-items:center;gap:8px}
+.sub-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.sub p,.sub li{font-size:13px;color:var(--muted);line-height:1.65}
+.sub ul,.sub ol{padding-left:18px;display:flex;flex-direction:column;gap:6px}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:11px;margin-top:12px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:16px}
+.card-icon{font-size:18px;margin-bottom:7px}
+.card-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:5px}
+.card-body{font-size:12px;color:var(--muted);line-height:1.6}
+
+.trigger-table{width:100%;border-collapse:collapse;margin-top:12px}
+.trigger-table th{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:8px 12px;text-align:left;border-bottom:1px solid var(--border2)}
+.trigger-table td{font-size:13px;padding:10px 12px;border-bottom:1px solid var(--border);color:var(--muted);vertical-align:top}
+.trigger-table tr:last-child td{border-bottom:none}
+.trigger-table tr:hover td{background:var(--surface2)}
+.tb{font-family:'DM Mono',monospace;font-size:12px;font-weight:500;padding:3px 8px;border-radius:5px;display:inline-block;color:var(--ux);background:var(--uxbg);border:1px solid var(--uxt)}
+.trigger-name{color:var(--text);font-weight:500}
+
+.flow{display:flex;align-items:center;gap:0;margin:14px 0;flex-wrap:wrap}
+.flow-step{background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:7px 13px;font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;margin:3px 0}
+.flow-step.ux{border-color:var(--ux);color:var(--ux)}
+.flow-step.pm{border-color:var(--p2);color:var(--p2)}
+.flow-step.dev{border-color:var(--p1);color:var(--p1)}
+.flow-step.arch{border-color:var(--p3);color:var(--p3)}
+.flow-arr{font-size:13px;color:var(--faint);padding:0 5px;flex-shrink:0}
+
+pre{background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:16px;overflow-x:auto;margin:12px 0}
+code{font-family:'DM Mono',monospace;font-size:12px;color:#a8d8a8;line-height:1.7}
+p code,li code,td code{background:var(--faint);padding:1px 5px;border-radius:4px;color:var(--text);font-size:12px;font-family:'DM Mono',monospace}
+
+.tip{border-radius:11px;padding:16px 18px;margin:12px 0;font-size:13px;color:var(--muted);line-height:1.65}
+.tip-ux{background:var(--uxbg);border:1px solid var(--uxt)}
+.tip-ux strong{color:var(--ux);font-weight:500}
+.tip-green{background:var(--p1bg);border:1px solid var(--p1t)}
+.tip-green strong{color:var(--p1);font-weight:500}
+.tip-orange{background:var(--p3bg);border:1px solid var(--p3t)}
+.tip-orange strong{color:var(--p3);font-weight:500}
+
+.checklist{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;font-size:13px}
+.check-item.ok{border-left:3px solid var(--p1)}
+.check-item.warn{border-left:3px solid var(--p3)}
+.check-item.bad{border-left:3px solid var(--p4)}
+.check-icon{flex-shrink:0;font-size:13px;margin-top:1px}
+.check-text{color:var(--muted);line-height:1.5}
+.check-text strong{color:var(--text);font-weight:500}
+
+.phase-block{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:18px;margin-bottom:12px;border-left:3px solid var(--ux)}
+.phase-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ux);margin-bottom:6px}
+.phase-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:8px}
+.phase-body{font-size:13px;color:var(--muted);line-height:1.65}
+.phase-body ul{padding-left:18px;margin-top:6px;display:flex;flex-direction:column;gap:5px}
+
+.handoff-box{background:var(--surface2);border:1px solid var(--border2);border-radius:11px;padding:16px;margin:12px 0}
+.handoff-title{font-size:12px;font-family:'DM Mono',monospace;color:var(--muted);margin-bottom:8px;letter-spacing:.05em}
+.handoff-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.handoff-row:last-child{margin-bottom:0}
+.handoff-from{font-size:12px;color:var(--muted);flex-shrink:0;width:80px}
+.handoff-arr{color:var(--faint);flex-shrink:0;font-size:12px;padding-top:1px}
+.handoff-to{font-size:12px;color:var(--text)}
+
+.divider{height:1px;background:var(--border);margin:36px 0}
+
+@media(max-width:768px){
+  .layout{flex-direction:column;padding:28px 16px 60px}
+  .toc{display:none}
+}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a class="topnav-home" href="index.html">← BMAD Lab</a>
+  <span class="topnav-sep">/</span>
+  <span class="topnav-title">Guia para UX Designer</span>
+  <span class="topnav-badge">bmad-ux-designer</span>
+</nav>
+
+<div class="layout">
+  <aside class="toc">
+    <div class="toc-sticky">
+      <div class="toc-lbl">Nesta página</div>
+      <ul class="toc-list" id="toc-list">
+        <li class="toc-sec">Fundamentos</li>
+        <li><a href="#s0">0. O papel humano aqui</a></li>
+        <li><a href="#s1">1. Sally — o agente</a></li>
+        <li><a href="#s2">2. Triggers disponíveis</a></li>
+        <li class="toc-sec">No ciclo BMAD</li>
+        <li><a href="#s3">3. Onde UX entra no fluxo</a></li>
+        <li><a href="#s4">4. UX na fase de descoberta</a></li>
+        <li><a href="#s5">5. UX na fase de planejamento</a></li>
+        <li><a href="#s6">6. UX na fase de arquitetura</a></li>
+        <li><a href="#s7">7. UX na fase de desenvolvimento</a></li>
+        <li class="toc-sec">Handoffs</li>
+        <li><a href="#s8">8. UX → PM — enriquecendo o PRD</a></li>
+        <li><a href="#s9">9. UX → Dev — contratos de interface</a></li>
+        <li><a href="#s10">10. UX → QA — critérios de aceite visuais</a></li>
+        <li class="toc-sec">Referência</li>
+        <li><a href="#s11">11. Artefatos UX no BMAD</a></li>
+        <li><a href="#s12">12. Erros comuns</a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <main class="content">
+    <div class="page-header">
+      <div class="header-label">Guia prático · bmad-ux-designer</div>
+      <h1>BMAD para<br>UX Designer</h1>
+      <div class="header-sub">Como operar a Sally (UX Designer) ao longo de todo o ciclo BMAD — da descoberta ao handoff para Dev e QA — e como os artefatos de UX alimentam os outros agentes.</div>
+      <div class="header-tags">
+        <span class="htag hi">bmad-ux-designer</span>
+        <span class="htag">User Flows</span>
+        <span class="htag">UX Brief</span>
+        <span class="htag">Handoff Dev</span>
+        <span class="htag">Critérios visuais</span>
+      </div>
+    </div>
+
+    <!-- 0 -->
+    <div class="section" id="s0">
+      <div class="section-heading"><span class="section-num">00</span>O papel humano nesta fase</div>
+      <div class="section-body">
+        <p>Design é a disciplina que mais depende de contexto humano — e a que mais sofre quando esse contexto está ausente. A Sally estrutura fluxos, gera especificações e documenta decisões de interface, mas não tem como sentir a frustração de um usuário real, entender nuances culturais do seu público ou perceber que um fluxo tecnicamente correto é cognitivamente confuso na prática.</p>
+        <p>O papel do UX Designer humano no BMAD é ser o defensor do usuário dentro do ciclo de desenvolvimento. Você traz pesquisa, traz empatia e, principalmente, traz a capacidade de questionar soluções que parecem óbvias para o time técnico mas são opacos para quem vai usar o produto.</p>
+      </div>
+      <div class="cards">
+        <div class="card" style="border-left:3px solid var(--ux)">
+          <div class="card-icon">🧠</div>
+          <div class="card-title">Você traz</div>
+          <div class="card-body">Pesquisa de usuário, empatia, contexto cultural, julgamento sobre usabilidade e validação de que o fluxo funciona para pessoas reais</div>
+        </div>
+        <div class="card" style="border-left:3px solid var(--p1)">
+          <div class="card-icon">⚡</div>
+          <div class="card-title">Sally traz</div>
+          <div class="card-body">Estruturação de fluxos, especificações de componentes, documentação de estados e heurísticas de usabilidade aplicadas sistematicamente</div>
+        </div>
+      </div>
+      <div class="tip tip-ux">
+        <strong>Princípio central:</strong> UX no BMAD não é uma fase separada que acontece antes do desenvolvimento — é uma disciplina que atravessa todo o ciclo. A Sally deve ser acionada na descoberta, no planejamento, na arquitetura e no desenvolvimento. Quanto mais tarde o UX entra, mais caro é consertar.
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 1 -->
+    <div class="section" id="s1">
+      <div class="section-heading"><span class="section-num">01</span>Sally — o agente UX Designer</div>
+      <div class="section-body">
+        <p>A Sally é o agente de design de experiência do usuário do BMAD. Ela opera com foco em fluxos de usuário, especificações de interface e critérios de usabilidade — não em geração de assets visuais ou código CSS. Seu output são documentos que informam as decisões dos outros agentes.</p>
+      </div>
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">🗺</div>
+          <div class="card-title">User flows</div>
+          <div class="card-body">Mapeamento de jornadas do usuário — happy path, caminhos alternativos e estados de erro</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">📐</div>
+          <div class="card-title">Especificações</div>
+          <div class="card-body">Documentação de componentes, estados, comportamentos e regras de interação</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔍</div>
+          <div class="card-title">Heurísticas</div>
+          <div class="card-body">Avaliação de usabilidade de fluxos e interfaces com base em princípios estabelecidos</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🤝</div>
+          <div class="card-title">Handoff docs</div>
+          <div class="card-body">Documentação de interface pronta para o Developer implementar sem ambiguidade</div>
+        </div>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 2 -->
+    <div class="section" id="s2">
+      <div class="section-heading"><span class="section-num">02</span>Triggers disponíveis</div>
+      <div class="section-body"><p>A Sally tem triggers cobrindo as etapas centrais do processo de UX dentro do ciclo BMAD.</p></div>
+      <div class="sub" style="margin-top:12px">
+        <table class="trigger-table">
+          <thead><tr><th>Trigger</th><th>Nome</th><th>O que gera</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="tb">UB</span></td>
+              <td><span class="trigger-name">UX Brief</span></td>
+              <td>Documento de contexto de UX baseado no Project Brief — define público, objetivos de experiência, restrições de interface e princípios de design para o produto</td>
+            </tr>
+            <tr>
+              <td><span class="tb">UF</span></td>
+              <td><span class="trigger-name">User Flows</span></td>
+              <td>Mapeamento completo dos fluxos de usuário — happy path, caminhos alternativos, estados de erro e transições entre telas</td>
+            </tr>
+            <tr>
+              <td><span class="tb">US</span></td>
+              <td><span class="trigger-name">UX Spec</span></td>
+              <td>Especificação detalhada de uma tela ou componente — comportamentos, estados, regras de validação, mensagens de erro e acessibilidade</td>
+            </tr>
+            <tr>
+              <td><span class="tb">UH</span></td>
+              <td><span class="trigger-name">UX Heuristics</span></td>
+              <td>Avaliação heurística de um fluxo ou interface usando as 10 heurísticas de Nielsen — identifica problemas de usabilidade antes do desenvolvimento</td>
+            </tr>
+            <tr>
+              <td><span class="tb">UD</span></td>
+              <td><span class="trigger-name">UX Handoff</span></td>
+              <td>Documento de handoff para o Developer — especificação completa de uma feature pronta para implementação, sem ambiguidade de comportamento</td>
+            </tr>
+            <tr>
+              <td><span class="tb">UA</span></td>
+              <td><span class="trigger-name">UX Audit</span></td>
+              <td>Auditoria de UX de um produto ou fluxo existente — identifica problemas, prioriza por impacto e propõe melhorias incrementais</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 3 -->
+    <div class="section" id="s3">
+      <div class="section-heading"><span class="section-num">03</span>Onde UX entra no fluxo BMAD</div>
+      <div class="section-body">
+        <p>UX não é uma fase — é uma disciplina transversal que contribui em cada etapa do ciclo BMAD. O erro mais comum é inserir o UX apenas entre o PRD e o desenvolvimento, perdendo a oportunidade de influenciar o produto quando o custo de mudança ainda é baixo.</p>
+      </div>
+      <div class="phase-block">
+        <div class="phase-label">Fase 1</div>
+        <div class="phase-title">Descoberta — junto com o Analyst</div>
+        <div class="phase-body">A Sally contribui com o UX Brief (<code>UB</code>) que documenta os objetivos de experiência do produto. Também avalia, junto ao Analyst, se o problema identificado tem implicações de usabilidade que o Brief deve capturar.
+          <ul><li>Acione a Sally com <code>UB</code> após o brainstorming do Analyst</li><li>Output: UX Brief que alimenta o PM e o Architect</li></ul>
+        </div>
+      </div>
+      <div class="phase-block">
+        <div class="phase-label">Fase 2</div>
+        <div class="phase-title">Planejamento — junto com o PM</div>
+        <div class="phase-body">A Sally cria os user flows (<code>UF</code>) que validam se os requisitos do PRD são implementáveis de forma usável. Fluxos revelam lacunas no PRD que critérios de aceite textuais não capturam.
+          <ul><li>Acione a Sally com <code>UF</code> após o PRD inicial</li><li>Output: User flows que o PM usa para refinar o PRD e o QA usa como base de cenários</li></ul>
+        </div>
+      </div>
+      <div class="phase-block">
+        <div class="phase-label">Fase 3</div>
+        <div class="phase-title">Arquitetura — junto com o Architect</div>
+        <div class="phase-body">A Sally valida se as decisões de arquitetura (especialmente de API e modelo de dados) suportam os fluxos de usuário projetados. Um modelo de dados que não suporta um estado de interface exige refatoração cara depois.
+          <ul><li>Acione a Sally com <code>UH</code> para avaliar os fluxos contra a arquitetura proposta</li><li>Output: lista de incompatibilidades entre UX e arquitetura, resolvidas antes do desenvolvimento</li></ul>
+        </div>
+      </div>
+      <div class="phase-block">
+        <div class="phase-label">Fase 4</div>
+        <div class="phase-title">Desenvolvimento — junto com o Developer</div>
+        <div class="phase-body">A Sally gera as especificações de interface (<code>US</code>) e os documentos de handoff (<code>UD</code>) que o Developer usa como input para cada story de frontend.
+          <ul><li>Acione a Sally com <code>US</code> antes de cada story de UI</li><li>Acione com <code>UD</code> para o handoff formal antes do DS do Developer</li></ul>
+        </div>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 4 -->
+    <div class="section" id="s4">
+      <div class="section-heading"><span class="section-num">04</span>UX na fase de descoberta — UX Brief</div>
+      <div class="section-body">
+        <p>O UX Brief é o primeiro artefato da Sally e o que mais influencia o produto final. Ele traduz o Project Brief do Analyst em objetivos de experiência concretos — definindo quem é o usuário, o que ele tenta fazer e quais são as restrições de interface que o produto deve respeitar.</p>
+      </div>
+      <div class="sub" style="margin-top:16px">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--ux)"></div>O que o UX Brief contém</div>
+        <ul>
+          <li><strong style="color:var(--text)">Personas</strong> — perfis do usuário primário e secundário com contexto de uso real</li>
+          <li><strong style="color:var(--text)">Jobs to be done</strong> — o que o usuário está tentando realizar, não apenas o que o produto faz</li>
+          <li><strong style="color:var(--text)">Princípios de experiência</strong> — os valores de design que devem guiar todas as decisões de interface</li>
+          <li><strong style="color:var(--text)">Restrições de interface</strong> — dispositivos, contexto de uso, acessibilidade, idioma</li>
+          <li><strong style="color:var(--text)">Métricas de UX</strong> — como vamos saber que a experiência é boa? (task completion rate, erro rate, NPS)</li>
+          <li><strong style="color:var(--text)">Referências</strong> — produtos com experiências que inspiram ou que devemos evitar</li>
+        </ul>
+      </div>
+      <div class="tip tip-ux">
+        <strong>Como usar o UX Brief:</strong> passe o UX Brief para o PM antes de criar o PRD. O PM vai usar os Jobs to be Done como base para as user stories e os princípios de experiência como critério de aceite implícito para todas as features.
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 5 -->
+    <div class="section" id="s5">
+      <div class="section-heading"><span class="section-num">05</span>UX na fase de planejamento — User Flows</div>
+      <div class="section-body">
+        <p>Os user flows são o artefato de UX mais valioso para o PM e o QA. Eles revelam lacunas no PRD que critérios de aceite textuais não capturam — especialmente estados de erro, fluxos alternativos e transições entre telas.</p>
+      </div>
+      <div class="sub" style="margin-top:16px">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--ux)"></div>O que passar como contexto para o trigger UF</div>
+        <ul>
+          <li>O PRD — a Sally analisa cada requisito funcional e cria o fluxo correspondente</li>
+          <li>O UX Brief — garante que os fluxos seguem os princípios de experiência definidos</li>
+          <li>As restrições técnicas relevantes — o que é possível de implementar dado o modelo de dados e a arquitetura</li>
+        </ul>
+      </div>
+      <div class="sub">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--ux)"></div>O que um bom user flow documenta</div>
+        <ul>
+          <li><strong style="color:var(--text)">Happy path</strong> — o fluxo ideal quando tudo funciona</li>
+          <li><strong style="color:var(--text)">Caminhos alternativos</strong> — usuário que pula etapas, volta, cancela</li>
+          <li><strong style="color:var(--text)">Estados de erro</strong> — o que acontece quando algo falha e como o usuário se recupera</li>
+          <li><strong style="color:var(--text)">Estados vazios</strong> — o que o usuário vê antes de ter dados (first-time experience)</li>
+          <li><strong style="color:var(--text)">Estados de carregamento</strong> — feedback durante operações assíncronas</li>
+          <li><strong style="color:var(--text)">Pontos de decisão</strong> — onde o sistema ou o usuário toma uma decisão que bifurca o fluxo</li>
+        </ul>
+      </div>
+      <div class="tip tip-orange">
+        <strong>Dica:</strong> após gerar os user flows com <code>UF</code>, leve-os de volta ao PM. Frequentemente os fluxos revelam requisitos que o PRD não cobriu — estados de erro, permissões de acesso ou fluxos de onboarding que parecem óbvios no texto mas são complexos na prática.
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 6 -->
+    <div class="section" id="s6">
+      <div class="section-heading"><span class="section-num">06</span>UX na fase de arquitetura</div>
+      <div class="section-body">
+        <p>A fase de arquitetura é onde UX e tecnologia precisam conversar — e onde a maioria dos times não faz isso. Decisões de modelo de dados e API que parecem neutras tecnicamente podem impossibilitar estados de interface importantes ou forçar roundtrips desnecessários que degradam a experiência.</p>
+      </div>
+      <div class="sub" style="margin-top:16px">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--ux)"></div>Perguntas que o UX Designer deve fazer ao Architect</div>
+        <ul>
+          <li>O modelo de dados suporta paginação sem recarregar a página inteira?</li>
+          <li>A API retorna dados suficientes para renderizar o estado otimista sem esperar confirmação do servidor?</li>
+          <li>Como o sistema lida com operações offline ou com conectividade intermitente?</li>
+          <li>Há endpoints que suportam busca e filtro em tempo real sem latência perceptível?</li>
+          <li>O modelo de permissões suporta os diferentes níveis de acesso mapeados nos user flows?</li>
+        </ul>
+      </div>
+      <div class="sub">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--ux)"></div>Use UH para validar arquitetura × UX</div>
+        <p>O trigger <code>UH</code> (UX Heuristics) pode ser usado nesta fase para avaliar os user flows contra a arquitetura proposta. A Sally identifica pontos de fricção que surgiriam da implementação da arquitetura — antes de uma linha de código ser escrita.</p>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 7 -->
+    <div class="section" id="s7">
+      <div class="section-heading"><span class="section-num">07</span>UX na fase de desenvolvimento</div>
+      <div class="section-body">
+        <p>Durante o desenvolvimento, a Sally gera dois tipos de artefato: as especificações de interface (<code>US</code>) que detalham como cada tela e componente deve se comportar, e os documentos de handoff (<code>UD</code>) que o Developer usa como input direto para implementar uma feature.</p>
+      </div>
+      <div class="sub" style="margin-top:16px">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--ux)"></div>UX Spec (US) — por componente ou tela</div>
+        <ul>
+          <li>Comportamento de cada elemento interativo (hover, focus, active, disabled)</li>
+          <li>Regras de validação de formulários com mensagens de erro específicas</li>
+          <li>Lógica condicional de visibilidade de componentes</li>
+          <li>Comportamento responsivo — o que muda entre mobile e desktop</li>
+          <li>Requisitos de acessibilidade — ARIA labels, ordem de tab, contraste mínimo</li>
+          <li>Animações e transições — duração, easing, gatilho</li>
+        </ul>
+      </div>
+      <div class="sub">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--ux)"></div>UX Handoff (UD) — por feature completa</div>
+        <p>O handoff é gerado para features maiores que envolvem múltiplas telas ou componentes. Ele consolida todos os specs em um único documento estruturado que o Developer usa como input para o trigger <code>DS</code>.</p>
+        <div class="flow" style="flex-wrap:wrap;margin-top:8px">
+          <div class="flow-step ux">Sally: UD</div><div class="flow-arr">→</div>
+          <div class="flow-step dev">Developer: DS</div><div class="flow-arr">→</div>
+          <div class="flow-step dev">Developer: CR</div><div class="flow-arr">→</div>
+          <div class="flow-step ux">Sally: UH review</div>
+        </div>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 8 -->
+    <div class="section" id="s8">
+      <div class="section-heading"><span class="section-num">08</span>UX → PM — enriquecendo o PRD</div>
+      <div class="section-body"><p>Os artefatos de UX alimentam o PM em dois momentos principais:</p></div>
+
+      <div class="handoff-box">
+        <div class="handoff-title">HANDOFFS: Sally → John (PM)</div>
+        <div class="handoff-row">
+          <div class="handoff-from">UX Brief</div>
+          <div class="handoff-arr">→</div>
+          <div class="handoff-to">PM usa as Personas e Jobs to be Done para escrever user stories mais centradas no usuário real</div>
+        </div>
+        <div class="handoff-row">
+          <div class="handoff-from">User Flows</div>
+          <div class="handoff-arr">→</div>
+          <div class="handoff-to">PM usa os fluxos para identificar requisitos ausentes no PRD e refinar critérios de aceite com estados específicos</div>
+        </div>
+        <div class="handoff-row">
+          <div class="handoff-from">UX Heuristics</div>
+          <div class="handoff-arr">→</div>
+          <div class="handoff-to">PM usa os problemas de usabilidade identificados como backlog de melhorias priorizáveis</div>
+        </div>
+      </div>
+
+      <div class="tip tip-ux" style="margin-top:4px">
+        <strong>Regra prática:</strong> todo critério de aceite de uma story de UI deve ter um correspondente no user flow ou no UX spec. Se o Dev não sabe qual mensagem de erro mostrar quando a validação falha, o critério de aceite está incompleto.
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 9 -->
+    <div class="section" id="s9">
+      <div class="section-heading"><span class="section-num">09</span>UX → Dev — contratos de interface</div>
+      <div class="section-body"><p>O handoff de UX para o Developer é o ponto mais crítico do processo. Ambiguidade aqui se traduz diretamente em retrabalho.</p></div>
+
+      <div class="handoff-box">
+        <div class="handoff-title">HANDOFFS: Sally → Amelia (Developer)</div>
+        <div class="handoff-row">
+          <div class="handoff-from">UX Spec</div>
+          <div class="handoff-arr">→</div>
+          <div class="handoff-to">Developer usa como input para o DS — especialmente os estados de componente, regras de validação e requisitos de acessibilidade</div>
+        </div>
+        <div class="handoff-row">
+          <div class="handoff-from">UX Handoff</div>
+          <div class="handoff-arr">→</div>
+          <div class="handoff-to">Developer usa como referência durante toda a implementação de uma feature — substitui perguntas ao designer durante o sprint</div>
+        </div>
+        <div class="handoff-row">
+          <div class="handoff-from">User Flows</div>
+          <div class="handoff-arr">→</div>
+          <div class="handoff-to">Developer usa para entender o contexto de navegação — para onde o usuário vai antes e depois de cada tela</div>
+        </div>
+      </div>
+
+      <div class="sub" style="margin-top:12px">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--ux)"></div>O que um handoff completo deve especificar</div>
+        <ul>
+          <li>Todos os estados possíveis de cada componente interativo (não apenas o estado padrão)</li>
+          <li>Mensagens de erro exatas — não "mostrar erro", mas o texto específico de cada mensagem</li>
+          <li>Comportamento durante carregamento — skeleton, spinner ou progressive disclosure</li>
+          <li>Limites de caracteres em campos de texto e o que acontece quando são atingidos</li>
+          <li>Comportamento em telas pequenas — o que colapsa, o que some, o que muda de posição</li>
+          <li>Requisitos de acessibilidade específicos — não apenas "deve ser acessível"</li>
+        </ul>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 10 -->
+    <div class="section" id="s10">
+      <div class="section-heading"><span class="section-num">10</span>UX → QA — critérios de aceite visuais</div>
+      <div class="section-body"><p>O QA usa os artefatos de UX para definir o que testar além da funcionalidade — verificando se a experiência implementada corresponde ao que foi projetado.</p></div>
+
+      <div class="handoff-box">
+        <div class="handoff-title">HANDOFFS: Sally → QA</div>
+        <div class="handoff-row">
+          <div class="handoff-from">User Flows</div>
+          <div class="handoff-arr">→</div>
+          <div class="handoff-to">QA usa como base para os cenários de teste E2E — cada nó do fluxo é um cenário a ser testado</div>
+        </div>
+        <div class="handoff-row">
+          <div class="handoff-from">UX Spec</div>
+          <div class="handoff-arr">→</div>
+          <div class="handoff-to">QA usa para testar estados específicos de componente — validação de erro, estados desabilitados, comportamento responsivo</div>
+        </div>
+        <div class="handoff-row">
+          <div class="handoff-from">UX Heuristics</div>
+          <div class="handoff-arr">→</div>
+          <div class="handoff-to">QA incorpora problemas de usabilidade identificados como casos de teste de regressão de experiência</div>
+        </div>
+      </div>
+
+      <div class="tip tip-green" style="margin-top:12px">
+        <strong>Dica para QA:</strong> o user flow é o mapa dos cenários de teste E2E. Cada caminho no fluxo — happy path, alternativo e de erro — é um cenário. Se o QA não tem um user flow para referência, está testando às cegas.
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 11 -->
+    <div class="section" id="s11">
+      <div class="section-heading"><span class="section-num">11</span>Artefatos UX no BMAD — onde vivem</div>
+      <div class="section-body"><p>Todos os artefatos de UX devem ser versionados no repositório junto com o código — não em ferramentas externas isoladas.</p></div>
+      <div class="sub" style="margin-top:16px">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--ux)"></div>Estrutura recomendada em docs/</div>
+<pre><code>docs/
+└── ux/
+    ├── ux-brief.md              ← UB — princípios e personas
+    ├── user-flows/
+    │   ├── flow-auth.md         ← UF por feature
+    │   ├── flow-checkout.md
+    │   └── flow-onboarding.md
+    ├── specs/
+    │   ├── spec-login-form.md   ← US por componente
+    │   └── spec-dashboard.md
+    ├── handoffs/
+    │   └── handoff-checkout.md  ← UD por feature
+    └── audits/
+        └── audit-v1.md          ← UA histórico</code></pre>
+      </div>
+      <div class="section-body" style="margin-top:12px">
+        <p>Com os artefatos no repositório, o Developer pode referenciar o spec diretamente no contexto do Claude Code ao usar o trigger <code>DS</code> — sem precisar sair da ferramenta para consultar o design em outro sistema.</p>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 12 -->
+    <div class="section" id="s12">
+      <div class="section-heading"><span class="section-num">12</span>Erros comuns e como evitar</div>
+      <div class="checklist">
+        <div class="check-item bad">
+          <span class="check-icon">❌</span>
+          <div class="check-text"><strong>UX entrando somente após o PRD aprovado</strong> — o custo de mudar um fluxo depois que o PM validou o PRD é 3x maior do que co-criar o PRD com UX desde o início. Insira a Sally na fase de brainstorming.</div>
+        </div>
+        <div class="check-item bad">
+          <span class="check-icon">❌</span>
+          <div class="check-text"><strong>Handoff sem estados de erro documentados</strong> — "mostrar mensagem de erro" não é uma spec. O Developer precisa saber exatamente qual texto mostrar, quando mostrar, e como o usuário se recupera do erro.</div>
+        </div>
+        <div class="check-item bad">
+          <span class="check-icon">❌</span>
+          <div class="check-text"><strong>User flows sem caminhos alternativos</strong> — um flow que só documenta o happy path é metade de um flow. Os caminhos de erro e recuperação são onde a experiência real é vivida.</div>
+        </div>
+        <div class="check-item warn">
+          <span class="check-icon">⚠</span>
+          <div class="check-text"><strong>Não validar UX contra arquitetura</strong> — um fluxo que requer 5 chamadas de API para renderizar uma tela vai ser lento em produção. A conversa entre UX e Architect antes do desenvolvimento evita esse problema.</div>
+        </div>
+        <div class="check-item warn">
+          <span class="check-icon">⚠</span>
+          <div class="check-text"><strong>Artefatos de UX fora do repositório</strong> — specs em Figma, flows em Miro e critérios no Notion criam fragmentação de contexto. O Developer não vai abrir três ferramentas para implementar uma story. Centralize em <code>docs/ux/</code>.</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+const secs = document.querySelectorAll('.section[id]');
+const links = document.querySelectorAll('#toc-list li a');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      links.forEach(l => l.classList.remove('active'));
+      const a = document.querySelector(`#toc-list li a[href="#${e.target.id}"]`);
+      if (a) a.classList.add('active');
+    }
+  });
+}, { rootMargin: '-15% 0px -70% 0px' });
+secs.forEach(s => obs.observe(s));
+document.querySelectorAll('#toc-list li a').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    document.querySelector(a.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BMAD para Tech Writer — Guia de Documentação</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f1117;--surface:#181c27;--surface2:#1f2535;
+  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.13);
+  --text:#e8eaf0;--muted:#7a8099;--faint:#3a3f52;
+  --p1:#3ecf8e;--p1t:#1a5c38;--p1bg:#0c3320;
+  --p2:#7c6fcd;--p2t:#2d2560;--p2bg:#1a1640;
+  --p3:#e8975a;--p3t:#5c3018;--p3bg:#2e1a08;
+  --p4:#e05c7c;--p4t:#5c1830;--p4bg:#2a0e1b;
+  --p5:#4faaee;--p5t:#1a3d60;--p5bg:#0a2038;
+  --p6:#b8a4f0;--p6t:#3d2d80;--p6bg:#1a1240;
+  --accent:#b8a4f0;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.7;min-height:100vh}
+
+.topnav{position:sticky;top:0;z-index:100;background:rgba(15,17,23,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 24px;height:52px;display:flex;align-items:center;gap:16px}
+.topnav-home{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .15s}
+.topnav-home:hover{color:var(--text)}
+.topnav-sep{color:var(--faint);font-size:12px}
+.topnav-title{font-family:'DM Mono',monospace;font-size:12px;color:var(--text)}
+.topnav-badge{margin-left:auto;font-family:'DM Mono',monospace;font-size:10px;padding:3px 9px;border-radius:99px;border:1px solid var(--p6);color:var(--p6)}
+
+.layout{display:flex;max-width:1100px;margin:0 auto;padding:48px 24px 80px;gap:44px}
+.toc{width:210px;flex-shrink:0}
+.toc-sticky{position:sticky;top:72px}
+.toc-lbl{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.toc-list{list-style:none;display:flex;flex-direction:column;gap:1px}
+.toc-list li a{font-size:12px;color:var(--muted);text-decoration:none;display:block;padding:4px 8px;border-radius:5px;transition:color .1s,background .1s}
+.toc-list li a:hover{color:var(--text);background:var(--surface)}
+.toc-list li a.active{color:var(--p6);background:var(--p6bg)}
+.toc-sec{font-family:'DM Mono',monospace;font-size:10px;color:var(--faint);letter-spacing:.1em;text-transform:uppercase;padding:8px 8px 2px;margin-top:4px}
+
+.content{flex:1;min-width:0}
+.page-header{margin-bottom:44px;padding-bottom:28px;border-bottom:1px solid var(--border)}
+.header-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.page-header h1{font-family:'DM Serif Display',serif;font-size:clamp(26px,4vw,40px);font-weight:400;line-height:1.15;margin-bottom:10px}
+.header-sub{font-size:14px;color:var(--muted);margin-bottom:18px;line-height:1.6}
+.header-tags{display:flex;gap:7px;flex-wrap:wrap}
+.htag{font-size:11px;font-family:'DM Mono',monospace;padding:3px 10px;border-radius:99px;border:1px solid var(--border2);color:var(--muted)}
+.htag.hi{border-color:var(--p6);color:var(--p6);background:var(--p6bg)}
+
+.section{margin-bottom:44px;scroll-margin-top:80px}
+.section-heading{font-family:'DM Serif Display',serif;font-size:21px;font-weight:400;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:11px}
+.section-num{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);background:var(--surface);border:1px solid var(--border);padding:2px 8px;border-radius:4px}
+.section-body{color:var(--muted);font-size:14px;line-height:1.75}
+.section-body p{margin-bottom:10px}
+.section-body p:last-child{margin-bottom:0}
+
+.sub{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:18px;margin-bottom:10px}
+.sub-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:9px;display:flex;align-items:center;gap:8px}
+.sub-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.sub p,.sub li{font-size:13px;color:var(--muted);line-height:1.65}
+.sub ul,.sub ol{padding-left:18px;display:flex;flex-direction:column;gap:6px}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:11px;margin-top:12px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:16px}
+.card-icon{font-size:18px;margin-bottom:7px}
+.card-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:5px}
+.card-body{font-size:12px;color:var(--muted);line-height:1.6}
+.card-list{padding-left:0;list-style:none;display:flex;flex-direction:column;gap:3px;margin-top:6px}
+.card-list li{font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:6px}
+.card-list li::before{content:'·';color:var(--faint);flex-shrink:0}
+
+/* Mode switcher */
+.mode-tabs{display:flex;gap:8px;margin-bottom:24px}
+.mode-tab{padding:8px 18px;border-radius:8px;border:1px solid var(--border);background:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .15s}
+.mode-tab.active{background:var(--surface2);border-color:var(--border2);color:var(--text)}
+.mode-content{display:none}
+.mode-content.active{display:block}
+
+/* Role badge */
+.role-badge{display:inline-flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:11px;padding:3px 10px;border-radius:99px;margin-right:6px;margin-bottom:4px}
+.rb-dev{border:1px solid var(--p1t);color:var(--p1);background:var(--p1bg)}
+.rb-pm{border:1px solid var(--p2t);color:var(--p2);background:var(--p2bg)}
+.rb-arch{border:1px solid var(--p3t);color:var(--p3);background:var(--p3bg)}
+.rb-tw{border:1px solid var(--p6t);color:var(--p6);background:var(--p6bg)}
+
+.trigger-table{width:100%;border-collapse:collapse;margin-top:12px}
+.trigger-table th{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:8px 12px;text-align:left;border-bottom:1px solid var(--border2)}
+.trigger-table td{font-size:13px;padding:10px 12px;border-bottom:1px solid var(--border);color:var(--muted);vertical-align:top}
+.trigger-table tr:last-child td{border-bottom:none}
+.trigger-table tr:hover td{background:var(--surface2)}
+.tb{font-family:'DM Mono',monospace;font-size:12px;font-weight:500;padding:3px 8px;border-radius:5px;display:inline-block;color:var(--p6);background:var(--p6bg);border:1px solid var(--p6t)}
+.trigger-name{color:var(--text);font-weight:500}
+
+.flow{display:flex;align-items:center;gap:0;margin:14px 0;flex-wrap:wrap}
+.flow-step{background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:7px 13px;font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;margin:3px 0}
+.flow-step.tw{border-color:var(--p6);color:var(--p6)}
+.flow-step.dev{border-color:var(--p1);color:var(--p1)}
+.flow-step.pm{border-color:var(--p2);color:var(--p2)}
+.flow-step.arch{border-color:var(--p3);color:var(--p3)}
+.flow-arr{font-size:13px;color:var(--faint);padding:0 5px;flex-shrink:0}
+
+pre{background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:16px;overflow-x:auto;margin:12px 0}
+code{font-family:'DM Mono',monospace;font-size:12px;color:#a8d8a8;line-height:1.7}
+p code,li code,td code{background:var(--faint);padding:1px 5px;border-radius:4px;color:var(--text);font-size:12px;font-family:'DM Mono',monospace}
+
+.tip{border-radius:11px;padding:16px 18px;margin:12px 0;font-size:13px;color:var(--muted);line-height:1.65}
+.tip-purple{background:var(--p6bg);border:1px solid var(--p6t)}
+.tip-purple strong{color:var(--p6);font-weight:500}
+.tip-green{background:var(--p1bg);border:1px solid var(--p1t)}
+.tip-green strong{color:var(--p1);font-weight:500}
+.tip-orange{background:var(--p3bg);border:1px solid var(--p3t)}
+.tip-orange strong{color:var(--p3);font-weight:500}
+
+.checklist{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;font-size:13px}
+.check-item.ok{border-left:3px solid var(--p1)}
+.check-item.warn{border-left:3px solid var(--p3)}
+.check-item.bad{border-left:3px solid var(--p4)}
+.check-icon{flex-shrink:0;font-size:13px;margin-top:1px}
+.check-text{color:var(--muted);line-height:1.5}
+.check-text strong{color:var(--text);font-weight:500}
+
+/* Doc type cards */
+.doc-types{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:11px;margin-top:12px}
+.dt{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:16px}
+.dt-top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.dt-icon{font-size:18px}
+.dt-title{font-size:13px;font-weight:600;color:var(--text)}
+.dt-owner{font-size:11px;font-family:'DM Mono',monospace;color:var(--muted);margin-top:2px}
+.dt-body{font-size:12px;color:var(--muted);line-height:1.6}
+
+/* Ownership table */
+.own-table{width:100%;border-collapse:collapse;margin-top:12px}
+.own-table th{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:8px 12px;text-align:left;border-bottom:1px solid var(--border2)}
+.own-table td{font-size:13px;padding:10px 12px;border-bottom:1px solid var(--border);color:var(--muted);vertical-align:middle}
+.own-table tr:last-child td{border-bottom:none}
+.own-table tr:hover td{background:var(--surface2)}
+
+.divider{height:1px;background:var(--border);margin:36px 0}
+
+@media(max-width:768px){
+  .layout{flex-direction:column;padding:28px 16px 60px}
+  .toc{display:none}
+  .mode-tabs{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a class="topnav-home" href="index.html">← BMAD Lab</a>
+  <span class="topnav-sep">/</span>
+  <span class="topnav-title">Guia para Tech Writer</span>
+  <span class="topnav-badge">bmad-tech-writer</span>
+</nav>
+
+<div class="layout">
+  <aside class="toc">
+    <div class="toc-sticky">
+      <div class="toc-lbl">Nesta página</div>
+      <ul class="toc-list" id="toc-list">
+        <li class="toc-sec">Fundamentos</li>
+        <li><a href="#s0">0. O papel humano aqui</a></li>
+        <li><a href="#s1">1. Paige — o agente</a></li>
+        <li><a href="#s2">2. Triggers disponíveis</a></li>
+        <li class="toc-sec">Tiny Teams</li>
+        <li><a href="#s3">3. Quem opera Paige?</a></li>
+        <li><a href="#s4">4. Dev operando Paige</a></li>
+        <li><a href="#s5">5. PM operando Paige</a></li>
+        <li><a href="#s6">6. Architect operando Paige</a></li>
+        <li><a href="#s7">7. Fluxo tiny team</a></li>
+        <li class="toc-sec">Tech Writer dedicado</li>
+        <li><a href="#s8">8. O papel dedicado</a></li>
+        <li><a href="#s9">9. Fluxo dedicado</a></li>
+        <li><a href="#s10">10. Doc strategy</a></li>
+        <li class="toc-sec">Referência</li>
+        <li><a href="#s11">11. Tipos de documentação</a></li>
+        <li><a href="#s12">12. Erros comuns</a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <main class="content">
+    <div class="page-header">
+      <div class="header-label">Guia prático · bmad-tech-writer</div>
+      <h1>BMAD para<br>Tech Writer</h1>
+      <div class="header-sub">Como operar a Paige (Tech Writer) para produzir documentação consistente — cobrindo desde o modelo de responsabilidade compartilhada em tiny teams até o papel dedicado de Technical Writer.</div>
+      <div class="header-tags">
+        <span class="htag hi">bmad-tech-writer</span>
+        <span class="htag">Tiny Teams</span>
+        <span class="htag">Tech Writer dedicado</span>
+        <span class="htag">Docs strategy</span>
+        <span class="htag">README · API · Release Notes</span>
+      </div>
+    </div>
+
+    <!-- 0 -->
+    <div class="section" id="s0">
+      <div class="section-heading"><span class="section-num">00</span>O papel humano nesta fase</div>
+      <div class="section-body">
+        <p>Documentação é o artefato que mais sofre com a pressão de prazo — e o que mais custa caro quando inexistente. A Paige acelera a produção de documentação, mas não substitui o julgamento sobre <em>o que</em> documentar, <em>para quem</em> e <em>com qual nível de detalhe</em>.</p>
+        <p>O agente não sabe quais partes do sistema são frágeis e merecem documentação extra. Não sabe qual é o nível técnico do leitor. Não sabe quais decisões foram tomadas em reunião e nunca viraram artefato. Essas são contribuições humanas insubstituíveis — com ou sem um Tech Writer dedicado.</p>
+      </div>
+      <div class="cards">
+        <div class="card" style="border-left:3px solid var(--p6)">
+          <div class="card-icon">🧠</div>
+          <div class="card-title">Você traz</div>
+          <div class="card-body">Conhecimento do leitor, contexto de negócio, julgamento sobre profundidade, decisões não documentadas e validação da clareza do texto gerado</div>
+        </div>
+        <div class="card" style="border-left:3px solid var(--p1)">
+          <div class="card-icon">⚡</div>
+          <div class="card-title">Paige traz</div>
+          <div class="card-body">Velocidade de escrita, consistência de formato, cobertura sistemática de tópicos, templates estruturados e adaptação de tom por tipo de documento</div>
+        </div>
+      </div>
+      <div class="tip tip-purple">
+        <strong>Princípio central:</strong> documentação boa não é documentação completa — é documentação útil para quem vai lê-la. Sua principal tarefa ao operar a Paige é garantir que o output serve o leitor real, não apenas cobre o conteúdo técnico.
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 1 -->
+    <div class="section" id="s1">
+      <div class="section-heading"><span class="section-num">01</span>Paige — o agente Tech Writer</div>
+      <div class="section-body">
+        <p>A Paige é o agente de documentação técnica do BMAD. Ela adapta tom, formato e profundidade conforme o tipo de documento — um README para desenvolvedores é diferente de release notes para usuários finais, que é diferente de um guia de API para integradores.</p>
+      </div>
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">📖</div>
+          <div class="card-title">Documentação técnica</div>
+          <div class="card-body">READMEs, guias de API, documentação de arquitetura, guias de contribuição e onboarding para devs</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">📋</div>
+          <div class="card-title">Documentação de produto</div>
+          <div class="card-body">Release notes, changelogs, guias de usuário, FAQs e documentação de features para usuários finais</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔗</div>
+          <div class="card-title">Documentação de processo</div>
+          <div class="card-body">Runbooks, guias operacionais, playbooks de incidente e documentação de deploy</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">📐</div>
+          <div class="card-title">Documentação de padrões</div>
+          <div class="card-body">Style guides, coding standards, convenções de projeto e guias de decisão arquitetural</div>
+        </div>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 2 -->
+    <div class="section" id="s2">
+      <div class="section-heading"><span class="section-num">02</span>Triggers disponíveis</div>
+      <div class="section-body"><p>A Paige tem triggers cobrindo os tipos mais comuns de documentação que surgem ao longo do ciclo BMAD.</p></div>
+      <div class="sub" style="margin-top:12px">
+        <table class="trigger-table">
+          <thead><tr><th>Trigger</th><th>Nome</th><th>O que gera</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="tb">DR</span></td>
+              <td><span class="trigger-name">Doc README</span></td>
+              <td>README completo do projeto — visão geral, instalação, uso, contribuição e licença. Adapta o nível técnico conforme o público informado</td>
+            </tr>
+            <tr>
+              <td><span class="tb">DA</span></td>
+              <td><span class="trigger-name">Doc API</span></td>
+              <td>Documentação de API baseada nos contratos definidos na arquitetura — endpoints, parâmetros, respostas, exemplos e erros</td>
+            </tr>
+            <tr>
+              <td><span class="tb">RN</span></td>
+              <td><span class="trigger-name">Release Notes</span></td>
+              <td>Release notes estruturadas a partir das stories e epics concluídos — novas features, correções, breaking changes e instruções de migração</td>
+            </tr>
+            <tr>
+              <td><span class="tb">CL</span></td>
+              <td><span class="trigger-name">Changelog</span></td>
+              <td>Changelog versionado seguindo o padrão Keep a Changelog, gerado a partir do histórico de stories e commits</td>
+            </tr>
+            <tr>
+              <td><span class="tb">GU</span></td>
+              <td><span class="trigger-name">Guide User</span></td>
+              <td>Guia de usuário para uma feature ou fluxo específico — passo a passo, screenshots placeholders e casos comuns de uso</td>
+            </tr>
+            <tr>
+              <td><span class="tb">RB</span></td>
+              <td><span class="trigger-name">Runbook</span></td>
+              <td>Runbook operacional — procedimentos de deploy, rollback, diagnóstico de incidentes e checklists de operação</td>
+            </tr>
+            <tr>
+              <td><span class="tb">SG</span></td>
+              <td><span class="trigger-name">Style Guide</span></td>
+              <td>Style guide de documentação ou código — convenções de nomenclatura, formato de commits, padrões de comentário e tom de escrita</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 3 -->
+    <div class="section" id="s3">
+      <div class="section-heading"><span class="section-num">03</span>Tiny team — quem opera a Paige?</div>
+      <div class="section-body">
+        <p>Em tiny teams, não há um Tech Writer dedicado. A responsabilidade é distribuída por quem produziu o artefato que precisa ser documentado — o princípio é simples: <strong style="color:var(--text)">quem criou, documenta.</strong></p>
+      </div>
+      <div class="sub" style="margin-top:16px">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p6)"></div>Tabela de responsabilidade por tipo de doc</div>
+        <table class="own-table">
+          <thead><tr><th>Documento</th><th>Quem opera Paige</th><th>Trigger</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>README do projeto</td>
+              <td><span class="role-badge rb-dev">Dev</span></td>
+              <td><code>DR</code></td>
+            </tr>
+            <tr>
+              <td>Documentação de API</td>
+              <td><span class="role-badge rb-dev">Dev</span></td>
+              <td><code>DA</code></td>
+            </tr>
+            <tr>
+              <td>Guia de contribuição</td>
+              <td><span class="role-badge rb-dev">Dev</span></td>
+              <td><code>SG</code></td>
+            </tr>
+            <tr>
+              <td>Runbook / deploy guide</td>
+              <td><span class="role-badge rb-dev">Dev</span></td>
+              <td><code>RB</code></td>
+            </tr>
+            <tr>
+              <td>Release notes</td>
+              <td><span class="role-badge rb-pm">PM</span></td>
+              <td><code>RN</code></td>
+            </tr>
+            <tr>
+              <td>Changelog</td>
+              <td><span class="role-badge rb-pm">PM</span></td>
+              <td><code>CL</code></td>
+            </tr>
+            <tr>
+              <td>Guia de usuário</td>
+              <td><span class="role-badge rb-pm">PM</span></td>
+              <td><code>GU</code></td>
+            </tr>
+            <tr>
+              <td>Documentação de arquitetura</td>
+              <td><span class="role-badge rb-arch">Architect</span></td>
+              <td><code>SG</code> + manual</td>
+            </tr>
+            <tr>
+              <td>ADRs legíveis por não-técnicos</td>
+              <td><span class="role-badge rb-arch">Architect</span></td>
+              <td><code>GU</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tip tip-orange" style="margin-top:16px">
+        <strong>Regra de ouro tiny team:</strong> nunca termine uma story sem acionar ao menos o trigger <code>DR</code> ou <code>DA</code> se a story adicionou ou modificou comportamento público. Documentação não é uma tarefa separada — é o último passo de cada story.
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 4 -->
+    <div class="section" id="s4">
+      <div class="section-heading"><span class="section-num">04</span>Dev operando a Paige</div>
+      <div class="section-body">
+        <p>O Developer é quem mais aciona a Paige no dia a dia. Após implementar e fazer code review, antes do commit final, aciona a documentação técnica da feature.</p>
+      </div>
+      <div class="sub" style="margin-top:16px">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p1)"></div>Quando acionar no Dev Loop</div>
+        <div class="flow" style="flex-wrap:wrap;margin-top:8px">
+          <div class="flow-step dev">DS implementa</div><div class="flow-arr">→</div>
+          <div class="flow-step dev">CR revisa</div><div class="flow-arr">→</div>
+          <div class="flow-step tw">Paige documenta</div><div class="flow-arr">→</div>
+          <div class="flow-step">commit</div>
+        </div>
+      </div>
+      <div class="sub">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p1)"></div>O que passar como contexto</div>
+        <ul>
+          <li>A story implementada — a Paige usa os critérios de aceite como base do que documentar</li>
+          <li>Os contratos de API modificados ou criados — input direto para o trigger <code>DA</code></li>
+          <li>O <code>project-context.md</code> — garante que a documentação segue as convenções do projeto</li>
+          <li>O público-alvo do documento — dev interno, dev externo, usuário final ou ops</li>
+        </ul>
+      </div>
+      <div class="sub">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p3)"></div>O que o Dev deve revisar antes de commitar</div>
+        <ul>
+          <li>Exemplos de código estão corretos e funcionam?</li>
+          <li>Nomes de variáveis, endpoints e parâmetros batem com o código real?</li>
+          <li>Há informação sensível (tokens, URLs internas) que não deveria estar no doc?</li>
+          <li>O nível de detalhe é adequado para o leitor — não falta nem sobra?</li>
+        </ul>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 5 -->
+    <div class="section" id="s5">
+      <div class="section-heading"><span class="section-num">05</span>PM operando a Paige</div>
+      <div class="section-body">
+        <p>O PM aciona a Paige ao final de cada sprint ou release para produzir a documentação voltada ao usuário e ao negócio.</p>
+      </div>
+      <div class="sub" style="margin-top:16px">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p2)"></div>Quando acionar no ciclo de produto</div>
+        <div class="flow" style="flex-wrap:wrap;margin-top:8px">
+          <div class="flow-step pm">Epic concluído</div><div class="flow-arr">→</div>
+          <div class="flow-step tw">RN / CL</div><div class="flow-arr">→</div>
+          <div class="flow-step tw">GU</div><div class="flow-arr">→</div>
+          <div class="flow-step">release</div>
+        </div>
+      </div>
+      <div class="sub">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p2)"></div>Release notes — o que passar como contexto</div>
+        <ul>
+          <li>Lista de stories e epics concluídos no período — a Paige transforma em linguagem de usuário</li>
+          <li>Breaking changes identificados pelo Architect ou Developer</li>
+          <li>Instrução de migração se houver mudança de contrato ou modelo de dados</li>
+          <li>Tom da release: patch silencioso, minor com novas features ou major com mudanças de produto</li>
+        </ul>
+      </div>
+      <div class="tip tip-purple">
+        <strong>Dica:</strong> ao usar o trigger <code>RN</code>, diga à Paige explicitamente para quem são as release notes — desenvolvedores que integram a API têm necessidades diferentes de usuários finais do produto. O tom e o nível de detalhe mudam completamente.
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 6 -->
+    <div class="section" id="s6">
+      <div class="section-heading"><span class="section-num">06</span>Architect operando a Paige</div>
+      <div class="section-body">
+        <p>O Architect aciona a Paige para tornar decisões técnicas compreensíveis para audiências não-técnicas — stakeholders, novos membros do time ou documentação de produto de longo prazo.</p>
+      </div>
+      <div class="sub" style="margin-top:16px">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p3)"></div>Casos de uso do Architect com a Paige</div>
+        <ul>
+          <li><strong style="color:var(--text)">ADRs em linguagem acessível</strong> — transformar um ADR técnico num resumo executivo que stakeholders não-técnicos conseguem ler e aprovar</li>
+          <li><strong style="color:var(--text)">Guia de onboarding de devs</strong> — documentação que explica a arquitetura para um dev novo no projeto sem precisar de par programming</li>
+          <li><strong style="color:var(--text)">Style guide de código</strong> — transformar as convenções do <code>project-context.md</code> em um guia oficial do projeto usando <code>SG</code></li>
+          <li><strong style="color:var(--text)">Documentação de integrações</strong> — explicar como sistemas externos se conectam ao produto para times de parceiros ou integradores</li>
+        </ul>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 7 -->
+    <div class="section" id="s7">
+      <div class="section-heading"><span class="section-num">07</span>Fluxo de documentação em tiny team</div>
+      <div class="section-body"><p>Como a documentação se encaixa no ciclo BMAD completo num tiny team — sem bloqueios e sem acúmulo de dívida de documentação:</p></div>
+      <div class="sub" style="margin-top:16px">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p6)"></div>Por story — Dev</div>
+        <div class="flow" style="flex-wrap:wrap;margin-top:8px">
+          <div class="flow-step dev">DS → CR → QA</div><div class="flow-arr">→</div>
+          <div class="flow-step tw">Paige DR / DA</div><div class="flow-arr">→</div>
+          <div class="flow-step">commit com doc</div>
+        </div>
+      </div>
+      <div class="sub">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p6)"></div>Por release — PM</div>
+        <div class="flow" style="flex-wrap:wrap;margin-top:8px">
+          <div class="flow-step pm">Epic fechado</div><div class="flow-arr">→</div>
+          <div class="flow-step tw">Paige RN + CL</div><div class="flow-arr">→</div>
+          <div class="flow-step tw">Paige GU</div><div class="flow-arr">→</div>
+          <div class="flow-step">publicação</div>
+        </div>
+      </div>
+      <div class="sub">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p6)"></div>Por decisão arquitetural — Architect</div>
+        <div class="flow" style="flex-wrap:wrap;margin-top:8px">
+          <div class="flow-step arch">ADR aprovado</div><div class="flow-arr">→</div>
+          <div class="flow-step tw">Paige SG / GU</div><div class="flow-arr">→</div>
+          <div class="flow-step">doc no repo</div>
+        </div>
+      </div>
+      <div class="tip tip-green" style="margin-top:4px">
+        <strong>Estrutura recomendada de docs no repo:</strong> mantenha tudo em <code>docs/</code> versionado junto com o código. Use subpastas por tipo: <code>docs/api/</code>, <code>docs/guides/</code>, <code>docs/runbooks/</code>, <code>docs/adr/</code>. A Paige escreve para esse destino por padrão.
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 8 -->
+    <div class="section" id="s8">
+      <div class="section-heading"><span class="section-num">08</span>Tech Writer dedicado — o papel</div>
+      <div class="section-body">
+        <p>Quando existe um Tech Writer dedicado, a relação com a Paige muda: em vez de ser acionada de forma reativa por quem produziu o artefato, a Paige vira a ferramenta principal de uma pessoa que pensa em documentação de forma estratégica e proativa.</p>
+        <p>O Tech Writer dedicado não apenas produz docs — ele define <em>o que</em> precisa ser documentado, <em>como</em> o sistema de documentação está organizado e garante que a documentação está sempre sincronizada com o produto real.</p>
+      </div>
+      <div class="cards">
+        <div class="card" style="border-left:3px solid var(--p6)">
+          <div class="card-icon">🗺</div>
+          <div class="card-title">Doc strategy</div>
+          <div class="card-body">Define a arquitetura de informação do produto: quais docs existem, para quem, em qual formato e onde vivem</div>
+        </div>
+        <div class="card" style="border-left:3px solid var(--p6)">
+          <div class="card-icon">🔄</div>
+          <div class="card-title">Doc lifecycle</div>
+          <div class="card-body">Garante que docs são criados, atualizados e depreciados junto com o produto — não ficam desatualizados após releases</div>
+        </div>
+        <div class="card" style="border-left:3px solid var(--p6)">
+          <div class="card-icon">📏</div>
+          <div class="card-title">Style & standards</div>
+          <div class="card-body">Define e mantém o style guide de documentação que toda a Paige vai usar como referência consistente</div>
+        </div>
+        <div class="card" style="border-left:3px solid var(--p6)">
+          <div class="card-icon">🤝</div>
+          <div class="card-title">Revisão editorial</div>
+          <div class="card-body">Revisa o output da Paige antes de publicar — garante clareza, tom adequado e ausência de jargão desnecessário</div>
+        </div>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 9 -->
+    <div class="section" id="s9">
+      <div class="section-heading"><span class="section-num">09</span>Fluxo com Tech Writer dedicado</div>
+      <div class="section-body"><p>Com um TW dedicado, a documentação deixa de ser um passo no fim de cada story e vira uma disciplina paralela ao desenvolvimento:</p></div>
+      <div class="sub" style="margin-top:16px">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p6)"></div>Fase de planejamento — TW participa do PRD</div>
+        <ul>
+          <li>Lê o PRD e identifica quais features vão precisar de documentação de usuário</li>
+          <li>Aciona a Paige com <code>GU</code> para criar o esqueleto do guia de usuário já no início do ciclo — não no final</li>
+          <li>Alinha com o PM o tom e o público-alvo de cada tipo de doc</li>
+        </ul>
+      </div>
+      <div class="sub">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p6)"></div>Fase de desenvolvimento — TW trabalha em paralelo</div>
+        <div class="flow" style="flex-wrap:wrap;margin-top:8px">
+          <div class="flow-step dev">Dev implementa story</div><div class="flow-arr">→</div>
+          <div class="flow-step tw">TW: Paige DA / DR</div><div class="flow-arr">→</div>
+          <div class="flow-step tw">TW revisa e publica</div>
+        </div>
+        <ul style="margin-top:10px">
+          <li>TW acompanha as stories concluídas em tempo real e documenta sem esperar o release</li>
+          <li>Usa o ticket da story como contexto para a Paige — mantém rastreabilidade entre feature e doc</li>
+          <li>Coordena com o Dev para validar exemplos de código antes de publicar</li>
+        </ul>
+      </div>
+      <div class="sub">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p6)"></div>Fase de release — TW fecha o ciclo</div>
+        <div class="flow" style="flex-wrap:wrap;margin-top:8px">
+          <div class="flow-step pm">PM fecha epic</div><div class="flow-arr">→</div>
+          <div class="flow-step tw">TW: Paige RN + CL</div><div class="flow-arr">→</div>
+          <div class="flow-step tw">TW: revisão editorial</div><div class="flow-arr">→</div>
+          <div class="flow-step">publicação coordenada</div>
+        </div>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 10 -->
+    <div class="section" id="s10">
+      <div class="section-heading"><span class="section-num">10</span>Doc strategy — construindo o sistema de documentação</div>
+      <div class="section-body">
+        <p>O Tech Writer dedicado usa a Paige com o trigger <code>SG</code> para criar e manter o style guide de documentação do produto. Este guia vira o input padrão para todas as sessões futuras com a Paige — garantindo consistência mesmo quando diferentes pessoas acionam o agente.</p>
+      </div>
+      <div class="sub" style="margin-top:16px">
+        <div class="sub-title"><div class="sub-dot" style="background:var(--p6)"></div>O que o style guide de documentação deve conter</div>
+        <ul>
+          <li><strong style="color:var(--text)">Tom e voz</strong> — formal, conversacional, técnico ou acessível? Como tratamos o leitor (você, usuário, desenvolvedor)?</li>
+          <li><strong style="color:var(--text)">Estrutura por tipo</strong> — qual é o template de um README, de um guia de API, de um runbook?</li>
+          <li><strong style="color:var(--text)">Convenções de nomenclatura</strong> — como nomear arquivos de doc, seções e headings?</li>
+          <li><strong style="color:var(--text)">Exemplos</strong> — quando incluir, como formatar, como nomear variáveis de exemplo</li>
+          <li><strong style="color:var(--text)">O que evitar</strong> — jargão interno, siglas não explicadas, pronomes ambíguos</li>
+          <li><strong style="color:var(--text)">Processo de revisão</strong> — quem aprova cada tipo de doc antes de publicar</li>
+        </ul>
+      </div>
+      <div class="tip tip-purple">
+        <strong>Como usar o style guide com a Paige:</strong> adicione ao <code>claude.md</code> do projeto: <em>"Documentation style guide is located at docs/style-guide.md. All documentation must follow this guide."</em> Assim todos os agentes carregam o guia automaticamente quando geram documentação.
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 11 -->
+    <div class="section" id="s11">
+      <div class="section-heading"><span class="section-num">11</span>Tipos de documentação — referência rápida</div>
+      <div class="doc-types">
+        <div class="dt">
+          <div class="dt-top">
+            <div class="dt-icon">📘</div>
+            <div>
+              <div class="dt-title">README</div>
+              <div class="dt-owner">Trigger: DR · Quem: Dev</div>
+            </div>
+          </div>
+          <div class="dt-body">Visão geral, instalação, uso básico, contribuição. Público: qualquer dev que encontra o repositório</div>
+        </div>
+        <div class="dt">
+          <div class="dt-top">
+            <div class="dt-icon">🔌</div>
+            <div>
+              <div class="dt-title">API Docs</div>
+              <div class="dt-owner">Trigger: DA · Quem: Dev</div>
+            </div>
+          </div>
+          <div class="dt-body">Endpoints, parâmetros, respostas e exemplos. Público: devs que integram a API</div>
+        </div>
+        <div class="dt">
+          <div class="dt-top">
+            <div class="dt-icon">📣</div>
+            <div>
+              <div class="dt-title">Release Notes</div>
+              <div class="dt-owner">Trigger: RN · Quem: PM / TW</div>
+            </div>
+          </div>
+          <div class="dt-body">Novas features, correções, breaking changes por release. Público: usuários e integradores</div>
+        </div>
+        <div class="dt">
+          <div class="dt-top">
+            <div class="dt-icon">📋</div>
+            <div>
+              <div class="dt-title">Changelog</div>
+              <div class="dt-owner">Trigger: CL · Quem: PM / TW</div>
+            </div>
+          </div>
+          <div class="dt-body">Histórico versionado de todas as mudanças. Formato: Keep a Changelog</div>
+        </div>
+        <div class="dt">
+          <div class="dt-top">
+            <div class="dt-icon">📗</div>
+            <div>
+              <div class="dt-title">User Guide</div>
+              <div class="dt-owner">Trigger: GU · Quem: PM / TW</div>
+            </div>
+          </div>
+          <div class="dt-body">Passo a passo de uso de uma feature. Público: usuário final do produto</div>
+        </div>
+        <div class="dt">
+          <div class="dt-top">
+            <div class="dt-icon">🔧</div>
+            <div>
+              <div class="dt-title">Runbook</div>
+              <div class="dt-owner">Trigger: RB · Quem: Dev / TW</div>
+            </div>
+          </div>
+          <div class="dt-body">Procedimentos de deploy, rollback e incidente. Público: time de ops e devs em plantão</div>
+        </div>
+        <div class="dt">
+          <div class="dt-top">
+            <div class="dt-icon">📏</div>
+            <div>
+              <div class="dt-title">Style Guide</div>
+              <div class="dt-owner">Trigger: SG · Quem: TW / Architect</div>
+            </div>
+          </div>
+          <div class="dt-body">Convenções de código, documentação e processo. Público: todo o time</div>
+        </div>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 12 -->
+    <div class="section" id="s12">
+      <div class="section-heading"><span class="section-num">12</span>Erros comuns e como evitar</div>
+      <div class="checklist">
+        <div class="check-item bad">
+          <span class="check-icon">❌</span>
+          <div class="check-text"><strong>Deixar documentação para depois do deploy</strong> — "vamos documentar quando tiver tempo" é uma promessa que nunca é cumprida. Doc é o último passo de cada story, não uma tarefa separada do backlog.</div>
+        </div>
+        <div class="check-item bad">
+          <span class="check-icon">❌</span>
+          <div class="check-text"><strong>Aceitar o output da Paige sem revisar exemplos de código</strong> — o agente gera exemplos plausíveis mas pode usar nomes de variáveis ou endpoints que não batem com o código real. Sempre valide exemplos antes de publicar.</div>
+        </div>
+        <div class="check-item bad">
+          <span class="check-icon">❌</span>
+          <div class="check-text"><strong>Documentação sem audiência definida</strong> — "escreva a documentação da feature X" sem especificar o leitor gera um texto que não serve bem a ninguém. Sempre diga à Paige para quem o documento é.</div>
+        </div>
+        <div class="check-item warn">
+          <span class="check-icon">⚠</span>
+          <div class="check-text"><strong>Não versionar docs junto com o código</strong> — documentação fora do repositório se desincroniza rapidamente. Mantenha tudo em <code>docs/</code> e commite junto com o código que documenta.</div>
+        </div>
+        <div class="check-item warn">
+          <span class="check-icon">⚠</span>
+          <div class="check-text"><strong>Tiny team sem um "dono" de docs</strong> — mesmo sem TW dedicado, alguém precisa ser responsável pela saúde do sistema de documentação. Defina quem revisa a qualidade geral a cada sprint — pode ser o PM ou o tech lead.</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+const secs = document.querySelectorAll('.section[id]');
+const links = document.querySelectorAll('#toc-list li a');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      links.forEach(l => l.classList.remove('active'));
+      const a = document.querySelector(`#toc-list li a[href="#${e.target.id}"]`);
+      if (a) a.classList.add('active');
+    }
+  });
+}, { rootMargin: '-15% 0px -70% 0px' });
+secs.forEach(s => obs.observe(s));
+document.querySelectorAll('#toc-list li a').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    document.querySelector(a.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+</script>
+</body>
+</html>

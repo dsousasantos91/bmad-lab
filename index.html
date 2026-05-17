@@ -109,7 +109,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;opacity:.025;
   <div class="info-strip-inner">
     <div>
       <div class="info-item-label">Documentos</div>
-      <div class="info-item-value">6</div>
+      <div class="info-item-value">8</div>
       <div class="info-item-sub">Guias disponíveis</div>
     </div>
     <div>
@@ -132,7 +132,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;opacity:.025;
 
 <!-- Documents -->
 <div class="grid-section">
-  <div class="grid-label">Documentos</div>
+  <div class="grid-label">Documentos — na ordem da pipeline BMAD</div>
   <div class="grid">
 
     <a class="doc-card" href="material-estudo-bmad.html">
@@ -173,49 +173,11 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;opacity:.025;
       </div>
     </a>
 
-    <a class="doc-card" href="guia-dev.html">
-      <div class="doc-card-top">
-        <div class="doc-card-accent" style="background:var(--p1)"></div>
-        <div class="doc-card-title">BMAD para Devs</div>
-        <div class="doc-card-sub">Fluxo de desenvolvimento com o Developer Agent (Amelia). Todos os triggers, Dev Loop completo, Quick Dev, project-context.md e erros comuns a evitar.</div>
-        <div class="doc-card-tags">
-          <span class="doc-tag">bmad-agent-dev</span>
-          <span class="doc-tag">DS · QD · CR</span>
-          <span class="doc-tag">Dev Loop</span>
-          <span class="doc-tag">Quick Dev</span>
-        </div>
-      </div>
-      <div class="doc-card-divider"></div>
-      <div class="doc-card-bottom">
-        <div class="doc-card-meta">7 triggers · índice navegável</div>
-        <div class="doc-card-arrow" style="color:var(--p1)">→</div>
-      </div>
-    </a>
-
-    <a class="doc-card" href="guia-qa.html">
-      <div class="doc-card-top">
-        <div class="doc-card-accent" style="background:var(--p4)"></div>
-        <div class="doc-card-title">BMAD para QAs</div>
-        <div class="doc-card-sub">Qualidade em projetos greenfield e brownfield. QA via Developer Agent, Test Architect (TEA), quality gates, Edge Case Hunter e Party Mode.</div>
-        <div class="doc-card-tags">
-          <span class="doc-tag">TEA Module</span>
-          <span class="doc-tag">*risk · *design</span>
-          <span class="doc-tag">Quality Gates</span>
-          <span class="doc-tag">Brownfield</span>
-        </div>
-      </div>
-      <div class="doc-card-divider"></div>
-      <div class="doc-card-bottom">
-        <div class="doc-card-meta">10 seções · referência de triggers</div>
-        <div class="doc-card-arrow" style="color:var(--p4)">→</div>
-      </div>
-    </a>
-
     <a class="doc-card" href="guia-analyst-pm.html">
       <div class="doc-card-top">
         <div class="doc-card-accent" style="background:var(--p2)"></div>
-        <div class="doc-card-title">BMAD para<br>Analyst & PM</div>
-        <div class="doc-card-sub">Como operar os agentes Mary (Analyst) e John (PM) — do brainstorming ao PRD aprovado, com epics e stories prontas para o Architect.</div>
+        <div class="doc-card-title">① Analyst &amp; PM<br><span style="font-size:12px;font-family:'DM Mono',monospace;color:var(--muted)">Descoberta · Planejamento</span></div>
+        <div class="doc-card-sub">Como operar Mary (Analyst) e John (PM) — do brainstorming ao PRD aprovado, com epics e stories prontas para o Architect.</div>
         <div class="doc-card-tags">
           <span class="doc-tag">bmad-analyst</span>
           <span class="doc-tag">bmad-pm</span>
@@ -230,11 +192,30 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;opacity:.025;
       </div>
     </a>
 
+    <a class="doc-card" href="guia-ux.html">
+      <div class="doc-card-top">
+        <div class="doc-card-accent" style="background:#f472b6"></div>
+        <div class="doc-card-title">② UX Designer<br><span style="font-size:12px;font-family:'DM Mono',monospace;color:var(--muted)">Descoberta → Desenvolvimento</span></div>
+        <div class="doc-card-sub">Como operar a Sally (UX Designer) ao longo de todo o ciclo — UX Brief, user flows, specs e handoff para Dev e QA, com artefatos versionados no repositório.</div>
+        <div class="doc-card-tags">
+          <span class="doc-tag">bmad-ux-designer</span>
+          <span class="doc-tag">UB · UF · US · UD</span>
+          <span class="doc-tag">User Flows</span>
+          <span class="doc-tag">Handoff Dev</span>
+        </div>
+      </div>
+      <div class="doc-card-divider"></div>
+      <div class="doc-card-bottom">
+        <div class="doc-card-meta">12 seções · índice navegável</div>
+        <div class="doc-card-arrow" style="color:#f472b6">→</div>
+      </div>
+    </a>
+
     <a class="doc-card" href="guia-architect.html">
       <div class="doc-card-top">
         <div class="doc-card-accent" style="background:var(--p3)"></div>
-        <div class="doc-card-title">BMAD para<br>Architect</div>
-        <div class="doc-card-sub">Como operar o Winston (Architect) para definir arquiteturas que o Developer implementa com consistência — em projetos novos e brownfield.</div>
+        <div class="doc-card-title">③ Architect<br><span style="font-size:12px;font-family:'DM Mono',monospace;color:var(--muted)">Arquitetura · Decisões técnicas</span></div>
+        <div class="doc-card-sub">Como operar Winston (Architect) para definir arquiteturas que o Developer implementa com consistência — em projetos novos e brownfield.</div>
         <div class="doc-card-tags">
           <span class="doc-tag">bmad-architect</span>
           <span class="doc-tag">CA · IR</span>
@@ -249,8 +230,560 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;opacity:.025;
       </div>
     </a>
 
+    <a class="doc-card" href="guia-dev.html">
+      <div class="doc-card-top">
+        <div class="doc-card-accent" style="background:var(--p1)"></div>
+        <div class="doc-card-title">④ Developer<br><span style="font-size:12px;font-family:'DM Mono',monospace;color:var(--muted)">Implementação · Dev Loop</span></div>
+        <div class="doc-card-sub">Fluxo de desenvolvimento com Amelia (Developer Agent). Todos os triggers, Dev Loop completo, Quick Dev, project-context.md e erros comuns a evitar.</div>
+        <div class="doc-card-tags">
+          <span class="doc-tag">bmad-agent-dev</span>
+          <span class="doc-tag">DS · QD · CR</span>
+          <span class="doc-tag">Dev Loop</span>
+          <span class="doc-tag">Quick Dev</span>
+        </div>
+      </div>
+      <div class="doc-card-divider"></div>
+      <div class="doc-card-bottom">
+        <div class="doc-card-meta">9 seções · 7 triggers</div>
+        <div class="doc-card-arrow" style="color:var(--p1)">→</div>
+      </div>
+    </a>
+
+    <a class="doc-card" href="guia-qa.html">
+      <div class="doc-card-top">
+        <div class="doc-card-accent" style="background:var(--p4)"></div>
+        <div class="doc-card-title">⑤ QA<br><span style="font-size:12px;font-family:'DM Mono',monospace;color:var(--muted)">Qualidade · Gates · Regressão</span></div>
+        <div class="doc-card-sub">QA via Developer Agent e Test Architect Murat (TEA). Quality gates, risk assessment, brownfield, Edge Case Hunter e Party Mode.</div>
+        <div class="doc-card-tags">
+          <span class="doc-tag">TEA · Murat</span>
+          <span class="doc-tag">*risk · *design</span>
+          <span class="doc-tag">Quality Gates</span>
+          <span class="doc-tag">Brownfield</span>
+        </div>
+      </div>
+      <div class="doc-card-divider"></div>
+      <div class="doc-card-bottom">
+        <div class="doc-card-meta">11 seções · referência de triggers</div>
+        <div class="doc-card-arrow" style="color:var(--p4)">→</div>
+      </div>
+    </a>
+
+    <a class="doc-card" href="guia-tech-writer.html">
+      <div class="doc-card-top">
+        <div class="doc-card-accent" style="background:#b8a4f0"></div>
+        <div class="doc-card-title">⑥ Tech Writer<br><span style="font-size:12px;font-family:'DM Mono',monospace;color:var(--muted)">Documentação · Publicação</span></div>
+        <div class="doc-card-sub">Como operar Paige (Tech Writer) — responsabilidade compartilhada em tiny teams e fluxo dedicado com doc strategy, style guide e ciclo de publicação.</div>
+        <div class="doc-card-tags">
+          <span class="doc-tag">bmad-tech-writer</span>
+          <span class="doc-tag">DR · DA · RN</span>
+          <span class="doc-tag">Tiny Teams</span>
+          <span class="doc-tag">Doc Strategy</span>
+        </div>
+      </div>
+      <div class="doc-card-divider"></div>
+      <div class="doc-card-bottom">
+        <div class="doc-card-meta">12 seções · índice navegável</div>
+        <div class="doc-card-arrow" style="color:#b8a4f0">→</div>
+      </div>
+    </a>
+
   </div>
 </div>
+
+<!-- Pipeline -->
+<div class="agents-strip" style="padding-bottom:0">
+  <div class="grid-label">Pipeline BMAD — fluxo de ponta a ponta</div>
+  <p style="font-size:13px;color:#7a8099;margin-bottom:20px;max-width:560px">Como os agentes se encadeiam em sequência — o output de cada fase alimenta a próxima. Use como mapa de referência antes de entrar nos guias individuais.</p>
+
+  <!-- Tab switcher -->
+  <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap">
+    <button id="tab-green" onclick="switchTab('green')" style="font-family:'DM Mono',monospace;font-size:11px;padding:6px 16px;border-radius:7px;border:1px solid #1a5c38;background:#0c3320;color:#3ecf8e;cursor:pointer">🌱 Greenfield</button>
+    <button id="tab-brown" onclick="switchTab('brown')" style="font-family:'DM Mono',monospace;font-size:11px;padding:6px 16px;border-radius:7px;border:1px solid rgba(255,255,255,.07);background:none;color:#7a8099;cursor:pointer">🏗 Brownfield</button>
+  </div>
+
+  <!-- GREENFIELD -->
+  <div id="flow-green">
+  <div style="display:flex;flex-direction:column;gap:0;max-width:860px">
+
+    <!-- Phase row macro -->
+    <style>
+    .prow{display:grid;grid-template-columns:120px 1fr;gap:0;position:relative}
+    .prow-label{padding:20px 16px 20px 0;display:flex;flex-direction:column;align-items:flex-end;justify-content:flex-start;gap:4px}
+    .prow-num{font-family:'DM Mono',monospace;font-size:10px;color:#3a3f52;letter-spacing:.1em}
+    .prow-name{font-family:'DM Mono',monospace;font-size:11px;color:#7a8099;text-align:right;letter-spacing:.04em}
+    .prow-body{border-left:2px solid #1f2535;padding:16px 0 16px 20px;display:flex;flex-direction:column;gap:10px}
+    .prow-body::before{content:'';position:absolute;left:119px;top:24px;width:10px;height:10px;border-radius:50%;border:2px solid #1f2535;background:#0f1117}
+    .prow:first-child .prow-body::before{background:#3ecf8e;border-color:#3ecf8e}
+    .agent-row{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap}
+    .agent-node{display:flex;align-items:center;gap:8px;background:#181c27;border:1px solid rgba(255,255,255,.07);border-radius:9px;padding:10px 14px;flex-shrink:0}
+    .agent-node-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+    .agent-node-info{}
+    .agent-node-name{font-size:12px;font-weight:600;color:#e8eaf0}
+    .agent-node-triggers{font-size:11px;font-family:'DM Mono',monospace;color:#7a8099;margin-top:2px}
+    .output-pill{display:inline-flex;align-items:center;gap:5px;background:#1f2535;border:1px solid rgba(255,255,255,.07);border-radius:6px;padding:4px 10px;font-size:11px;font-family:'DM Mono',monospace;color:#7a8099}
+    .output-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+    .output-label{font-size:11px;color:#3a3f52;font-family:'DM Mono',monospace;margin-right:2px}
+    .gate-pill{display:inline-flex;align-items:center;gap:5px;border-radius:6px;padding:4px 10px;font-size:11px;font-family:'DM Mono',monospace}
+    .gate-ok{background:#0c3320;border:1px solid #1a5c38;color:#3ecf8e}
+    .gate-warn{background:#2a0e1b;border:1px solid #5c1830;color:#e05c7c}
+    .phase-divider-arrow{display:flex;align-items:center;gap:8px;padding:4px 0 4px 20px;border-left:2px solid #1f2535;margin-left:120px}
+    .pda-line{width:24px;height:1px;background:#3a3f52}
+    .pda-text{font-size:11px;font-family:'DM Mono',monospace;color:#3a3f52}
+    </style>
+
+    <!-- 1 - Descoberta -->
+    <div class="prow">
+      <div class="prow-label">
+        <div class="prow-num">01</div>
+        <div class="prow-name">Descoberta</div>
+      </div>
+      <div class="prow-body">
+        <div class="agent-row">
+          <div class="agent-node">
+            <div class="agent-node-dot" style="background:#3ecf8e"></div>
+            <div class="agent-node-info">
+              <div class="agent-node-name">Mary — Analyst</div>
+              <div class="agent-node-triggers">BP · MR · WB · CB</div>
+            </div>
+          </div>
+          <div class="agent-node">
+            <div class="agent-node-dot" style="background:#f472b6"></div>
+            <div class="agent-node-info">
+              <div class="agent-node-name">Sally — UX Designer</div>
+              <div class="agent-node-triggers">UB — UX Brief</div>
+            </div>
+          </div>
+        </div>
+        <div class="output-row">
+          <span class="output-label">↳ gera</span>
+          <span class="output-pill">📄 Project Brief</span>
+          <span class="output-pill">🎨 UX Brief</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-divider-arrow">
+      <div class="pda-line"></div>
+      <div class="pda-text">Brief → PM</div>
+    </div>
+
+    <!-- 2 - Planejamento -->
+    <div class="prow">
+      <div class="prow-label">
+        <div class="prow-num">02</div>
+        <div class="prow-name">Planejamento</div>
+      </div>
+      <div class="prow-body">
+        <div class="agent-row">
+          <div class="agent-node">
+            <div class="agent-node-dot" style="background:#7c6fcd"></div>
+            <div class="agent-node-info">
+              <div class="agent-node-name">John — PM</div>
+              <div class="agent-node-triggers">CP · VP · EP · CE</div>
+            </div>
+          </div>
+          <div class="agent-node">
+            <div class="agent-node-dot" style="background:#f472b6"></div>
+            <div class="agent-node-info">
+              <div class="agent-node-name">Sally — UX Designer</div>
+              <div class="agent-node-triggers">UF — User Flows</div>
+            </div>
+          </div>
+        </div>
+        <div class="output-row">
+          <span class="output-label">↳ gera</span>
+          <span class="output-pill">📋 PRD</span>
+          <span class="output-pill">🗺 User Flows</span>
+          <span class="output-pill">📝 Epics &amp; Stories</span>
+          <span class="gate-pill gate-ok">gate IR</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-divider-arrow">
+      <div class="pda-line"></div>
+      <div class="pda-text">PRD + Flows → Architect</div>
+    </div>
+
+    <!-- 3 - Arquitetura -->
+    <div class="prow">
+      <div class="prow-label">
+        <div class="prow-num">03</div>
+        <div class="prow-name">Arquitetura</div>
+      </div>
+      <div class="prow-body">
+        <div class="agent-row">
+          <div class="agent-node">
+            <div class="agent-node-dot" style="background:#e8975a"></div>
+            <div class="agent-node-info">
+              <div class="agent-node-name">Winston — Architect</div>
+              <div class="agent-node-triggers">CA · ADR · IR</div>
+            </div>
+          </div>
+          <div class="agent-node">
+            <div class="agent-node-dot" style="background:#f472b6"></div>
+            <div class="agent-node-info">
+              <div class="agent-node-name">Sally — UX Designer</div>
+              <div class="agent-node-triggers">UH — valida arquitetura × UX</div>
+            </div>
+          </div>
+        </div>
+        <div class="output-row">
+          <span class="output-label">↳ gera</span>
+          <span class="output-pill">🏗 architecture.md</span>
+          <span class="output-pill">📐 ADRs</span>
+          <span class="output-pill">📁 project-context.md</span>
+          <span class="gate-pill gate-ok">gate IR</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-divider-arrow">
+      <div class="pda-line"></div>
+      <div class="pda-text">Arch + Stories → Developer</div>
+    </div>
+
+    <!-- 4 - Dev Loop -->
+    <div class="prow">
+      <div class="prow-label">
+        <div class="prow-num">04</div>
+        <div class="prow-name">Dev Loop</div>
+      </div>
+      <div class="prow-body">
+        <div class="agent-row">
+          <div class="agent-node">
+            <div class="agent-node-dot" style="background:#3ecf8e"></div>
+            <div class="agent-node-info">
+              <div class="agent-node-name">Amelia — Developer</div>
+              <div class="agent-node-triggers">SP · CS · DS · CR</div>
+            </div>
+          </div>
+          <div class="agent-node">
+            <div class="agent-node-dot" style="background:#f472b6"></div>
+            <div class="agent-node-info">
+              <div class="agent-node-name">Sally — UX Designer</div>
+              <div class="agent-node-triggers">US · UD — specs e handoff</div>
+            </div>
+          </div>
+        </div>
+        <div class="output-row">
+          <span class="output-label">↳ gera</span>
+          <span class="output-pill">💻 Código</span>
+          <span class="output-pill">📐 UX Specs</span>
+          <span class="output-pill">📄 UX Handoff</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-divider-arrow">
+      <div class="pda-line"></div>
+      <div class="pda-text">Código → QA</div>
+    </div>
+
+    <!-- 5 - Qualidade -->
+    <div class="prow">
+      <div class="prow-label">
+        <div class="prow-num">05</div>
+        <div class="prow-name">Qualidade</div>
+      </div>
+      <div class="prow-body">
+        <div class="agent-row">
+          <div class="agent-node">
+            <div class="agent-node-dot" style="background:#3ecf8e"></div>
+            <div class="agent-node-info">
+              <div class="agent-node-name">Amelia — Developer</div>
+              <div class="agent-node-triggers">QA — gera testes E2E</div>
+            </div>
+          </div>
+        </div>
+        <div class="output-row">
+          <span class="output-label">↳ gera</span>
+          <span class="output-pill">🧪 E2E Tests</span>
+          <span class="gate-pill gate-ok">✓ pronto para deploy</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-divider-arrow">
+      <div class="pda-line"></div>
+      <div class="pda-text">Release → Tech Writer</div>
+    </div>
+
+    <!-- 6 - Publicação -->
+    <div class="prow">
+      <div class="prow-label">
+        <div class="prow-num">06</div>
+        <div class="prow-name">Publicação</div>
+      </div>
+      <div class="prow-body">
+        <div class="agent-row">
+          <div class="agent-node">
+            <div class="agent-node-dot" style="background:#b8a4f0"></div>
+            <div class="agent-node-info">
+              <div class="agent-node-name">Paige — Tech Writer</div>
+              <div class="agent-node-triggers">DR · DA · RN · CL</div>
+            </div>
+          </div>
+        </div>
+        <div class="output-row">
+          <span class="output-label">↳ gera</span>
+          <span class="output-pill">📖 README</span>
+          <span class="output-pill">🔌 API Docs</span>
+          <span class="output-pill">📣 Release Notes</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  </div><!-- end flow-green -->
+
+  <!-- BROWNFIELD -->
+  <div id="flow-brown" style="display:none">
+  <div style="display:flex;flex-direction:column;gap:0;max-width:860px">
+
+    <!-- 1 - Mapeamento -->
+    <div class="prow">
+      <div class="prow-label">
+        <div class="prow-num">01</div>
+        <div class="prow-name">Mapeamento</div>
+      </div>
+      <div class="prow-body">
+        <div style="font-size:11px;color:#e8975a;font-family:'DM Mono',monospace;margin-bottom:8px">⚠ Fase exclusiva do brownfield — não existe no greenfield</div>
+        <div class="agent-row">
+          <div class="agent-node">
+            <div class="agent-node-dot" style="background:#3ecf8e"></div>
+            <div class="agent-node-info">
+              <div class="agent-node-name">Mary — Analyst</div>
+              <div class="agent-node-triggers">DP — document project</div>
+            </div>
+          </div>
+          <div class="agent-node">
+            <div class="agent-node-dot" style="background:#e8975a"></div>
+            <div class="agent-node-info">
+              <div class="agent-node-name">Winston — Architect</div>
+              <div class="agent-node-triggers">DP — source tree analysis</div>
+            </div>
+          </div>
+          <div class="agent-node">
+            <div class="agent-node-dot" style="background:#f472b6"></div>
+            <div class="agent-node-info">
+              <div class="agent-node-name">Sally — UX Designer</div>
+              <div class="agent-node-triggers">UA — UX Audit do produto atual</div>
+            </div>
+          </div>
+        </div>
+        <div class="output-row">
+          <span class="output-label">↳ gera</span>
+          <span class="output-pill">📄 docs/index.md</span>
+          <span class="output-pill">🌳 source-tree-analysis</span>
+          <span class="output-pill">🔍 UX Audit</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-divider-arrow">
+      <div class="pda-line"></div>
+      <div class="pda-text">Docs existentes → PM</div>
+    </div>
+
+    <!-- 2 - Planejamento -->
+    <div class="prow">
+      <div class="prow-label">
+        <div class="prow-num">02</div>
+        <div class="prow-name">Planejamento</div>
+      </div>
+      <div class="prow-body">
+        <div class="agent-row">
+          <div class="agent-node">
+            <div class="agent-node-dot" style="background:#7c6fcd"></div>
+            <div class="agent-node-info">
+              <div class="agent-node-name">John — PM</div>
+              <div class="agent-node-triggers">brownfield-prd · CE stories</div>
+            </div>
+          </div>
+          <div class="agent-node">
+            <div class="agent-node-dot" style="background:#e8975a"></div>
+            <div class="agent-node-info">
+              <div class="agent-node-name">Winston — Architect</div>
+              <div class="agent-node-triggers">brownfield-arch · integration points</div>
+            </div>
+          </div>
+          <div class="agent-node">
+            <div class="agent-node-dot" style="background:#f472b6"></div>
+            <div class="agent-node-info">
+              <div class="agent-node-name">Sally — UX Designer</div>
+              <div class="agent-node-triggers">UF · UH</div>
+            </div>
+          </div>
+        </div>
+        <div class="output-row">
+          <span class="output-label">↳ gera</span>
+          <span class="output-pill">📋 Brownfield PRD</span>
+          <span class="output-pill">🏗 Integration arch</span>
+          <span class="output-pill">🗺 User Flows</span>
+          <span class="gate-pill gate-ok">gate IR</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-divider-arrow">
+      <div class="pda-line"></div>
+      <div class="pda-text">PRD + Arch → QA (pré-dev)</div>
+    </div>
+
+    <!-- 3 - QA Pré-Dev -->
+    <div class="prow">
+      <div class="prow-label">
+        <div class="prow-num">03</div>
+        <div class="prow-name">QA Pré-Dev</div>
+      </div>
+      <div class="prow-body">
+        <div style="font-size:11px;color:#e05c7c;font-family:'DM Mono',monospace;margin-bottom:8px">🔴 Obrigatório antes de qualquer implementação no brownfield</div>
+        <div class="agent-row">
+          <div class="agent-node" style="border-color:#5c1830">
+            <div class="agent-node-dot" style="background:#e05c7c"></div>
+            <div class="agent-node-info">
+              <div class="agent-node-name">Murat — Test Architect</div>
+              <div class="agent-node-triggers">*risk · *design · *trace · *nfr</div>
+            </div>
+          </div>
+        </div>
+        <div class="output-row">
+          <span class="output-label">↳ gera</span>
+          <span class="output-pill">⚠ Risk map</span>
+          <span class="output-pill">🎯 Test design</span>
+          <span class="output-pill">🔗 Trace matrix</span>
+          <span class="gate-pill gate-warn">gate obrigatório</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-divider-arrow">
+      <div class="pda-line"></div>
+      <div class="pda-text">Risk map + Stories → Developer</div>
+    </div>
+
+    <!-- 4 - Dev Loop -->
+    <div class="prow">
+      <div class="prow-label">
+        <div class="prow-num">04</div>
+        <div class="prow-name">Dev Loop</div>
+      </div>
+      <div class="prow-body">
+        <div class="agent-row">
+          <div class="agent-node">
+            <div class="agent-node-dot" style="background:#3ecf8e"></div>
+            <div class="agent-node-info">
+              <div class="agent-node-name">Amelia — Developer</div>
+              <div class="agent-node-triggers">DS · CR</div>
+            </div>
+          </div>
+          <div class="agent-node">
+            <div class="agent-node-dot" style="background:#f472b6"></div>
+            <div class="agent-node-info">
+              <div class="agent-node-name">Sally — UX Designer</div>
+              <div class="agent-node-triggers">US · UD — specs e handoff</div>
+            </div>
+          </div>
+        </div>
+        <div class="output-row">
+          <span class="output-label">↳ gera</span>
+          <span class="output-pill">💻 Código</span>
+          <span class="output-pill">📐 UX Specs</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-divider-arrow">
+      <div class="pda-line"></div>
+      <div class="pda-text">Código → QA (pós-dev)</div>
+    </div>
+
+    <!-- 5 - QA Pós-Dev -->
+    <div class="prow">
+      <div class="prow-label">
+        <div class="prow-num">05</div>
+        <div class="prow-name">QA Pós-Dev</div>
+      </div>
+      <div class="prow-body">
+        <div class="agent-row">
+          <div class="agent-node" style="border-color:#5c1830">
+            <div class="agent-node-dot" style="background:#e05c7c"></div>
+            <div class="agent-node-info">
+              <div class="agent-node-name">Murat — Test Architect</div>
+              <div class="agent-node-triggers">*review · *gate</div>
+            </div>
+          </div>
+          <div class="agent-node">
+            <div class="agent-node-dot" style="background:#3ecf8e"></div>
+            <div class="agent-node-info">
+              <div class="agent-node-name">Amelia — Developer</div>
+              <div class="agent-node-triggers">QA — testes E2E</div>
+            </div>
+          </div>
+        </div>
+        <div class="output-row">
+          <span class="output-label">↳ gera</span>
+          <span class="output-pill">📋 QA Results</span>
+          <span class="output-pill">🚦 Gate file</span>
+          <span class="output-pill">🧪 E2E Tests</span>
+          <span class="gate-pill gate-ok">✓ pronto para deploy</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-divider-arrow">
+      <div class="pda-line"></div>
+      <div class="pda-text">Release → Tech Writer</div>
+    </div>
+
+    <!-- 6 - Publicação -->
+    <div class="prow">
+      <div class="prow-label">
+        <div class="prow-num">06</div>
+        <div class="prow-name">Publicação</div>
+      </div>
+      <div class="prow-body">
+        <div class="agent-row">
+          <div class="agent-node">
+            <div class="agent-node-dot" style="background:#b8a4f0"></div>
+            <div class="agent-node-info">
+              <div class="agent-node-name">Paige — Tech Writer</div>
+              <div class="agent-node-triggers">DR · DA · RN · CL</div>
+            </div>
+          </div>
+        </div>
+        <div class="output-row">
+          <span class="output-label">↳ gera</span>
+          <span class="output-pill">📖 README</span>
+          <span class="output-pill">🔌 API Docs</span>
+          <span class="output-pill">📣 Release Notes</span>
+          <span class="output-pill">📋 Migration Guide</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  </div><!-- end flow-brown -->
+
+  <div style="padding-bottom:48px"></div>
+</div>
+
+<script>
+function switchTab(tab) {
+  const isGreen = tab === 'green';
+  document.getElementById('flow-green').style.display = isGreen ? 'block' : 'none';
+  document.getElementById('flow-brown').style.display = isGreen ? 'none' : 'block';
+  const tg = document.getElementById('tab-green');
+  const tb = document.getElementById('tab-brown');
+  tg.style.background    = isGreen ? '#0c3320' : 'none';
+  tg.style.borderColor   = isGreen ? '#1a5c38' : 'rgba(255,255,255,.07)';
+  tg.style.color         = isGreen ? '#3ecf8e' : '#7a8099';
+  tb.style.background    = isGreen ? 'none'    : '#2a0e1b';
+  tb.style.borderColor   = isGreen ? 'rgba(255,255,255,.07)' : '#5c1830';
+  tb.style.color         = isGreen ? '#7a8099' : '#e05c7c';
+}
+</script>
 
 <!-- Agents -->
 <div class="agents-strip">
@@ -262,6 +795,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;opacity:.025;
     <div class="agent-chip"><div class="agent-dot" style="background:#4faaee"></div><span class="agent-chip-name">Developer (Amelia)</span><span class="agent-chip-id">bmad-agent-dev</span></div>
     <div class="agent-chip"><div class="agent-dot" style="background:#e05c7c"></div><span class="agent-chip-name">UX Designer (Sally)</span><span class="agent-chip-id">bmad-ux-designer</span></div>
     <div class="agent-chip"><div class="agent-dot" style="background:#aaa"></div><span class="agent-chip-name">Tech Writer (Paige)</span><span class="agent-chip-id">bmad-tech-writer</span></div>
+    <div class="agent-chip"><div class="agent-dot" style="background:#e05c7c"></div><span class="agent-chip-name">Murat — Test Architect</span><span class="agent-chip-id">TEA Module · /tea</span></div>
   </div>
 </div>
 
