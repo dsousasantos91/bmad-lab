@@ -127,6 +127,7 @@ p code,li code,td code{background:var(--faint);padding:1px 5px;border-radius:4px
       <div class="toc-lbl">Nesta página</div>
       <ul class="toc-list" id="toc-list">
         <li class="toc-sec">Fundamentos</li>
+        <li><a href="#s0">0. O papel humano aqui</a></li>
         <li><a href="#s1">1. O Developer Agent</a></li>
         <li><a href="#s2">2. Todos os triggers</a></li>
         <li class="toc-sec">Caminhos de dev</li>
@@ -157,6 +158,31 @@ p code,li code,td code{background:var(--faint);padding:1px 5px;border-radius:4px
         <span class="htag">project-context.md</span>
       </div>
     </div>
+
+    <!-- 0 -->
+    <div class="section" id="s0">
+      <div class="section-heading"><span class="section-num">00</span>O papel humano nesta fase</div>
+      <div class="section-body">
+        <p>O Developer Agent (Amelia) é poderoso, mas a qualidade do código gerado depende diretamente da qualidade do que você coloca como contexto. Amelia não sabe o que não está documentado — não conhece a dívida técnica tácita, as restrições de ambiente não escritas ou as decisões tomadas em reunião que nunca viraram artefato.</p>
+        <p>O papel do desenvolvedor humano com o BMAD não é digitar código — é ser o guardião da qualidade e do contexto. Você decide o que entra como input, revisa o que sai como output e identifica quando o agente tomou uma decisão que parece certa mas conflita com algo que só você sabe.</p>
+      </div>
+      <div class="cards">
+        <div class="card" style="border-left:3px solid var(--p1)">
+          <div class="card-icon">🧠</div>
+          <div class="card-title">Você traz</div>
+          <div class="card-body">Contexto não documentado, restrições de ambiente, julgamento sobre tradeoffs, conhecimento da dívida técnica e validação do output gerado</div>
+        </div>
+        <div class="card" style="border-left:3px solid var(--p2)">
+          <div class="card-icon">⚡</div>
+          <div class="card-title">Amelia traz</div>
+          <div class="card-body">Velocidade de implementação, consistência com a arquitetura definida, cobertura de critérios de aceite e revisão sistemática do próprio código</div>
+        </div>
+      </div>
+      <div class="highlight">
+        <strong>Princípio central:</strong> o Dev Loop do BMAD não é "peça e aceite". É "peça, revise, corrija e aprove". O agente reduz esforço mecânico — a responsabilidade técnica continua sendo sua.
+      </div>
+    </div>
+    <div class="divider"></div>
 
     <!-- 1 -->
     <div class="section" id="s1">

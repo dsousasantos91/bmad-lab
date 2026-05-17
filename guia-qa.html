@@ -138,6 +138,7 @@ p code,li code,td code{background:var(--faint);padding:1px 5px;border-radius:4px
       <div class="toc-lbl">Nesta página</div>
       <ul class="toc-list" id="toc-list">
         <li class="toc-sec">Fundamentos</li>
+        <li><a href="#s0">0. O papel humano aqui</a></li>
         <li><a href="#s1">1. QA no BMAD v6</a></li>
         <li><a href="#s2">2. QA via Developer Agent</a></li>
         <li class="toc-sec">Brownfield</li>
@@ -169,6 +170,31 @@ p code,li code,td code{background:var(--faint);padding:1px 5px;border-radius:4px
         <span class="htag">Regressão</span>
       </div>
     </div>
+
+    <!-- 0 -->
+    <div class="section" id="s0">
+      <div class="section-heading"><span class="section-num">00</span>O papel humano nesta fase</div>
+      <div class="section-body">
+        <p>QA com BMAD não é sobre apertar um botão e receber testes prontos. O agente gera estrutura e cobertura — mas a inteligência sobre o que <em>realmente importa</em> testar vem de você. Você conhece os fluxos críticos de negócio, os casos extremos que já quebraram produção e as integrações frágeis que nenhum documento captura.</p>
+        <p>O papel do QA humano neste fluxo é definir a estratégia de risco, revisar os testes gerados com olho crítico e garantir que o quality gate reflete a realidade do produto — não apenas a cobertura numérica.</p>
+      </div>
+      <div class="cards">
+        <div class="card" style="border-left:3px solid var(--p4)">
+          <div class="card-icon">🧠</div>
+          <div class="card-title">Você traz</div>
+          <div class="card-body">Conhecimento dos fluxos críticos, histórico de bugs em produção, julgamento de risco, validação dos cenários gerados e decisão final sobre o quality gate</div>
+        </div>
+        <div class="card" style="border-left:3px solid var(--p1)">
+          <div class="card-icon">⚡</div>
+          <div class="card-title">O agente traz</div>
+          <div class="card-body">Geração sistemática de cenários, cobertura de happy path e edge cases documentados, rastreabilidade PRD → testes e execução consistente de checklists</div>
+        </div>
+      </div>
+      <div class="highlight">
+        <strong>Princípio central:</strong> o agente não sabe o que quebrou produção no trimestre passado. Você sabe. Use esse conhecimento para guiar o risk assessment e complementar os cenários gerados — especialmente nos fluxos onde o custo de falha é alto.
+      </div>
+    </div>
+    <div class="divider"></div>
 
     <!-- 1 -->
     <div class="section" id="s1">
